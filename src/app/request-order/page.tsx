@@ -11,6 +11,7 @@ import { Upload, FileText, Image as ImageIcon, X, Send } from 'lucide-react';
 export default function RequestOrderPage() {
   const [user, setUser] = useState<any>(null);
   const [description, setDescription] = useState('');
+  const [notes, setNotes] = useState('');
   const [briefFile, setBriefFile] = useState<File | null>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -80,10 +81,11 @@ export default function RequestOrderPage() {
 
       // Insert Request
       const { error: insertError } = await supabase
-        .from('project-requests')
+        .from('project_requests')
         .insert({
           user_id: user.id,
           description,
+          notes,
           brief_url: briefUrl,
           image_urls: imageUrls,
         });
@@ -115,92 +117,109 @@ export default function RequestOrderPage() {
             </h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12 bg-white/50 backdrop-blur-sm border border-border p-8 md:p-12">
-            <div className="space-y-10">
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Project Brief & Description</label>
-                <textarea
-                  required
-                  rows={8}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Describe your project, requirements, and vision..."
-                  className="w-full bg-transparent border border-border p-4 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
-                />
+          <form onSubmit={handleSubmit} className="bg-white/50 backdrop-blur-sm border border-border p-8 md:p-12 space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {/* Left Column */}
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Project Brief & Description</label>
+                  <textarea
+                    required
+                    rows={8}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Describe your project, requirements, and vision..."
+                    className="w-full bg-transparent border border-border p-4 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Attach Brief (PDF/DOC)</label>
+                  <div className="relative border-2 border-dashed border-border p-8 text-center hover:border-primary transition-colors group cursor-pointer">
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx"
+                      onChange={(e) => handleFileChange(e, 'brief')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <FileText className="text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-xs uppercase tracking-widest">
+                        {briefFile ? briefFile.name : 'Click or Drag File'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Attach Brief (PDF/DOC)</label>
-                <div className="relative border-2 border-dashed border-border p-8 text-center hover:border-primary transition-colors group cursor-pointer">
-                  <input
-                    type="file"
-                    accept=".pdf,.doc,.docx"
-                    onChange={(e) => handleFileChange(e, 'brief')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <div className="flex flex-col items-center gap-2">
-                    <FileText className="text-muted-foreground group-hover:text-primary transition-colors" />
-                    <span className="text-xs uppercase tracking-widest">
-                      {briefFile ? briefFile.name : 'Click or Drag File'}
-                    </span>
+              {/* Right Column */}
+              <div className="space-y-10">
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Reference Images (.JPG)</label>
+                  <div className="relative border-2 border-dashed border-border p-8 text-center hover:border-primary transition-colors group cursor-pointer">
+                    <input
+                      type="file"
+                      multiple
+                      accept=".jpg,.jpeg"
+                      onChange={(e) => handleFileChange(e, 'images')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <ImageIcon className="text-muted-foreground group-hover:text-primary transition-colors" />
+                      <span className="text-xs uppercase tracking-widest">Add Images</span>
+                    </div>
                   </div>
+
+                  {imageFiles.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mt-4">
+                      {imageFiles.map((file, idx) => (
+                        <div key={idx} className="relative aspect-square border border-border overflow-hidden">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt="preview"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeImage(idx)}
+                            className="absolute top-1 right-1 bg-black/50 text-white p-1 hover:bg-black transition-colors"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* NOTES for Five+One's Team */}
+                <div className="space-y-4">
+                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold">NOTES for Five+One's Team</label>
+                  <textarea
+                    rows={4}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="Any additional notes or specific requests..."
+                    className="w-full bg-transparent border border-border p-4 text-sm focus:outline-none focus:border-primary transition-colors resize-none"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="space-y-10">
-              <div className="space-y-4">
-                <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Reference Images (.JPG)</label>
-                <div className="relative border-2 border-dashed border-border p-8 text-center hover:border-primary transition-colors group cursor-pointer">
-                  <input
-                    type="file"
-                    multiple
-                    accept=".jpg,.jpeg"
-                    onChange={(e) => handleFileChange(e, 'images')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                  />
-                  <div className="flex flex-col items-center gap-2">
-                    <ImageIcon className="text-muted-foreground group-hover:text-primary transition-colors" />
-                    <span className="text-xs uppercase tracking-widest">Add Images</span>
-                  </div>
-                </div>
-
-                {imageFiles.length > 0 && (
-                  <div className="grid grid-cols-3 gap-2 mt-4">
-                    {imageFiles.map((file, idx) => (
-                      <div key={idx} className="relative aspect-square border border-border overflow-hidden">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt="preview"
-                          className="w-full h-full object-cover"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(idx)}
-                          className="absolute top-1 right-1 bg-black/50 text-white p-1 hover:bg-black transition-colors"
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+            {/* SEND REQUEST button - Pushed to end */}
+            <div className="flex justify-end pt-8 border-t border-border">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-12 py-4 bg-[#D17D4B] text-white font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-4 hover:opacity-90 transition-opacity disabled:opacity-50 text-sm"
+              >
+                {isSubmitting ? 'SUBMITTING...' : (
+                  <>
+                    SEND REQUEST
+                    <Send size={18} />
+                  </>
                 )}
-              </div>
-
-              <div className="pt-8">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-6 bg-primary text-primary-foreground font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-4 hover:opacity-90 transition-opacity disabled:opacity-50"
-                >
-                  {isSubmitting ? 'SUBMITTING...' : (
-                    <>
-                      SEND REQUEST
-                      <Send size={18} />
-                    </>
-                  )}
-                </button>
-              </div>
+              </button>
             </div>
           </form>
         </div>
