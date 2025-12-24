@@ -159,7 +159,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
               {t(
                 'Selected architectural interventions / Residential, Commercial & Urban Studies',
-                'Các can thiệp kiến trúc tiêu biểu / Nhà ở, Thương mại & Nghiên cứu Đô thị'
+                'Các Dự Án Kiến Trúc Tiêu Biểu / Nhà Ở, Thương Mại & Nghiên Cứu Đô Thị'
               )}
             </p>
           </div>

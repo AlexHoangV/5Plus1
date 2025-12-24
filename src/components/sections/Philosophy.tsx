@@ -5,7 +5,12 @@ import { useLanguage } from '@/hooks/useLanguage';
 import { motion } from 'framer-motion';
 
 const Philosophy = () => {
+  const [mounted, setMounted] = React.useState(false);
   const { t } = useLanguage();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const philosophies = [
     {
@@ -25,6 +30,8 @@ const Philosophy = () => {
       highlightVi: "Dù bằng cách nào, việc học hỏi từ thất bại chính là chìa khóa để làm việc hiệu quả.",
     }
   ];
+
+  if (!mounted) return null;
 
   return (
     <section id="philosophy" className="py-24 md:py-32 bg-white">
