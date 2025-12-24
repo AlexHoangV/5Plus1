@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Host_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Reddit_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Chatbot } from "@/components/Chatbot";
 
 import { LanguageProvider } from "@/hooks/useLanguage";
 
-const mainFont = Host_Grotesk({
+const mainFont = Reddit_Sans({
   variable: "--font-main",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const monoFont = JetBrains_Mono({
+const monoFont = Reddit_Mono({
   variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

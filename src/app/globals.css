@@ -54,7 +54,7 @@
     --font-serif-jp: "Noto Serif JP", serif;
 
     --letter-spacing-technical: 0.04em;
-    --letter-spacing-display: -0.02em;
+    --letter-spacing-display: -0.05em;
     --letter-spacing-tight: -0.04em;
     --letter-spacing-wide: 0.03em;
 
@@ -127,6 +127,10 @@
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "ss01", "ss02", "cv01", "tnum";
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -134,19 +138,9 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: var(--letter-spacing-display);
-    line-height: 1.1;
-    font-feature-settings: "ss01", "ss02", "cv01";
-  }
-
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "ss01";
+    line-height: 0.95;
+    font-feature-settings: "ss01", "ss02", "cv01", "tnum", "ss03";
+    text-rendering: optimizeLegibility;
   }
 
   .container {

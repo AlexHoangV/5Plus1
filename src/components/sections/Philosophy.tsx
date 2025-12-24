@@ -32,26 +32,26 @@ const Philosophy = () => {
         <div className="max-w-5xl mx-auto space-y-24">
           {philosophies.map((item, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
-              <div className="space-y-2">
-                <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-black tracking-tight leading-none">
-                  “{t(item.titleEn, item.titleVi)}”
-                </h3>
-                <p className="text-2xl md:text-3xl lg:text-4xl font-display font-medium text-primary italic">
-                  ({item.titleEn})
-                </p>
-              </div>
-              
-              <div className="space-y-8 relative">
-                <div className="text-base md:text-lg leading-relaxed text-[#737373] font-sans">
-                  {t(item.contentEn, item.contentVi)}
-                </div>
-                
-                <div className="relative pl-6 border-l-2 border-primary">
-                  <p className="text-lg md:text-xl font-medium text-black italic">
-                    {t(item.highlightEn, item.highlightVi)}
+                <div className="space-y-2">
+                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-black tracking-tight leading-none">
+                    “{t(item.titleEn, item.titleVi)}”
+                  </h3>
+                  <p className="text-xl md:text-2xl font-mono text-black/40 uppercase tracking-widest">
+                    {item.titleEn}
                   </p>
                 </div>
-              </div>
+                
+                <div className="space-y-8 relative">
+                  <div className="text-base md:text-lg leading-relaxed text-[#737373] font-sans">
+                    {t(item.contentEn, item.contentVi)}
+                  </div>
+                  
+                  <div className="relative pl-6 border-l-2 border-black">
+                    <p className="text-lg md:text-xl font-medium text-black">
+                      {t(item.highlightEn, item.highlightVi)}
+                    </p>
+                  </div>
+                </div>
             </div>
           ))}
         </div>
