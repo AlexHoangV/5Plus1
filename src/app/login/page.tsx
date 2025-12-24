@@ -6,8 +6,10 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Navbar from '@/components/sections/navbar';
 import Footer from '@/components/sections/Footer';
+import { useLanguage } from '@/hooks/useLanguage';
 
 export default function LoginPage() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isAdminMode, setIsAdminMode] = useState(false);
@@ -74,10 +76,10 @@ export default function LoginPage() {
         <div className="w-full max-w-md border border-border p-8 md:p-12 space-y-8">
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-display font-bold uppercase tracking-tighter">
-              {isAdminMode ? 'ADMIN ACCESS' : 'CLIENT PORTAL'}
+              {isAdminMode ? t('ADMIN ACCESS', 'QUYỀN ADMIN') : t('CLIENT PORTAL', 'CỔNG KHÁCH HÀNG')}
             </h1>
             <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              {isAdminMode ? 'Mode 01 | Exclusive for Kosuke' : 'Mode 02 | Client Login & Registration'}
+              {isAdminMode ? t('Mode 01 | Exclusive for Kosuke', 'Chế độ 01 | Dành riêng cho Kosuke') : t('Mode 02 | Client Login & Registration', 'Chế độ 02 | Đăng nhập & Đăng ký Khách hàng')}
             </p>
           </div>
 
@@ -86,7 +88,7 @@ export default function LoginPage() {
               onClick={() => setIsAdminMode(false)}
               className={`flex-1 py-3 text-[10px] uppercase tracking-widest transition-colors ${!isAdminMode ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
             >
-              Client
+              {t('Client', 'Khách Hàng')}
             </button>
             <button
               onClick={() => setIsAdminMode(true)}
@@ -100,7 +102,7 @@ export default function LoginPage() {
             <div className="space-y-4">
               <div className="space-y-1">
                 <label className="text-[10px] uppercase tracking-widest font-bold">
-                  {isAdminMode ? 'Username' : 'Email'}
+                  {isAdminMode ? t('Username', 'Tên đăng nhập') : 'Email'}
                 </label>
                 <input
                   type={isAdminMode ? 'text' : 'email'}
@@ -112,7 +114,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[10px] uppercase tracking-widest font-bold">Password</label>
+                <label className="text-[10px] uppercase tracking-widest font-bold">{t('Password', 'Mật khẩu')}</label>
                 <input
                   type="password"
                   required
@@ -130,7 +132,7 @@ export default function LoginPage() {
                 disabled={isLoading}
                 className="w-full py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                {isLoading ? 'PROCESSING...' : 'SIGN IN'}
+                {isLoading ? t('PROCESSING...', 'ĐANG XỬ LÝ...') : t('SIGN IN', 'ĐĂNG NHẬP')}
               </button>
               
               {!isAdminMode && (
@@ -140,7 +142,7 @@ export default function LoginPage() {
                   disabled={isLoading}
                   className="w-full py-4 border border-border font-bold uppercase tracking-widest hover:bg-muted transition-colors disabled:opacity-50"
                 >
-                  SIGN UP
+                  {t('SIGN UP', 'ĐĂNG KÝ')}
                 </button>
               )}
             </div>

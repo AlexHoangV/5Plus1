@@ -2,15 +2,18 @@
 
 import React from 'react';
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const ContactSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="contact" className="py-24 md:py-32 bg-background">
       <div className="container mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="flex flex-col gap-4 mb-20 md:mb-24 text-center items-center">
           <h2 className="relative text-5xl md:text-7xl lg:text-8xl font-display font-bold uppercase tracking-tight">
-            Get in Touch
+            {t('Get in Touch', 'Liên Hệ')}
             <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-24 md:w-32 h-2 bg-primary"></span>
           </h2>
         </div>
@@ -20,7 +23,7 @@ const ContactSection = () => {
           <div className="flex flex-col space-y-12">
             <div>
               <h3 className="font-display text-2xl font-bold uppercase tracking-wide mb-8">
-                Contact Info
+                {t('Contact Info', 'Thông Tin')}
               </h3>
               
               <div className="space-y-6">
@@ -43,7 +46,7 @@ const ContactSection = () => {
                     <Phone size={18} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Phone</p>
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">{t('Phone', 'Điện Thoại')}</p>
                     <a href="tel:+84901234567" className="font-mono text-sm tracking-tight hover:text-primary transition-colors">
                       +84 90 123 4567
                     </a>
@@ -56,7 +59,7 @@ const ContactSection = () => {
                     <MapPin size={18} strokeWidth={1.5} />
                   </div>
                   <div>
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">Office</p>
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-1">{t('Office', 'Văn Phòng')}</p>
                     <p className="font-mono text-sm tracking-tight">
                       District 1, Ho Chi Minh City, Vietnam
                     </p>
@@ -68,7 +71,10 @@ const ContactSection = () => {
             {/* Quote Block */}
             <div className="border border-border p-8 md:p-10 relative overflow-hidden">
               <p className="font-mono text-sm leading-relaxed text-muted-foreground relative z-10 italic">
-                "We believe that great architecture comes from great communication. Let's discuss your vision."
+                {t(
+                  '"We believe that great architecture comes from great communication. Let\'s discuss your vision."',
+                  '"Chúng tôi tin rằng kiến trúc tuyệt vời đến từ sự kết nối tuyệt vời. Hãy thảo luận về tầm nhìn của bạn."'
+                )}
               </p>
             </div>
           </div>
@@ -78,10 +84,10 @@ const ContactSection = () => {
               <form className="flex flex-col space-y-10" onSubmit={(e) => e.preventDefault()}>
                 {/* Name Input */}
                 <div className="flex flex-col space-y-3">
-                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Name</label>
+                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{t('Name', 'Họ Tên')}</label>
                   <input 
                     type="text" 
-                    placeholder="ENTER YOUR NAME" 
+                    placeholder={t('ENTER YOUR NAME', 'NHẬP HỌ TÊN')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
                   />
                 </div>
@@ -91,17 +97,17 @@ const ContactSection = () => {
                   <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Email</label>
                   <input 
                     type="email" 
-                    placeholder="ENTER YOUR EMAIL" 
+                    placeholder={t('ENTER YOUR EMAIL', 'NHẬP EMAIL')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
                   />
                 </div>
   
                 {/* Message Input */}
                 <div className="flex flex-col space-y-3">
-                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Message</label>
+                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{t('Message', 'Lời Nhắn')}</label>
                   <textarea 
                     rows={4}
-                    placeholder="TELL US ABOUT YOUR PROJECT" 
+                    placeholder={t('TELL US ABOUT YOUR PROJECT', 'HÃY CHO CHÚNG TÔI BIẾT VỀ DỰ ÁN CỦA BẠN')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40 resize-none min-h-[100px]"
                   ></textarea>
                 </div>
@@ -111,7 +117,7 @@ const ContactSection = () => {
                   type="submit" 
                   className="btn-primary group w-full justify-center py-5 mt-4"
                 >
-                  Send Message
+                  {t('Send Message', 'Gửi Lời Nhắn')}
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </button>
               </form>
@@ -123,10 +129,13 @@ const ContactSection = () => {
             <div className="flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="max-w-xl text-center md:text-left">
                 <h3 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-6">
-                  Book a Consultant Today!
+                  {t('Book a Consultant Today!', 'Đặt Lịch Tư Vấn Ngay!')}
                 </h3>
                 <p className="font-mono text-sm tracking-widest opacity-60 uppercase mb-8">
-                  Explore our vision through these exclusive showcases.
+                  {t(
+                    'Explore our vision through these exclusive showcases.',
+                    'Khám phá tầm nhìn của chúng tôi qua các buổi giới thiệu độc quyền.'
+                  )}
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                   <a 
@@ -161,15 +170,15 @@ const ContactSection = () => {
                   href="/request-order"
                   className="block w-full md:w-[400px] h-[150px] bg-primary text-primary-foreground flex items-center justify-center font-display text-2xl font-bold uppercase tracking-tighter hover:opacity-90 transition-opacity text-center px-8"
                 >
-                  Start Your Project Journey
+                  {t('Start Your Project Journey', 'Bắt Đầu Hành Trình Dự Án')}
                 </a>
               </div>
             </div>
           </div>
         </div>
       </section>
-
   );
 };
+
 
 export default ContactSection;

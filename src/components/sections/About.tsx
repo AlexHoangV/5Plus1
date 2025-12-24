@@ -1,8 +1,10 @@
 "use client";
 
 import React from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 const AboutUs = () => {
+  const { t } = useLanguage();
   const godaiElements = [
     {
       kanji: "地",
@@ -75,9 +77,9 @@ const AboutUs = () => {
                     <p>
                       Established in 2010, Five + One brings a unique perspective to architectural design, blending traditional Japanese minimalism with modern brutalist aesthetics.
                     </p>
-                    <p>
-                      Concept 'Five + One' của ông được phát triển từ Godai (Ngũ Đại) - triết lý Nhật Bản cổ xưa về năm nguyên tố hình thành nên vũ trụ: Đất, Nước, Lửa, Gió và Hư Không. Yếu tố "+ One" đại diện cho con người, nhân tố kết nối và mang lại sự sống cho không gian kiến trúc.
-                    </p>
+                      <p>
+                        The 'Five + One' concept is developed from Godai (The Five Great Elements) - the ancient Japanese philosophy of the five elements that form the universe: Earth, Water, Fire, Wind, and Void. The '+ One' element represents humans, the factor that connects and brings life to the architectural space.
+                      </p>
                   </div>
                 </div>
               </div>

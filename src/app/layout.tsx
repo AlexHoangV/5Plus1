@@ -4,6 +4,8 @@ import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Chatbot } from "@/components/Chatbot";
 
+import { LanguageProvider } from "@/hooks/useLanguage";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,9 +31,11 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          {children}
-          <Chatbot />
-          <VisualEditsMessenger />
+          <LanguageProvider>
+            {children}
+            <Chatbot />
+            <VisualEditsMessenger />
+          </LanguageProvider>
         </body>
 
     </html>

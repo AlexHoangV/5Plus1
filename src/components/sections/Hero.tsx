@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 /**
  * Hero component for the Five + One Architecture website.
@@ -8,6 +9,8 @@ import React from 'react';
  * and a black promotional square on the right.
  */
 const Hero = () => {
+  const { t } = useLanguage();
+
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-8">
         {/* Background Layer with opacity and overlay */}
@@ -33,15 +36,15 @@ const Hero = () => {
           
             <div className="border-l-[6px] border-[#C6733B] pl-8 space-y-8">
               <p className="font-mono text-lg md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
-                Architectural Design <br />
-                &amp; Planning
+                {t('Architectural Design', 'Thiết Kế Kiến Trúc')} <br />
+                &amp; {t('Planning', 'Quy Hoạch')}
               </p>
               <div className="pt-4">
                 <a 
                   href="/login" 
                   className="inline-block bg-primary text-primary-foreground px-8 py-4 font-mono text-sm uppercase tracking-[0.2em] hover:bg-primary/90 transition-colors"
                 >
-                  Start Your Project
+                  {t('Start Your Project', 'Bắt Đầu Dự Án')}
                 </a>
               </div>
             </div>
@@ -67,7 +70,10 @@ const Hero = () => {
               
               {/* Quote about architectural harmony */}
               <p className="font-mono text-sm sm:text-base leading-relaxed text-justify tracking-normal lowercase relative z-10">
-                &quot;Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony.&quot;
+                {t(
+                  '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
+                  '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
+                )}
               </p>
             </div>
           </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { useLanguage } from '@/hooks/useLanguage';
 
 /**
  * ProjectsSection Component
@@ -144,19 +145,25 @@ const ProjectCard = ({ project }: { project: Project }) => {
   );
 };
 
-const ProjectsSection = () => {
-  return (
-    <section id="projects" className="py-24 md:py-32 bg-white">
-      <div className="container mx-auto">
-        {/* Section Header */}
-        <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
-          <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
-            Projects
-          </h2>
-          <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
-            Selected architectural interventions / Residential, Commercial & Urban Studies
-          </p>
-        </div>
+  const ProjectsSection = () => {
+    const { t } = useLanguage();
+    
+    return (
+      <section id="projects" className="py-24 md:py-32 bg-white">
+        <div className="container mx-auto">
+          {/* Section Header */}
+          <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
+            <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
+              {t('Projects', 'Dự Án')}
+            </h2>
+            <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
+              {t(
+                'Selected architectural interventions / Residential, Commercial & Urban Studies',
+                'Các can thiệp kiến trúc tiêu biểu / Nhà ở, Thương mại & Nghiên cứu Đô thị'
+              )}
+            </p>
+          </div>
+
 
         {/* Project Grid - Artistic Brutalist Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">

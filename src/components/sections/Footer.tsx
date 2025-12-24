@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useLanguage } from "@/hooks/useLanguage";
 
 /**
  * Footer component for the Five + One website.
@@ -9,6 +10,8 @@ import React from "react";
  * bold display typography for the logo, and monospaced font for copyright.
  */
 const Footer = () => {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-[#000000] text-white py-12 md:py-16">
       <div className="container mx-auto px-4 md:px-8">
@@ -50,7 +53,7 @@ const Footer = () => {
               <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] leading-relaxed opacity-60">
                 © 2025 Five Plus One Architecture.
                 <br className="md:hidden" />
-                <span className="md:ml-1">All rights reserved.</span>
+                <span className="md:ml-1">{t('All rights reserved.', 'Bản quyền được bảo lưu.')}</span>
               </p>
             </div>
 
