@@ -54,11 +54,13 @@
     --font-serif-jp: "Noto Serif JP", serif;
 
     --letter-spacing-technical: 0.05em;
-    --letter-spacing-display: -0.02em;
+    --letter-spacing-display: -0.01em;
+    --letter-spacing-tight: -0.04em;
+    --letter-spacing-wide: 0.02em;
 
-  --radius-lg: 0px;
-  --radius-md: 0px;
-  --radius-sm: 0px;
+  --radius-lg: 4px;
+  --radius-md: 4px;
+  --radius-sm: 4px;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;

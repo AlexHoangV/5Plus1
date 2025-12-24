@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Space_Mono } from "next/font/google";
+import { Reddit_Sans, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Chatbot } from "@/components/Chatbot";
 
 import { LanguageProvider } from "@/hooks/useLanguage";
 
-const mainFont = Bricolage_Grotesque({
+const mainFont = Reddit_Sans({
   variable: "--font-main",
   subsets: ["latin", "vietnamese"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 const monoFont = Space_Mono({
