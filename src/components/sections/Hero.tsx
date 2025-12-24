@@ -30,12 +30,20 @@ const Hero = () => {
             <span>ONE</span>
           </h1>
           
-          <div className="border-l-[6px] border-[#C6733B] pl-8">
-            <p className="font-mono text-lg md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
-              Architectural Design <br />
-              &amp; Planning
-            </p>
-          </div>
+            <div className="border-l-[6px] border-[#C6733B] pl-8 space-y-8">
+              <p className="font-mono text-lg md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
+                Architectural Design <br />
+                &amp; Planning
+              </p>
+              <div className="pt-4">
+                <a 
+                  href="/login" 
+                  className="inline-block bg-primary text-primary-foreground px-8 py-4 font-mono text-sm uppercase tracking-[0.2em] hover:bg-primary/90 transition-colors"
+                >
+                  Start Your Project
+                </a>
+              </div>
+            </div>
         </div>
 
         {/* Right Column: Promotional Black Square */}
