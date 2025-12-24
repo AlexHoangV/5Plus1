@@ -74,17 +74,15 @@ export async function POST(req: Request) {
     // - Coalesce consecutive same-role messages
     // - Ensure starts with 'user'
     // - Ensure alternating roles
-    // - Ensure ends with 'model' (before sending the current user message)
     
     let processedMessages: any[] = [];
     let lastRole: string | null = null;
 
-    // Filter and coalesce
-    for (let i = 0; i < messages.length - 1; i++) {
-      const msg = messages[i];
+    // Process all messages including the new one
+    for (const msg of messages) {
       const role = msg.role === 'user' ? 'user' : 'model';
       
-      if (role === lastRole) {
+      if (role === lastRole && processedMessages.length > 0) {
         processedMessages[processedMessages.length - 1].parts[0].text += "\n" + msg.content;
       } else {
         processedMessages.push({
@@ -95,24 +93,33 @@ export async function POST(req: Request) {
       }
     }
 
-    // Remove until first 'user'
+    // Remove leading 'model' messages
     while (processedMessages.length > 0 && processedMessages[0].role !== 'user') {
       processedMessages.shift();
     }
 
-    // Now processedMessages starts with 'user' and alternates roles.
-    // Ensure it ends with 'model' because next message will be 'user'
-    let finalLastUserMessage = lastUserMessage;
-    if (processedMessages.length > 0 && processedMessages[processedMessages.length - 1].role === 'user') {
-      const popped = processedMessages.pop();
-      finalLastUserMessage = popped.parts[0].text + "\n" + finalLastUserMessage;
+    if (processedMessages.length === 0) {
+      return NextResponse.json({ 
+        error: "No valid user message found",
+        content: language === 'en' ? "How can I help you today?" : "Tôi có thể giúp gì cho bạn?"
+      });
     }
 
+    // Split into history and last user message
+    // Gemini startChat history MUST NOT include the message we're about to send
+    // And it MUST end with a 'model' message or be empty.
+    
+    const lastMsg = processedMessages.pop();
+    let finalLastUserMessage = lastMsg.parts[0].text;
+    
+    // If the last message was from 'model', something is wrong (the user just sent a message)
+    // But our loop above ensures if the last message in 'messages' was 'user', then lastMsg is 'user'.
+    
     const finalHistory = processedMessages;
 
     // 2. Initialize Model
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-8b",
+      model: "gemini-1.5-flash",
       systemInstruction: {
         parts: [{ text: `Role & Knowledge Base:\n${knowledgeBase}\n\nLanguage: ${language}` }],
       }
@@ -120,18 +127,32 @@ export async function POST(req: Request) {
 
     // 3. Attempt Chat
     try {
+      console.log("Chat Attempt - Model: gemini-1.5-flash");
+      // Validate history alternating
+      // If history ends with 'user', we need to append it to the next message
+      // because startChat history -> next message must be user.
+      let chatHistory = [...finalHistory];
+      let messageToSend = finalLastUserMessage;
+
+      if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') {
+        const lastHistoryMsg = chatHistory.pop();
+        messageToSend = lastHistoryMsg.parts[0].text + "\n" + messageToSend;
+      }
+
+      console.log("History Length:", chatHistory.length);
+      console.log("Message to Send:", messageToSend.substring(0, 50) + "...");
+
       const chat = model.startChat({
-        history: finalHistory,
+        history: chatHistory,
       });
 
-      const result = await chat.sendMessage(finalLastUserMessage);
+      const result = await chat.sendMessage(messageToSend);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     } catch (chatError: any) {
-      console.error("Chat Session Error:", chatError);
+      console.error("Chat Session Error Details:", chatError.message);
       // Fallback to simple generateContent if chat session fails
-      const prompt = `System: ${knowledgeBase}\nLanguage: ${language}\n\nUser: ${finalLastUserMessage}\nAssistant:`;
-      const result = await model.generateContent(prompt);
+      const result = await model.generateContent(finalLastUserMessage);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     }
