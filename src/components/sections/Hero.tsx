@@ -24,11 +24,12 @@ const Hero = () => {
       <div className="container mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         {/* Left Column: Headline and Subtitle */}
         <div className="flex flex-col">
-          <h1 className="text-[5.5rem] md:text-[8rem] lg:text-[11rem] font-display font-bold leading-[0.80] tracking-[-0.06em] mb-12 flex flex-col uppercase">
-            <span>FIVE</span>
-            <span className="text-[#C6733B] my-2">+</span>
-            <span>ONE</span>
-          </h1>
+            <h1 className="hero-title font-display font-bold leading-[0.80] tracking-[-0.06em] mb-12 flex flex-col uppercase">
+              <span>FIVE</span>
+              <span className="text-[#C6733B] my-2">+</span>
+              <span>ONE</span>
+            </h1>
+
           
             <div className="border-l-[6px] border-[#C6733B] pl-8 space-y-8">
               <p className="font-mono text-lg md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">

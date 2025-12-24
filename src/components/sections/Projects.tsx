@@ -147,13 +147,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
 const ProjectsSection = () => {
   return (
     <section id="projects" className="py-24 md:py-32 bg-white">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12">
+      <div className="container mx-auto">
         {/* Section Header */}
         <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
-          <h2 className="relative text-5xl md:text-7xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-none">
+          <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
             Projects
-            {/* The signature terracotta underline */}
-            <span className="absolute -bottom-4 left-0 w-[160px] h-3 bg-[#c6733b]" />
           </h2>
           <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
             Selected architectural interventions / Residential, Commercial & Urban Studies
