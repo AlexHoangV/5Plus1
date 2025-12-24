@@ -77,7 +77,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       </div>
 
       {/* Content Area */}
-      <div className="flex flex-col border-t border-[#e5e5e5] pt-4">
+      <div className="flex flex-col pt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
         <h3 className="text-xl md:text-2xl font-display font-black uppercase tracking-tight mb-1 group-hover:text-[#c6733b] transition-colors leading-none">
           {project.title}
         </h3>
