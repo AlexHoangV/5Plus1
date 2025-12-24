@@ -1,11 +1,43 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { supabase } from '@/lib/supabase';
+import { toast } from 'sonner';
 
 const ContactSection = () => {
   const { t } = useLanguage();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error('Please fill in all fields');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from('contact_messages')
+        .insert([formData]);
+
+      if (error) throw error;
+
+      toast.success(t('Message sent successfully!', 'Gửi tin nhắn thành công!'));
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="contact" className="py-24 md:py-32 bg-background">
@@ -81,14 +113,17 @@ const ContactSection = () => {
 
             {/* Right Column: Contact Form */}
             <div className="flex flex-col">
-              <form className="flex flex-col space-y-10" onSubmit={(e) => e.preventDefault()}>
+              <form className="flex flex-col space-y-10" onSubmit={handleSubmit}>
                 {/* Name Input */}
                 <div className="flex flex-col space-y-3">
                   <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{t('Name', 'Họ Tên')}</label>
                   <input 
                     type="text" 
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder={t('ENTER YOUR NAME', 'NHẬP HỌ TÊN')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
+                    required
                   />
                 </div>
   
@@ -97,8 +132,11 @@ const ContactSection = () => {
                   <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Email</label>
                   <input 
                     type="email" 
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder={t('ENTER YOUR EMAIL', 'NHẬP EMAIL')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
+                    required
                   />
                 </div>
   
@@ -107,18 +145,22 @@ const ContactSection = () => {
                   <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{t('Message', 'Lời Nhắn')}</label>
                   <textarea 
                     rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder={t('TELL US ABOUT YOUR PROJECT', 'HÃY CHO CHÚNG TÔI BIẾT VỀ DỰ ÁN CỦA BẠN')}
                     className="input-underline font-mono text-xs placeholder:text-muted-foreground/40 resize-none min-h-[100px]"
+                    required
                   ></textarea>
                 </div>
   
                 {/* Submit Button */}
                 <button 
                   type="submit" 
-                  className="btn-primary group w-full justify-center py-5 mt-4"
+                  disabled={isSubmitting}
+                  className="btn-primary group w-full justify-center py-5 mt-4 disabled:opacity-50"
                 >
-                  {t('Send Message', 'Gửi Lời Nhắn')}
-                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                  {isSubmitting ? t('Sending...', 'Đang gửi...') : t('Send Message', 'Gửi Lời Nhắn')}
+                  {!isSubmitting && <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />}
                 </button>
               </form>
             </div>
