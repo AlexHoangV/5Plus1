@@ -55,21 +55,32 @@ const AboutUs = () => {
               </h2>
             </div>
             
-            <div className="mt-16">
-              <h3 className="text-2xl font-display font-bold mb-2 text-black uppercase">Mr. Kosuke Osawa</h3>
-              <p className="font-mono text-[#C6733B] text-sm uppercase tracking-wider mb-8">
-                Principal Architect
-              </p>
-              
-              <div className="prose font-mono text-sm leading-relaxed text-[#737373] space-y-6">
-                <p>
-                  Established in 2010, Five + One brings a unique perspective to architectural design, blending traditional Japanese minimalism with modern brutalist aesthetics.
-                </p>
-                <p>
-                  Concept 'Five + One' của ông được phát triển từ Godai (Ngũ Đại) - triết lý Nhật Bản cổ xưa về năm nguyên tố hình thành nên vũ trụ: Đất, Nước, Lửa, Gió và Hư Không. Yếu tố "+ One" đại diện cho con người, nhân tố kết nối và mang lại sự sống cho không gian kiến trúc.
-                </p>
+              <div className="mt-16 flex flex-col md:flex-row gap-12 items-start">
+                <div className="w-full md:w-1/3 shrink-0">
+                  <div className="aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+                    <img 
+                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766600883475.jpg?width=8000&height=8000&resize=contain" 
+                      alt="Mr. Kosuke Osawa" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-display font-bold mb-2 text-black uppercase">Mr. Kosuke Osawa</h3>
+                  <p className="font-mono text-[#C6733B] text-sm uppercase tracking-wider mb-8">
+                    Principal Architect
+                  </p>
+                  
+                  <div className="prose font-mono text-sm leading-relaxed text-[#737373] space-y-6">
+                    <p>
+                      Established in 2010, Five + One brings a unique perspective to architectural design, blending traditional Japanese minimalism with modern brutalist aesthetics.
+                    </p>
+                    <p>
+                      Concept 'Five + One' của ông được phát triển từ Godai (Ngũ Đại) - triết lý Nhật Bản cổ xưa về năm nguyên tố hình thành nên vũ trụ: Đất, Nước, Lửa, Gió và Hư Không. Yếu tố "+ One" đại diện cho con người, nhân tố kết nối và mang lại sự sống cho không gian kiến trúc.
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
           </div>
 
           {/* Right Column: Godai Grid */}

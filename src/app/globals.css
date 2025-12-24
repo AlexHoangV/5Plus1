@@ -48,9 +48,12 @@
   --color-sidebar-border: #e5e5e5;
   --color-sidebar-ring: #c6733b;
 
-  --font-display: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
-  --font-serif-jp: "Noto Serif JP", serif;
+    --font-display: "Inter", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --font-serif-jp: "Noto Serif JP", serif;
+
+    --letter-spacing-technical: 0.1em;
+    --letter-spacing-display: -0.04em;
 
   --radius-lg: 0px;
   --radius-md: 0px;
@@ -127,7 +130,7 @@
     font-family: var(--font-display);
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -0.05em;
+    letter-spacing: var(--letter-spacing-display);
     line-height: 0.85;
   }
 
@@ -169,7 +172,7 @@
   .font-mono {
     font-family: var(--font-mono);
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: var(--letter-spacing-technical);
   }
 
   .font-serif-jp {

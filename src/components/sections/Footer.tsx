@@ -14,11 +14,16 @@ const Footer = () => {
       <div className="container mx-auto px-4 md:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0">
           {/* Logo Section */}
-          <div className="flex items-center">
-            <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tighter uppercase flex items-center gap-2">
-              FIVE <span className="text-[#C6733B] font-mono">+</span> ONE
-            </h2>
-          </div>
+            <div className="flex items-center gap-4">
+              <img 
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/15624988_581414668721475_3119813739293966336_a-1766600896149.jpg?width=8000&height=8000&resize=contain"
+                alt="FIVE + ONE"
+                className="h-12 w-12 object-contain invert"
+              />
+              <h2 className="font-display text-2xl md:text-3xl font-bold tracking-tighter uppercase flex items-center gap-2">
+                FIVE <span className="text-[#C6733B] font-mono">+</span> ONE
+              </h2>
+            </div>
 
           {/* Copyright Section */}
           <div className="text-center md:text-right">
