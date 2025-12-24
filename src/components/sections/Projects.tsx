@@ -20,38 +20,93 @@ interface Project {
   title: string;
   category: string;
   image: string;
+  size?: "small" | "medium" | "large";
 }
 
 const projects: Project[] = [
   {
     id: "01",
-    title: "Museum Residence",
-    category: "Residential",
-    image: "https://images.unsplash.com/photo-1600596542815-2a4d9fdd40d7?auto=format&fit=crop&q=80&w=800",
+    title: "Project Mangetsu",
+    category: "Da Nang / Renovation",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-1766603064607.png",
+    size: "large"
   },
   {
     id: "02",
-    title: "Townbridge",
-    category: "Commercial",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=800",
+    title: "Truc Bach Saga",
+    category: "Hanoi / Urban Mapping",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.2-1766603600381.png",
+    size: "medium"
   },
   {
     id: "03",
-    title: "Savory Residence",
-    category: "Interior",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=800",
+    title: "Project Barbaros",
+    category: "Hanoi / Social Space",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.3-1766603600383.png",
+    size: "medium"
   },
   {
     id: "04",
-    title: "Fire Ceramic",
-    category: "Installation",
-    image: "https://images.unsplash.com/photo-1600566753086-00f18cf27f43?auto=format&fit=crop&q=80&w=800",
+    title: "Asobi Bar",
+    category: "Da Nang / Commercial",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603600605.png",
+    size: "medium"
   },
   {
     id: "05",
-    title: "MW/G Apartment",
-    category: "Interior",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800",
+    title: "Mangetsu Anatomy",
+    category: "Architectural Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603064608.png",
+    size: "medium"
+  },
+  {
+    id: "06",
+    title: "Tay Ho Section",
+    category: "Spatial Study / In-Progress",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-2-1766603600397.png",
+    size: "large"
+  },
+  {
+    id: "07",
+    title: "Mangetsu Volumetric",
+    category: "Exploded Axonometric",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-1766603064607.png",
+    size: "medium"
+  },
+  {
+    id: "08",
+    title: "Lang Thang",
+    category: "Cafe / Social",
+    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&q=80&w=800",
+    size: "medium"
+  },
+  {
+    id: "09",
+    title: "Fu Hoo Cafe",
+    category: "Commercial / Fusion",
+    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
+    size: "medium"
+  },
+  {
+    id: "10",
+    title: "Goodtime Burger",
+    category: "Brutalist Dining",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
+    size: "medium"
+  },
+  {
+    id: "11",
+    title: "Dot Cafe",
+    category: "Compact Interior",
+    image: "https://images.unsplash.com/photo-1449156001437-3a144174828b?auto=format&fit=crop&q=80&w=800",
+    size: "medium"
+  },
+  {
+    id: "12",
+    title: "Tita Art Space",
+    category: "Cultural Installation",
+    image: "https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=800",
+    size: "large"
   },
 ];
 
@@ -59,9 +114,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <div className="group cursor-pointer">
       {/* Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden mb-4 bg-[#f5f5f5]">
+      <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
         {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-[#c6733b]/0 group-hover:bg-[#c6733b]/20 transition-colors duration-500 z-10" />
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
         
         {/* Project Image */}
         <img
@@ -92,33 +147,72 @@ const ProjectCard = ({ project }: { project: Project }) => {
 const ProjectsSection = () => {
   return (
     <section id="projects" className="py-24 md:py-32 bg-white">
-      <div className="max-w-[1280px] mx-auto px-4 md:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-12">
         {/* Section Header */}
-        <div className="flex flex-col gap-4 mb-16 md:mb-24 text-left items-start">
-          <h2 className="relative text-4xl md:text-6xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-none">
-            Selected Works
+        <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
+          <h2 className="relative text-5xl md:text-7xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-none">
+            Projects
             {/* The signature terracotta underline */}
-            <span className="absolute -bottom-4 left-0 w-[120px] h-2 bg-[#c6733b]" />
+            <span className="absolute -bottom-4 left-0 w-[160px] h-3 bg-[#c6733b]" />
           </h2>
-          <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.15em] mt-6 max-w-xl">
-            Curated collection of residential and commercial projects
+          <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
+            Selected architectural interventions / Residential, Commercial & Urban Studies
           </p>
         </div>
 
-        {/* Project Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 md:gap-x-12 md:gap-y-20">
-          {projects.map((project, index) => (
-            <div 
-              key={project.id}
-              className={`${
-                // Responsive layout logic if needed to match specific grid flow 
-                // but standard 3-col grid handles 5 items well with an empty slot
-                ""
-              }`}
-            >
-              <ProjectCard project={project} />
-            </div>
-          ))}
+        {/* Project Grid - Artistic Brutalist Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
+          {/* Project 01 - Large */}
+          <div className="md:col-span-12">
+            <ProjectCard project={projects[0]} />
+          </div>
+
+          {/* Projects 02 & 03 - Side by Side */}
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[1]} />
+          </div>
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[2]} />
+          </div>
+
+          {/* Project 04 - Offset */}
+          <div className="md:col-span-7 md:col-start-6">
+            <ProjectCard project={projects[3]} />
+          </div>
+
+          {/* Project 05 - Vertical Focus */}
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[4]} />
+          </div>
+
+          {/* Project 06 - Large Central */}
+          <div className="md:col-span-12 my-12">
+            <ProjectCard project={projects[5]} />
+          </div>
+
+          {/* Projects 07 & 08 */}
+          <div className="md:col-span-5">
+            <ProjectCard project={projects[6]} />
+          </div>
+          <div className="md:col-span-7">
+            <ProjectCard project={projects[7]} />
+          </div>
+
+          {/* Projects 09, 10, 11 - Triple Grid */}
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[8]} />
+          </div>
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[9]} />
+          </div>
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[10]} />
+          </div>
+
+          {/* Project 12 - Final Large Statement */}
+          <div className="md:col-span-10 md:col-start-2">
+            <ProjectCard project={projects[11]} />
+          </div>
         </div>
       </div>
     </section>
