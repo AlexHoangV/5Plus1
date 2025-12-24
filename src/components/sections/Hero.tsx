@@ -10,15 +10,15 @@ import React from 'react';
 const Hero = () => {
   return (
     <section className="h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-8">
-      {/* Background Layer with opacity and overlay */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1486325212027-8081e485255e?q=80&amp;w=2070&amp;auto=format&amp;fit=crop"
-          alt="Hero Architecture"
-          className="w-full h-full object-cover opacity-90"
-        />
-        <div className="absolute inset-0 bg-white/90"></div>
-      </div>
+        {/* Background Layer with opacity and overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+            alt="Kosuke Osawa - Principal Architect"
+            className="w-full h-full object-cover grayscale opacity-20"
+          />
+          <div className="absolute inset-0 bg-background/40"></div>
+        </div>
 
       {/* Content Container */}
       <div className="container mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -39,19 +39,29 @@ const Hero = () => {
         </div>
 
         {/* Right Column: Promotional Black Square */}
-        <div className="hidden md:flex justify-center lg:justify-end">
-          <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-square bg-[#000000] p-12 lg:p-16 flex flex-col justify-between text-[#ffffff]">
-            {/* Numerical 01 */}
-            <span className="font-display text-8xl lg:text-9xl font-bold opacity-20 block leading-none">
-              01
-            </span>
-            
-            {/* Quote about architectural harmony */}
-            <p className="font-mono text-sm sm:text-base leading-relaxed text-justify tracking-normal lowercase">
-              &quot;Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony.&quot;
-            </p>
+          <div className="hidden md:flex justify-center lg:justify-end">
+            <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-square relative overflow-hidden flex flex-col justify-between text-[#ffffff] p-12 lg:p-16">
+              {/* Image Background for Section 01 */}
+              <div className="absolute inset-0 z-0">
+                <img
+                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+                  alt="Kosuke Osawa"
+                  className="w-full h-full object-cover grayscale brightness-50"
+                />
+                <div className="absolute inset-0 bg-black/60"></div>
+              </div>
+
+              {/* Numerical 01 */}
+              <span className="font-display text-8xl lg:text-9xl font-bold opacity-20 block leading-none relative z-10">
+                01
+              </span>
+              
+              {/* Quote about architectural harmony */}
+              <p className="font-mono text-sm sm:text-base leading-relaxed text-justify tracking-normal lowercase relative z-10">
+                &quot;Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony.&quot;
+              </p>
+            </div>
           </div>
-        </div>
       </div>
     </section>
   );
