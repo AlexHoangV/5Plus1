@@ -68,93 +68,78 @@ export async function POST(req: Request) {
     }
 
     const knowledgeBase = await getKnowledgeBase(language);
-    const lastUserMessage = messages[messages.length - 1].content;
-
-    // 1. Process and Clean History for Gemini
-    // - Coalesce consecutive same-role messages
-    // - Ensure starts with 'user'
-    // - Ensure alternating roles
     
-    let processedMessages: any[] = [];
-    let lastRole: string | null = null;
+    // 1. Process and Clean History for Gemini
+    // Ensure history is alternating user/model and starts with user
+    const processedMessages = messages
+      .filter((msg: any) => msg.content && msg.content.trim() !== '')
+      .map((msg: any) => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
 
-    // Process all messages including the new one
-    for (const msg of messages) {
-      const role = msg.role === 'user' ? 'user' : 'model';
-      
-      if (role === lastRole && processedMessages.length > 0) {
-        processedMessages[processedMessages.length - 1].parts[0].text += "\n" + msg.content;
+    // Coalesce consecutive same-role messages
+    const coalescedMessages: any[] = [];
+    for (const msg of processedMessages) {
+      if (coalescedMessages.length > 0 && coalescedMessages[coalescedMessages.length - 1].role === msg.role) {
+        coalescedMessages[coalescedMessages.length - 1].parts[0].text += "\n\n" + msg.parts[0].text;
       } else {
-        processedMessages.push({
-          role: role,
-          parts: [{ text: msg.content }]
-        });
-        lastRole = role;
+        coalescedMessages.push(msg);
       }
     }
 
-    // Remove leading 'model' messages
-    while (processedMessages.length > 0 && processedMessages[0].role !== 'user') {
-      processedMessages.shift();
+    // Ensure starts with 'user'
+    while (coalescedMessages.length > 0 && coalescedMessages[0].role !== 'user') {
+      coalescedMessages.shift();
     }
 
-    if (processedMessages.length === 0) {
+    if (coalescedMessages.length === 0) {
       return NextResponse.json({ 
-        error: "No valid user message found",
         content: language === 'en' ? "How can I help you today?" : "Tôi có thể giúp gì cho bạn?"
       });
     }
 
-    // Split into history and last user message
-    // Gemini startChat history MUST NOT include the message we're about to send
-    // And it MUST end with a 'model' message or be empty.
-    
-    const lastMsg = processedMessages.pop();
-    let finalLastUserMessage = lastMsg.parts[0].text;
-    
-    // If the last message was from 'model', something is wrong (the user just sent a message)
-    // But our loop above ensures if the last message in 'messages' was 'user', then lastMsg is 'user'.
-    
-    const finalHistory = processedMessages;
+    // Extract the last message (which must be from 'user')
+    const lastMsg = coalescedMessages.pop();
+    const finalLastUserMessage = lastMsg.parts[0].text;
+    const finalHistory = coalescedMessages;
 
-    // 2. Initialize Model
+    // 2. Initialize Model (Gemini 2.5 Flash - Latest Stable for this key)
+    const MODEL_NAME = "gemini-2.5-flash"; 
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: MODEL_NAME,
       systemInstruction: {
-        parts: [{ text: `Role & Knowledge Base:\n${knowledgeBase}\n\nLanguage: ${language}` }],
+        parts: [{ text: `ROLE & KNOWLEDGE BASE (STRICT RAG):\n${knowledgeBase}\n\nINSTRUCTIONS:\n1. Use ONLY the provided knowledge base to answer.\n2. If unsure, say you don't know and suggest contact.\n3. Keep the tone Architect-like (Zen, Professional).\n4. Current Language: ${language}` }],
       }
     });
 
-    // 3. Attempt Chat
+    // 3. Attempt Chat with robust error handling
     try {
-      console.log("Chat Attempt - Model: gemini-1.5-flash");
-      // Validate history alternating
-      // If history ends with 'user', we need to append it to the next message
-      // because startChat history -> next message must be user.
-      let chatHistory = [...finalHistory];
-      let messageToSend = finalLastUserMessage;
-
-      if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === 'user') {
-        const lastHistoryMsg = chatHistory.pop();
-        messageToSend = lastHistoryMsg.parts[0].text + "\n" + messageToSend;
-      }
-
-      console.log("History Length:", chatHistory.length);
-      console.log("Message to Send:", messageToSend.substring(0, 50) + "...");
-
+      console.log(`Chat Attempt - Model: ${MODEL_NAME}`);
+      
       const chat = model.startChat({
-        history: chatHistory,
+        history: finalHistory,
       });
 
-      const result = await chat.sendMessage(messageToSend);
+      const result = await chat.sendMessage(finalLastUserMessage);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     } catch (chatError: any) {
-      console.error("Chat Session Error Details:", chatError.message);
-      // Fallback to simple generateContent if chat session fails
-      const result = await model.generateContent(finalLastUserMessage);
-      const response = await result.response;
-      return NextResponse.json({ content: response.text() });
+      console.error("Chat Session Error:", chatError.message);
+      
+      // Fallback 1: Try gemini-2.5-flash-lite or direct generateContent
+      try {
+        const result = await model.generateContent({
+          contents: [
+            { role: 'user', parts: [{ text: `System Info: ${knowledgeBase}\n\nUser Question: ${finalLastUserMessage}` }] }
+          ]
+        });
+        const response = await result.response;
+        return NextResponse.json({ content: response.text() });
+      } catch (fallbackError: any) {
+        console.error("All Model Fallbacks Failed:", fallbackError.message);
+        throw fallbackError;
+      }
     }
 
   } catch (error: any) {
