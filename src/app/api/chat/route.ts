@@ -104,25 +104,86 @@ export async function POST(req: Request) {
     const finalLastUserMessage = lastMsg.parts[0].text;
     const finalHistory = coalescedMessages;
 
-    // 2. Initialize Model (Gemini 2.5 Flash - Latest Stable for this key)
-    const MODEL_NAME = "gemini-2.5-flash"; 
+    // 2. Initialize Model (Gemini 1.5 Flash - Most Stable for Tool Calling)
+    const MODEL_NAME = "gemini-1.5-flash"; 
     const model = genAI.getGenerativeModel({ 
       model: MODEL_NAME,
       systemInstruction: {
-        parts: [{ text: `ROLE & KNOWLEDGE BASE (STRICT RAG):\n${knowledgeBase}\n\nINSTRUCTIONS:\n1. Use ONLY the provided knowledge base to answer.\n2. If unsure, say you don't know and suggest contact.\n3. Keep the tone Architect-like (Zen, Professional).\n4. Current Language: ${language}` }],
-      }
+        parts: [{ text: `ROLE: You are the AI Architect for Five Plus One (Kosuke Osawa).
+KNOWLEDGE BASE:
+${knowledgeBase}
+
+STRICT PROTOCOL FOR LEADS:
+1. If a user asks to book, design, or work together, you MUST collect:
+   - Full Name
+   - Email
+   - Phone Number
+   - Request Details (Project scope)
+2. DO NOT call 'create_order' until you have ALL FOUR pieces of information.
+3. After calling the tool, confirm to the user that Kosuke's team will reach out.
+4. Language: ${language === 'vi' ? 'Vietnamese' : 'English'}` }],
+      },
+      tools: [
+        {
+          functionDeclarations: [
+            {
+              name: "create_order",
+              description: "Sends customer lead information to the CRM system.",
+              parameters: {
+                type: "OBJECT",
+                properties: {
+                  name: { type: "STRING" },
+                  email: { type: "STRING" },
+                  phone: { type: "STRING" },
+                  message: { type: "STRING" },
+                },
+                required: ["name", "email", "phone", "message"],
+              },
+            },
+          ],
+        },
+      ],
     });
 
     // 3. Attempt Chat with robust error handling
     try {
-      console.log(`Chat Attempt - Model: ${MODEL_NAME}`);
-      
       const chat = model.startChat({
         history: finalHistory,
       });
 
       const result = await chat.sendMessage(finalLastUserMessage);
       const response = await result.response;
+      
+      // Handle Function Calls
+      const call = response.functionCalls()?.[0];
+      if (call && call.name === "create_order") {
+        const { name, email, phone, message } = call.args as any;
+        
+        // 1. Internal CRM: Save to Supabase
+        await supabase.from('contact_messages').insert([{ name, email, phone, message }]);
+
+        // 2. External CRM: Try sending to Bottle CRM or Webhook if configured
+        // We log it here for now. User can add CRM_WEBHOOK_URL to .env.local
+        const webhookUrl = process.env.CRM_WEBHOOK_URL;
+        if (webhookUrl) {
+          try {
+            await fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, phone, message, source: 'Chatbot AI' }),
+            });
+          } catch (e) {
+            console.error("External CRM sync failed:", e);
+          }
+        }
+
+        return NextResponse.json({ 
+          content: language === 'en' 
+            ? `Excellent. I've recorded your details, ${name}. Our studio will review your request and contact you at ${email} or ${phone} soon.` 
+            : `Tuyệt vời. Tôi đã ghi lại thông tin của bạn, ${name}. Studio của chúng tôi sẽ xem xét yêu cầu và liên hệ với bạn qua ${email} hoặc ${phone} sớm nhất.`
+        });
+      }
+
       return NextResponse.json({ content: response.text() });
     } catch (chatError: any) {
       console.error("Chat Session Error:", chatError.message);
