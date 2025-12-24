@@ -16,7 +16,7 @@ const Hero = () => {
         {/* Background Layer with opacity and overlay */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+            src="https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
             alt="Kosuke Osawa - Principal Architect"
             className="w-full h-full object-cover grayscale opacity-20"
           />
@@ -56,7 +56,7 @@ const Hero = () => {
               {/* Image Background for Section 01 */}
               <div className="absolute inset-0 z-0">
                 <img
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+                  src="https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
                   alt="Kosuke Osawa"
                   className="w-full h-full object-cover grayscale brightness-50"
                 />

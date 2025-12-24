@@ -15,7 +15,7 @@ const ClientStories = () => {
       nameVi: "Fu hoo Cafe",
       descEn: "A coffee space where culture meets serenity.",
       descVi: "Một không gian cà phê giao thoa giữa văn hóa và sự tĩnh lặng.",
-      image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Fu-hoo-1766607274341.jpg?width=8000&height=8000&resize=contain",
+      image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/Fu-hoo-1766607274341.jpg?width=8000&height=8000&resize=contain",
       hasVideo: true,
     },
     {
@@ -36,7 +36,7 @@ const ClientStories = () => {
       nameVi: "Nhà Hàng Mangetsu",
       descEn: "Renovating spaces from the most rustic materials.",
       descVi: "Cải tạo không gian từ những vật liệu thô mộc nhất.",
-      image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Mangetsu-1766607274341.jpg?width=8000&height=8000&resize=contain",
+      image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/Mangetsu-1766607274341.jpg?width=8000&height=8000&resize=contain",
     },
     {
       id: "04",
@@ -44,7 +44,7 @@ const ClientStories = () => {
       nameVi: "Căn Hộ Tô Ngọc Vân 'Tơ Lòng'",
       descEn: "Apartment interior design with a strong personal touch.",
       descVi: "Thiết kế nội thất căn hộ mang đậm dấu ấn cá nhân.",
-      image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/To-Long-1766607274341.jpg?width=8000&height=8000&resize=contain",
+      image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/To-Long-1766607274341.jpg?width=8000&height=8000&resize=contain",
     }
   ];
 

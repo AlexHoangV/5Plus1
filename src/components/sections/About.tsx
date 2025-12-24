@@ -69,7 +69,7 @@ const AboutUs = () => {
                   <div className="w-full md:w-1/3 shrink-0">
                     <div className="aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                       <img 
-                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766600883475.jpg?width=8000&height=8000&resize=contain" 
+                        src="https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766600883475.jpg?width=8000&height=8000&resize=contain" 
                         alt={t("Mr. Kosuke Osawa", "KTS. Kosuke Osawa")} 
                         className="w-full h-full object-cover"
                       />

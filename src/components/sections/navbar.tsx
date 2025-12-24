@@ -64,7 +64,7 @@
           >
             <div className="relative h-14 md:h-16 w-14 md:w-16 flex items-center justify-center">
                <Image 
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/15624988_581414668721475_3119813739293966336_a-1766600896149.jpg?width=8000&height=8000&resize=contain"
+                  src="https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/15624988_581414668721475_3119813739293966336_a-1766600896149.jpg?width=8000&height=8000&resize=contain"
                   alt="FIVE + ONE"
                   width={64}
                   height={64}

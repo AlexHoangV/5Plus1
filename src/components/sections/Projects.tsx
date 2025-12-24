@@ -29,84 +29,84 @@ const projects: Project[] = [
     id: "01",
     title: "Project Mangetsu",
     category: "Da Nang / Renovation",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-1766603064607.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2-1766603064607.png",
     size: "large"
   },
   {
     id: "02",
     title: "Truc Bach Saga",
     category: "Hanoi / Urban Mapping",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.2-1766603600381.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2.2-1766603600381.png",
     size: "medium"
   },
   {
     id: "03",
     title: "Project Barbaros",
     category: "Hanoi / Social Space",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.3-1766603600383.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2.3-1766603600383.png",
     size: "medium"
   },
   {
     id: "04",
     title: "Asobi Bar",
     category: "Da Nang / Commercial",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603600605.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603600605.png",
     size: "medium"
   },
   {
     id: "05",
     title: "Mangetsu Anatomy",
     category: "Architectural Analysis",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603064608.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603064608.png",
     size: "medium"
   },
   {
     id: "06",
     title: "Tay Ho Section",
     category: "Spatial Study / In-Progress",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-2-1766603600397.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/3-2-1766603600397.png",
     size: "large"
   },
   {
     id: "07",
     title: "Project Asobi Bar",
     category: "Da Nang / Commercial",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603962182.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603962182.png",
     size: "medium"
   },
   {
     id: "08",
     title: "Project Tho",
     category: "Hanoi / Interior Space",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.7-1766603962180.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/2.7-1766603962180.png",
     size: "medium"
   },
   {
     id: "09",
     title: "Project Mangetsu Da Nang",
     category: "Axonometric Diagram",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603962281.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603962281.png",
     size: "medium"
   },
   {
     id: "10",
     title: "Project Tần Mẫn Bakery",
     category: "Commercial / Bakery",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/1.6-1766604061650.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/1.6-1766604061650.png",
     size: "medium"
   },
   {
     id: "11",
     title: "Project Mangetsu Da Nang",
     category: "Material Analysis",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/5-1766604061733.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/5-1766604061733.png",
     size: "medium"
   },
   {
     id: "12",
     title: "Case Study: Casa Gilardi",
     category: "Luis Barragán / Analysis",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/9-1766604061733.png",
+    image: "https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/render/image/public/document-uploads/9-1766604061733.png",
     size: "large"
   },
 ];
