@@ -68,44 +68,44 @@ const projects: Project[] = [
   },
   {
     id: "07",
-    title: "Mangetsu Volumetric",
-    category: "Exploded Axonometric",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-1766603064607.png",
+    title: "Project Asobi Bar",
+    category: "Da Nang / Commercial",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603962182.png",
     size: "medium"
   },
   {
     id: "08",
-    title: "Lang Thang",
-    category: "Cafe / Social",
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&q=80&w=800",
+    title: "Project Tho",
+    category: "Hanoi / Interior Space",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.7-1766603962180.png",
     size: "medium"
   },
   {
     id: "09",
-    title: "Fu Hoo Cafe",
-    category: "Commercial / Fusion",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
+    title: "Project Mangetsu Da Nang",
+    category: "Axonometric Diagram",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603962281.png",
     size: "medium"
   },
   {
     id: "10",
-    title: "Goodtime Burger",
-    category: "Brutalist Dining",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800",
+    title: "Project Tần Mẫn Bakery",
+    category: "Commercial / Bakery",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/1.6-1766604061650.png",
     size: "medium"
   },
   {
     id: "11",
-    title: "Dot Cafe",
-    category: "Compact Interior",
-    image: "https://images.unsplash.com/photo-1449156001437-3a144174828b?auto=format&fit=crop&q=80&w=800",
+    title: "Project Mangetsu Da Nang",
+    category: "Material Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/5-1766604061733.png",
     size: "medium"
   },
   {
     id: "12",
-    title: "Tita Art Space",
-    category: "Cultural Installation",
-    image: "https://images.unsplash.com/photo-1503387762-592dea58ef23?auto=format&fit=crop&q=80&w=800",
+    title: "Case Study: Casa Gilardi",
+    category: "Luis Barragán / Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/9-1766604061733.png",
     size: "large"
   },
 ];
