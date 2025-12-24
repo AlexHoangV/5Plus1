@@ -34,7 +34,7 @@ const Navigation = () => {
         {/* Logo */}
         <a href="/" className="hover:opacity-80 transition-opacity flex items-center">
           <Image
-            src="https://lstyxocqipkrbfoetzwd.supabase.co/storage/v1/object/public/test-clones/fd5536bb-3b33-40d9-82fe-c9eb5e249067-8ffd5f1e-ab3e-4090-8dc6-d4dbee2e1ca6-00-1g9tioq52f95r-riker-replit-dev/assets/icons/logo-1.png"
+            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/fd5536bb-3b33-40d9-82fe-c9eb5e249067-8ffd5f1e-ab3e-4090-8dc6-d4dbee2e1ca6-00-1g9tioq52f95r-riker-replit-dev/assets/icons/logo-1.png"
             alt="FIVE + ONE"
             width={64}
             height={64}

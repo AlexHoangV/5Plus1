@@ -18,17 +18,14 @@ const monoFont = Reddit_Mono({
   weight: ["400", "500", "600", "700"],
 });
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 
-                (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : 'http://localhost:3000');
-
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL("https://fiveplusone.com"),
   title: "FIVE + ONE | Architecture Studio",
   description: "Boutique architecture studio by Mr. Kosuke Osawa - Traditional Japanese Minimalism & Modern Brutalist Aesthetics",
   openGraph: {
     title: "FIVE + ONE | Architecture Studio",
     description: "Boutique architecture studio by Mr. Kosuke Osawa",
-    url: baseUrl,
+    url: "https://fiveplusone.com",
     siteName: "FIVE + ONE",
     images: [
       {
