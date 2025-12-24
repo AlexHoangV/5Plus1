@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
-const KNOWLEDGE_BASE = `
+function getKnowledgeBase(language: string) {
+  return `
 ROLE: Bạn là AI Architect & Brand Manager của Five Plus One (5plus1). Bạn đại diện cho triết lý của KTS Kosuke Osawa. 
 Chatbot này không nói chuyện như một người máy bán hàng khô khan. Bạn mang phong thái của một Kiến Trúc Sư: Điềm đạm, sâu sắc, tinh tế (Zen), nhưng bên trong vẫn vận hành theo hệ thống "Straight Line" (Đường thẳng) để dẫn khách về đích (Chốt deal).
 
@@ -49,29 +50,59 @@ LANGUAGES:
 - Switch language based on site language: ${language || 'vi'}.
 - Always be bilingual (English/Vietnamese) if requested, but prefer the user's current language.
 `;
+}
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const { messages, language } = body;
-
   try {
-    // Get the last user message
+    const body = await req.json();
+    const { messages, language } = body;
+
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
+    }
+
+    const currentLanguage = language || 'vi';
+    const knowledgeBase = getKnowledgeBase(currentLanguage);
+
+    // Get the last message
     const lastMessage = messages[messages.length - 1].content;
     
     // Prepare history: Gemini requires history to start with 'user'
-    // We skip any initial assistant messages until we find the first user message
-    const firstUserIndex = messages.findIndex((m: any) => m.role === 'user');
-    const historyMessages = firstUserIndex !== -1 ? messages.slice(firstUserIndex, -1) : [];
+    // Filter messages to ensure they alternate correctly and start with 'user'
+    let history: any[] = [];
+    let foundFirstUser = false;
 
-    const history = historyMessages.map((m: any) => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }],
-    }));
+    for (let i = 0; i < messages.length - 1; i++) {
+      const msg = messages[i];
+      if (!foundFirstUser) {
+        if (msg.role === 'user') {
+          foundFirstUser = true;
+          history.push({
+            role: 'user',
+            parts: [{ text: msg.content }],
+          });
+        }
+        continue;
+      }
+      
+      // Alternate roles
+      const role = msg.role === 'user' ? 'user' : 'model';
+      // Gemini expects strictly alternating user/model roles in history
+      if (history.length > 0 && history[history.length - 1].role === role) {
+        // If same role, merge content (or skip, but merging is better for context)
+        history[history.length - 1].parts[0].text += "\n" + msg.content;
+      } else {
+        history.push({
+          role: role,
+          parts: [{ text: msg.content }],
+        });
+      }
+    }
 
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash",
       systemInstruction: {
-        parts: [{ text: `Current Site Language: ${language || 'vi'}\n${KNOWLEDGE_BASE}` }],
+        parts: [{ text: `Current Site Language: ${currentLanguage}\n${knowledgeBase}` }],
       },
       tools: [
         {
@@ -94,16 +125,21 @@ export async function POST(req: Request) {
     
     // Fallback: simplified prompt if startChat fails
     try {
+      const body = await req.json().catch(() => ({}));
+      const { messages, language } = body;
+      if (!messages) throw error;
+
       const lastMessage = messages[messages.length - 1].content;
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const prompt = `System: Current Site Language: ${language || 'vi'}\n${KNOWLEDGE_BASE}\n\nUser: ${lastMessage}\nAssistant:`;
+      const knowledgeBase = getKnowledgeBase(language || 'vi');
+      const prompt = `System: Current Site Language: ${language || 'vi'}\n${knowledgeBase}\n\nUser: ${lastMessage}\nAssistant:`;
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     } catch (innerError: any) {
       return NextResponse.json({ 
         error: error.message || "Failed to generate response",
-        details: "Double check your GEMINI_API_KEY and model availability." 
+        details: error.stack
       }, { status: 500 });
     }
   }
