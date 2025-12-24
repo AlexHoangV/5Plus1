@@ -1,22 +1,40 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, User, Bot, Loader2 } from 'lucide-react';
+import { MessageSquare, X, Send, User, Bot, Loader2, Linkedin } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/hooks/useLanguage';
+import Image from 'next/image';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
 
+const KOSUKE_AVATAR = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-3-1766614999280.jpg";
+
 export function Chatbot() {
+  const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Xin chào! Tôi là trợ lý ảo của FIVE + ONE. Tôi có thể giúp gì cho bạn?' }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize messages when language changes or on mount
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([
+        { 
+          role: 'assistant', 
+          content: t(
+            "Welcome to the space of Five Plus One. Here, we believe architecture is not just building walls, but creating a place where Nature, People, and Light converge in harmony. I am the AI assistant of Architect Kosuke. Today, what are you looking for in your life's flow?",
+            "Chào mừng bạn đến với không gian của Five Plus One. Tại đây, chúng tôi tin rằng kiến trúc không chỉ là dựng lên những bức tường, mà là tạo ra nơi Thiên nhiên, Con người và Ánh sáng hội tụ trong sự hài hòa. Tôi là trợ lý AI của KTS Kosuke. Hôm nay, bạn ghé thăm 5plus1 để tìm kiếm điều gì cho dòng chảy cuộc sống của mình?"
+          ) 
+        }
+      ]);
+    }
+  }, [language, t, messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -38,18 +56,27 @@ export function Chatbot() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
+        body: JSON.stringify({ 
+          messages: [...messages, userMessage],
+          language 
+        }),
       });
 
       const data = await response.json();
       if (data.content) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.content }]);
       } else {
-        throw new Error('No content received');
+        throw new Error(data.error || 'No content received');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.' }]);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: t(
+          'Sorry, an error occurred. Please try again later.', 
+          'Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.'
+        ) 
+      }]);
     } finally {
       setIsLoading(false);
     }
@@ -68,20 +95,36 @@ export function Chatbot() {
             {/* Header */}
             <div className="bg-black text-white p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-primary flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">5+1</span>
+                <div className="relative w-10 h-10 border border-white/20 overflow-hidden">
+                  <Image 
+                    src={KOSUKE_AVATAR} 
+                    alt="Kosuke Osawa" 
+                    fill 
+                    className="object-cover"
+                  />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xs font-bold uppercase tracking-widest">AI Assistant</span>
-                  <span className="text-[10px] opacity-70 uppercase">Online 24/7</span>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-primary">K. Osawa</span>
+                  <span className="text-[10px] opacity-70 uppercase tracking-tighter">AI Assistant</span>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="hover:rotate-90 transition-transform duration-300"
-              >
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://www.linkedin.com/in/kosuke-osawa/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-primary transition-colors"
+                  title="Connect on LinkedIn"
+                >
+                  <Linkedin size={16} />
+                </a>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="hover:rotate-90 transition-transform duration-300"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
