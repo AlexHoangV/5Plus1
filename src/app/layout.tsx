@@ -19,8 +19,24 @@ const monoFont = Reddit_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://fiveplusone.com"),
   title: "FIVE + ONE | Architecture Studio",
-  description: "Boutique architecture studio by Mr. Kosuke Osawa",
+  description: "Boutique architecture studio by Mr. Kosuke Osawa - Traditional Japanese Minimalism & Modern Brutalist Aesthetics",
+  openGraph: {
+    title: "FIVE + ONE | Architecture Studio",
+    description: "Boutique architecture studio by Mr. Kosuke Osawa",
+    url: "https://fiveplusone.com",
+    siteName: "FIVE + ONE",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
