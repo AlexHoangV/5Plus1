@@ -76,78 +76,43 @@ export async function POST(req: Request) {
     // - Ensure alternating roles
     // - Ensure ends with 'model' (before sending the current user message)
     
-    let processedHistory: any[] = [];
+    let processedMessages: any[] = [];
     let lastRole: string | null = null;
 
-    // Skip initial assistant welcome messages to satisfy Gemini's "start with user" rule
-    let firstUserFound = false;
-
+    // Filter and coalesce
     for (let i = 0; i < messages.length - 1; i++) {
       const msg = messages[i];
-      const currentRole = msg.role === 'user' ? 'user' : 'model';
-
-      if (!firstUserFound) {
-        if (currentRole === 'user') {
-          firstUserFound = true;
-        } else {
-          continue; // Skip until we find the first user message
-        }
-      }
-
-      if (lastRole === currentRole) {
-        // Coalesce
-        const lastMsg = processedHistory[processedHistory.length - 1];
-        lastMsg.parts[0].text += "\n" + msg.content;
+      const role = msg.role === 'user' ? 'user' : 'model';
+      
+      if (role === lastRole) {
+        processedMessages[processedMessages.length - 1].parts[0].text += "\n" + msg.content;
       } else {
-        processedHistory.push({
-          role: currentRole,
+        processedMessages.push({
+          role: role,
           parts: [{ text: msg.content }]
         });
-        lastRole = currentRole;
+        lastRole = role;
       }
     }
 
-    // Gemini requires the LAST message in history to be from 'model' 
-    // because the next call (sendMessage) will be from 'user'.
-    if (processedHistory.length > 0 && processedHistory[processedHistory.length - 1].role === 'user') {
-      // If history ends with user, we could either:
-      // 1. Remove it and prepend to current message (but it's already in history)
-      // 2. Add a dummy model response (bad)
-      // 3. Just trim it.
-      // Most reliable: if the user just sent a message and we're about to send another,
-      // Gemini expects a model response in between. 
-      // In our case, the messages array is [A, U, A, U, U_last]. 
-      // processedHistory is [U, A, U]. This is bad.
-      // Let's ensure alternating and ending with model.
-      
-      // If history ends with 'user', we drop it from history and append to lastUserMessage
-      // This happens if the user sent two messages in a row at the end.
+    // Remove until first 'user'
+    while (processedMessages.length > 0 && processedMessages[0].role !== 'user') {
+      processedMessages.shift();
     }
 
-    // Refined History Logic:
-    const finalHistory: any[] = [];
-    let currentHistoryRole: string = 'user'; // Start expecting user
-
-    for (const h of processedHistory) {
-      if (h.role === currentHistoryRole) {
-        finalHistory.push(h);
-        currentHistoryRole = currentHistoryRole === 'user' ? 'model' : 'user';
-      } else {
-        // Skip or coalesce if roles don't alternate
-        if (finalHistory.length > 0) {
-          finalHistory[finalHistory.length - 1].parts[0].text += "\n" + h.parts[0].text;
-        }
-      }
+    // Now processedMessages starts with 'user' and alternates roles.
+    // Ensure it ends with 'model' because next message will be 'user'
+    let finalLastUserMessage = lastUserMessage;
+    if (processedMessages.length > 0 && processedMessages[processedMessages.length - 1].role === 'user') {
+      const popped = processedMessages.pop();
+      finalLastUserMessage = popped.parts[0].text + "\n" + finalLastUserMessage;
     }
 
-    // Ensure it ends with 'model' if not empty
-    if (finalHistory.length > 0 && finalHistory[finalHistory.length - 1].role === 'user') {
-      finalHistory.pop();
-    }
+    const finalHistory = processedMessages;
 
     // 2. Initialize Model
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-latest",
+      model: "gemini-1.5-flash-8b",
       systemInstruction: {
         parts: [{ text: `Role & Knowledge Base:\n${knowledgeBase}\n\nLanguage: ${language}` }],
       }
@@ -159,13 +124,13 @@ export async function POST(req: Request) {
         history: finalHistory,
       });
 
-      const result = await chat.sendMessage(lastUserMessage);
+      const result = await chat.sendMessage(finalLastUserMessage);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     } catch (chatError: any) {
       console.error("Chat Session Error:", chatError);
       // Fallback to simple generateContent if chat session fails
-      const prompt = `System: ${knowledgeBase}\n\nUser: ${lastUserMessage}\nAssistant:`;
+      const prompt = `System: ${knowledgeBase}\nLanguage: ${language}\n\nUser: ${finalLastUserMessage}\nAssistant:`;
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
