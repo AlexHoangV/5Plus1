@@ -25,14 +25,35 @@ const Footer = () => {
               </h2>
             </div>
 
-          {/* Copyright Section */}
-          <div className="text-center md:text-right">
-            <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] leading-relaxed opacity-60">
-              © 2025 Five Plus One Architecture.
-              <br className="md:hidden" />
-              <span className="md:ml-1">All rights reserved.</span>
-            </p>
-          </div>
+            {/* Social & Copyright Section */}
+            <div className="flex flex-col items-center md:items-end gap-6 text-center md:text-right">
+              <div className="flex items-center gap-6">
+                <a href="https://5-plus-1.tumblr.com/" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Tumblr</span>
+                </a>
+                <a href="https://www.facebook.com/kousuke.osawa.98/" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Facebook</span>
+                </a>
+                <a href="https://www.instagram.com/f_plus_one/?hl=en" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Instagram</span>
+                </a>
+                <a href="https://x.com/5_plus_one" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Twitter</span>
+                </a>
+                <a href="https://www.threads.com/@kosukeosw" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Threads</span>
+                </a>
+                <a href="https://www.youtube.com/@kousuke0843" target="_blank" rel="noopener noreferrer" className="hover:text-[#C6733B] transition-colors">
+                  <span className="font-mono text-xs uppercase tracking-widest">Youtube</span>
+                </a>
+              </div>
+              <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] leading-relaxed opacity-60">
+                © 2025 Five Plus One Architecture.
+                <br className="md:hidden" />
+                <span className="md:ml-1">All rights reserved.</span>
+              </p>
+            </div>
+
         </div>
       </div>
     </footer>

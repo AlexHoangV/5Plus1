@@ -1,26 +1,48 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+  import React, { useState, useEffect } from 'react';
+  import Image from 'next/image';
+  import { Menu, X, User, LogOut } from 'lucide-react';
+  import { supabase } from '@/lib/supabase';
+  import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const Navbar = () => {
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [user, setUser] = useState<any>(null);
+    const router = useRouter();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+    useEffect(() => {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10);
+      };
+      window.addEventListener('scroll', handleScroll);
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user ?? null);
+      });
+
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        setUser(user);
+      });
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        subscription.unsubscribe();
+      };
+    }, []);
+
+    const handleLogout = async () => {
+      await supabase.auth.signOut();
+      router.push('/');
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
-  const navLinks = [
-    { name: 'Projects', href: '#projects' },
-    { name: 'About', href: '#about' },
-    { name: 'Contact', href: '#contact' },
-  ];
+    const navLinks = [
+      { name: 'Projects', href: '/#projects' },
+      { name: 'About', href: '/#about' },
+      { name: 'Contact', href: '/#contact' },
+    ];
+
 
   return (
     <header 
@@ -61,6 +83,31 @@ const Navbar = () => {
               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#C6733B] transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
+          {user ? (
+            <div className="flex items-center gap-8 pl-4 border-l border-border">
+              <a
+                href="/request-order"
+                className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity"
+              >
+                Request Project
+              </a>
+              <button
+                onClick={handleLogout}
+                className="hover:text-[#C6733B] transition-colors"
+                title="Logout"
+              >
+                <LogOut size={18} />
+              </button>
+            </div>
+          ) : (
+            <a
+              href="/login"
+              className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.15em] hover:text-[#C6733B] transition-colors"
+            >
+              <User size={16} />
+              Login
+            </a>
+          )}
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -72,25 +119,56 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      <div 
-        className={`md:hidden absolute top-full left-0 right-0 bg-white border-b border-border transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? 'max-h-[300px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
-        }`}
-      >
-        <div className="flex flex-col p-6 space-y-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="font-mono text-sm uppercase tracking-widest hover:text-[#C6733B] transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {link.name}
-            </a>
-          ))}
+        {/* Mobile Navigation Menu */}
+        <div 
+          className={`md:hidden absolute top-full left-0 right-0 bg-white border-b border-border transition-all duration-300 ease-in-out ${
+            mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'
+          }`}
+        >
+          <div className="flex flex-col p-6 space-y-6">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="font-mono text-sm uppercase tracking-widest hover:text-[#C6733B] transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+            <div className="pt-4 border-t border-border flex flex-col gap-4">
+              {user ? (
+                <>
+                  <a
+                    href="/request-order"
+                    className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Request Project
+                  </a>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="font-mono text-[12px] uppercase tracking-[0.2em] text-left hover:text-[#C6733B]"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <a
+                  href="/login"
+                  className="font-mono text-[12px] uppercase tracking-[0.2em] hover:text-[#C6733B]"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Login
+                </a>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+
     </header>
   );
 };

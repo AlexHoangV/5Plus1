@@ -73,52 +73,102 @@ const ContactSection = () => {
             </div>
           </div>
 
-          {/* Right Column: Contact Form */}
-          <div className="flex flex-col">
-            <form className="flex flex-col space-y-10" onSubmit={(e) => e.preventDefault()}>
-              {/* Name Input */}
-              <div className="flex flex-col space-y-3">
-                <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Name</label>
-                <input 
-                  type="text" 
-                  placeholder="ENTER YOUR NAME" 
-                  className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
-                />
-              </div>
+            {/* Right Column: Contact Form */}
+            <div className="flex flex-col">
+              <form className="flex flex-col space-y-10" onSubmit={(e) => e.preventDefault()}>
+                {/* Name Input */}
+                <div className="flex flex-col space-y-3">
+                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="ENTER YOUR NAME" 
+                    className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
+                  />
+                </div>
+  
+                {/* Email Input */}
+                <div className="flex flex-col space-y-3">
+                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Email</label>
+                  <input 
+                    type="email" 
+                    placeholder="ENTER YOUR EMAIL" 
+                    className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
+                  />
+                </div>
+  
+                {/* Message Input */}
+                <div className="flex flex-col space-y-3">
+                  <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Message</label>
+                  <textarea 
+                    rows={4}
+                    placeholder="TELL US ABOUT YOUR PROJECT" 
+                    className="input-underline font-mono text-xs placeholder:text-muted-foreground/40 resize-none min-h-[100px]"
+                  ></textarea>
+                </div>
+  
+                {/* Submit Button */}
+                <button 
+                  type="submit" 
+                  className="btn-primary group w-full justify-center py-5 mt-4"
+                >
+                  Send Message
+                  <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                </button>
+              </form>
+            </div>
+          </div>
 
-              {/* Email Input */}
-              <div className="flex flex-col space-y-3">
-                <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Email</label>
-                <input 
-                  type="email" 
-                  placeholder="ENTER YOUR EMAIL" 
-                  className="input-underline font-mono text-xs placeholder:text-muted-foreground/40"
-                />
+          {/* New CTA Section */}
+          <div className="mt-32 pt-24 border-t border-border">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+              <div className="max-w-xl text-center md:text-left">
+                <h3 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-6">
+                  Book a Consultant Today!
+                </h3>
+                <p className="font-mono text-sm tracking-widest opacity-60 uppercase mb-8">
+                  Explore our vision through these exclusive showcases.
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+                  <a 
+                    href="https://www.youtube.com/watch?v=kgQ1mJcg2UA&t=3s" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 border border-border font-mono text-[10px] uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    Vision 01
+                  </a>
+                  <a 
+                    href="https://www.youtube.com/watch?v=qqk0fI4iGyU" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 border border-border font-mono text-[10px] uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    Vision 02
+                  </a>
+                  <a 
+                    href="https://www.youtube.com/watch?v=xeDwV6fesLQ" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 border border-border font-mono text-[10px] uppercase tracking-widest hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    Vision 03
+                  </a>
+                </div>
               </div>
-
-              {/* Message Input */}
-              <div className="flex flex-col space-y-3">
-                <label className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Message</label>
-                <textarea 
-                  rows={4}
-                  placeholder="TELL US ABOUT YOUR PROJECT" 
-                  className="input-underline font-mono text-xs placeholder:text-muted-foreground/40 resize-none min-h-[100px]"
-                ></textarea>
+              
+              <div className="w-full md:w-auto">
+                <a 
+                  href="/request-order"
+                  className="block w-full md:w-[400px] h-[150px] bg-primary text-primary-foreground flex items-center justify-center font-display text-2xl font-bold uppercase tracking-tighter hover:opacity-90 transition-opacity text-center px-8"
+                >
+                  Start Your Project Journey
+                </a>
               </div>
-
-              {/* Submit Button */}
-              <button 
-                type="submit" 
-                className="btn-primary group w-full justify-center py-5 mt-4"
-              >
-                Send Message
-                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
-              </button>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
   );
 };
 
