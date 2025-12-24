@@ -4,6 +4,7 @@ import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Chatbot } from "@/components/Chatbot";
 
+import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
 
 const mainFont = Reddit_Sans({
@@ -49,11 +50,12 @@ export default function RootLayout({
         <body
           className={`${mainFont.variable} ${monoFont.variable} antialiased font-sans`}
         >
-          <LanguageProvider>
-            {children}
-            <Chatbot />
-            <VisualEditsMessenger />
-          </LanguageProvider>
+            <LanguageProvider>
+              {children}
+              <Chatbot />
+              <VisualEditsMessenger />
+              <Toaster position="top-right" richColors />
+            </LanguageProvider>
         </body>
 
     </html>
