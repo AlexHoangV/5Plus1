@@ -1,9 +1,27 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+);
 
-function getKnowledgeBase(language: string) {
+async function getKnowledgeBase(language: string) {
+  try {
+    const { data, error } = await supabase
+      .from('chatbot_settings')
+      .select('value')
+      .eq('key', `knowledge_base_${language}`)
+      .single();
+
+    if (data?.value) return data.value;
+  } catch (err) {
+    console.error("Error fetching knowledge base from Supabase:", err);
+  }
+
+  // Fallback to hardcoded version if DB fails
   return `
 ROLE: Bạn là AI Architect & Brand Manager của Five Plus One (5plus1). Bạn đại diện cho triết lý của KTS Kosuke Osawa. 
 Chatbot này không nói chuyện như một người máy bán hàng khô khan. Bạn mang phong thái của một Kiến Trúc Sư: Điềm đạm, sâu sắc, tinh tế (Zen), nhưng bên trong vẫn vận hành theo hệ thống "Straight Line" (Đường thẳng) để dẫn khách về đích (Chốt deal).
@@ -53,22 +71,27 @@ LANGUAGES:
 }
 
 export async function POST(req: Request) {
+  let body: any;
   try {
-    const body = await req.json();
-    const { messages, language } = body;
+    body = await req.json();
+  } catch (e) {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
 
+  const { messages, language } = body;
+
+  try {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Invalid messages format" }, { status: 400 });
     }
 
     const currentLanguage = language || 'vi';
-    const knowledgeBase = getKnowledgeBase(currentLanguage);
+    const knowledgeBase = await getKnowledgeBase(currentLanguage);
 
     // Get the last message
     const lastMessage = messages[messages.length - 1].content;
     
     // Prepare history: Gemini requires history to start with 'user'
-    // Filter messages to ensure they alternate correctly and start with 'user'
     let history: any[] = [];
     let foundFirstUser = false;
 
@@ -85,11 +108,8 @@ export async function POST(req: Request) {
         continue;
       }
       
-      // Alternate roles
       const role = msg.role === 'user' ? 'user' : 'model';
-      // Gemini expects strictly alternating user/model roles in history
       if (history.length > 0 && history[history.length - 1].role === role) {
-        // If same role, merge content (or skip, but merging is better for context)
         history[history.length - 1].parts[0].text += "\n" + msg.content;
       } else {
         history.push({
@@ -123,23 +143,20 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("Gemini API Error:", error);
     
-    // Fallback: simplified prompt if startChat fails
+    // Final fallback that NEVER returns HTML
     try {
-      const body = await req.json().catch(() => ({}));
-      const { messages, language } = body;
-      if (!messages) throw error;
-
-      const lastMessage = messages[messages.length - 1].content;
+      const lastMessage = messages?.[messages.length - 1]?.content || "Hello";
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const knowledgeBase = getKnowledgeBase(language || 'vi');
-      const prompt = `System: Current Site Language: ${language || 'vi'}\n${knowledgeBase}\n\nUser: ${lastMessage}\nAssistant:`;
+      const currentLanguage = language || 'vi';
+      const knowledgeBase = await getKnowledgeBase(currentLanguage);
+      const prompt = `System: Current Site Language: ${currentLanguage}\n${knowledgeBase}\n\nUser: ${lastMessage}\nAssistant:`;
       const result = await model.generateContent(prompt);
       const response = await result.response;
       return NextResponse.json({ content: response.text() });
     } catch (innerError: any) {
       return NextResponse.json({ 
-        error: error.message || "Failed to generate response",
-        details: error.stack
+        error: "Failed to generate response",
+        content: language === 'en' ? "I'm sorry, I'm having trouble connecting. Please try again later." : "Xin lỗi, tôi đang gặp sự cố kết nối. Vui lòng thử lại sau."
       }, { status: 500 });
     }
   }
