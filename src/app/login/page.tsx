@@ -24,7 +24,7 @@ export default function LoginPage() {
     try {
         if (isAdminMode) {
           // Mode 01: Admin
-          if (adminUsername === 'kosuke' && password === 'osawa') {
+          if ((adminUsername.toLowerCase() === 'kosuke' || adminUsername === 'admin@five-plus-one.com') && (password === 'osawa' || password === 'osawa123')) {
             const { error } = await supabase.auth.signInWithPassword({
               email: 'admin@five-plus-one.com',
               password: 'osawa123',
@@ -33,7 +33,7 @@ export default function LoginPage() {
             toast.success('Welcome back, Kosuke!');
             router.push('/');
           } else {
-            toast.error('Invalid admin credentials');
+            toast.error('Invalid admin credentials. Use kosuke/osawa');
           }
         } else {
         // Mode 02: Regular User
