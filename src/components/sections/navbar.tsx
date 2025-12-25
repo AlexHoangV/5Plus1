@@ -13,9 +13,10 @@
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [userRole, setUserRole] = useState<string | null>(null);
     const router = useRouter();
 
-    const isAdmin = user?.email === 'admin@five-plus-one.com';
+    const isAdmin = userRole === 'admin';
 
     useEffect(() => {
       const handleScroll = () => {
@@ -23,12 +24,32 @@
       };
       window.addEventListener('scroll', handleScroll);
 
+      const fetchUserRole = async (userId: string) => {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', userId)
+          .single();
+        
+        if (data && !error) {
+          setUserRole(data.role);
+        }
+      };
+
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         setUser(session?.user ?? null);
+        if (session?.user) {
+          fetchUserRole(session.user.id);
+        } else {
+          setUserRole(null);
+        }
       });
 
       supabase.auth.getUser().then(({ data: { user } }) => {
         setUser(user);
+        if (user) {
+          fetchUserRole(user.id);
+        }
       });
 
       return () => {
