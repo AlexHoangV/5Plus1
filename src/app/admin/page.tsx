@@ -46,18 +46,31 @@ export default function AdminDashboard() {
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push('/login');
-        return;
-      }
-      setUser(user);
-      fetchData();
-    };
-    checkUser();
-  }, [router]);
+    useEffect(() => {
+      const checkUser = async () => {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          router.push('/login');
+          return;
+        }
+
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (error || profile?.role !== 'admin') {
+          toast.error('Unauthorized access');
+          router.push('/');
+          return;
+        }
+
+        setUser(user);
+        fetchData();
+      };
+      checkUser();
+    }, [router]);
 
   const fetchData = async () => {
     setIsLoading(true);
