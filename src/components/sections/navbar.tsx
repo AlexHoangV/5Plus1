@@ -15,6 +15,8 @@
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
 
+    const isAdmin = user?.user_metadata?.role === 'admin' || user?.email === 'admin@five-plus-one.com';
+
     useEffect(() => {
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 10);
@@ -101,7 +103,7 @@
 
             {user ? (
                <div className="flex items-center gap-8 pl-4 border-l border-border">
-                 {user.user_metadata?.role === 'admin' && (
+                 {isAdmin && (
                    <a
                      href="/admin"
                      className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-all whitespace-nowrap"
@@ -168,25 +170,25 @@
                   {link.name}
                 </a>
               ))}
-                <div className="pt-4 border-t border-border flex flex-col gap-4">
-                  {user ? (
-                    <>
-                      {user.user_metadata?.role === 'admin' && (
+                  <div className="pt-4 border-t border-border flex flex-col gap-4">
+                    {user ? (
+                      <>
+                        {isAdmin && (
+                          <a
+                            href="/admin"
+                            className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-3 text-center"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            CRM
+                          </a>
+                        )}
                         <a
-                          href="/admin"
-                          className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-3 text-center"
+                          href="/request-order"
+                          className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
                           onClick={() => setMobileMenuOpen(false)}
                         >
-                          CRM
+                          {t('Request Project', 'Yêu Cầu Dự Án')}
                         </a>
-                      )}
-                      <a
-                        href="/request-order"
-                        className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {t('Request Project', 'Yêu Cầu Dự Án')}
-                      </a>
                     <button
                       onClick={() => {
                         handleLogout();
