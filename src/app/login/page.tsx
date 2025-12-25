@@ -17,40 +17,24 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    try {
-        if (isAdminMode) {
-          // Mode 01: Admin
-          if ((adminUsername.toLowerCase() === 'kosuke' || adminUsername === 'admin@five-plus-one.com') && (password === 'osawa' || password === 'osawa123')) {
-            const { error } = await supabase.auth.signInWithPassword({
-              email: 'admin@five-plus-one.com',
-              password: 'osawa123',
-            });
-            if (error) throw error;
-            toast.success('Welcome back, Kosuke!');
-            router.push('/');
-          } else {
-            toast.error('Invalid admin credentials. Use kosuke/osawa');
-          }
-        } else {
-        // Mode 02: Regular User
+    const handleLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoading(true);
+  
+      try {
         const { error } = await supabase.auth.signInWithPassword({
-          email,
+          email: isAdminMode ? adminUsername : email,
           password,
         });
         if (error) throw error;
-        toast.success('Successfully logged in');
+        toast.success(isAdminMode ? 'Welcome back, Admin' : 'Successfully logged in');
         router.push('/');
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   const handleSignUp = async () => {
     if (isAdminMode) return;
