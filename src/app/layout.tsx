@@ -6,6 +6,7 @@ import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
+import Script from "next/script";
 
 const mainFont = Reddit_Sans({
   variable: "--font-main",
@@ -50,6 +51,12 @@ export default function RootLayout({
         <body
           className={`${mainFont.variable} ${monoFont.variable} antialiased font-sans`}
         >
+        <Script
+          id="orchids-browser-logs"
+          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
+          strategy="afterInteractive"
+          data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
+        />
             <LanguageProvider>
               {children}
               <Chatbot />
