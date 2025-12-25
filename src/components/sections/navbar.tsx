@@ -100,13 +100,21 @@
             </div>
 
             {user ? (
-              <div className="flex items-center gap-8 pl-4 border-l border-border">
-                <a
-                  href="/request-order"
-                  className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity whitespace-nowrap"
-                >
-                  {t('Request Project', 'Yêu Cầu Dự Án')}
-                </a>
+               <div className="flex items-center gap-8 pl-4 border-l border-border">
+                 {user.user_metadata?.role === 'admin' && (
+                   <a
+                     href="/admin"
+                     className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-all whitespace-nowrap"
+                   >
+                     CRM
+                   </a>
+                 )}
+                 <a
+                   href="/request-order"
+                   className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity whitespace-nowrap"
+                 >
+                   {t('Request Project', 'Yêu Cầu Dự Án')}
+                 </a>
                 <button
                   onClick={handleLogout}
                   className="hover:text-[#C6733B] transition-colors"
@@ -160,16 +168,25 @@
                   {link.name}
                 </a>
               ))}
-              <div className="pt-4 border-t border-border flex flex-col gap-4">
-                {user ? (
-                  <>
-                    <a
-                      href="/request-order"
-                      className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {t('Request Project', 'Yêu Cầu Dự Án')}
-                    </a>
+                <div className="pt-4 border-t border-border flex flex-col gap-4">
+                  {user ? (
+                    <>
+                      {user.user_metadata?.role === 'admin' && (
+                        <a
+                          href="/admin"
+                          className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-3 text-center"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          CRM
+                        </a>
+                      )}
+                      <a
+                        href="/request-order"
+                        className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {t('Request Project', 'Yêu Cầu Dự Án')}
+                      </a>
                     <button
                       onClick={() => {
                         handleLogout();
