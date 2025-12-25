@@ -15,7 +15,7 @@
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
 
-    const isAdmin = user?.user_metadata?.role === 'admin' || user?.email === 'admin@five-plus-one.com';
+    const isAdmin = user?.email === 'admin@five-plus-one.com';
 
     useEffect(() => {
       const handleScroll = () => {
@@ -102,30 +102,38 @@
             </div>
 
             {user ? (
-               <div className="flex items-center gap-8 pl-4 border-l border-border">
-                 {isAdmin && (
+                 <div className="flex items-center gap-6 pl-4 border-l border-border">
+                   <div className="flex flex-col items-end">
+                     <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono">
+                       {isAdmin ? 'ADMIN' : 'CLIENT'}
+                     </span>
+                     <span className="text-[11px] font-mono lowercase tracking-tight max-w-[120px] truncate">
+                       {user.email}
+                     </span>
+                   </div>
+                   {isAdmin && (
+                     <a
+                       href="/admin"
+                       className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-all whitespace-nowrap"
+                     >
+                       CRM
+                     </a>
+                   )}
                    <a
-                     href="/admin"
-                     className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-all whitespace-nowrap"
+                     href="/request-order"
+                     className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity whitespace-nowrap"
                    >
-                     CRM
+                     {t('Request Project', 'Yêu Cầu Dự Án')}
                    </a>
-                 )}
-                 <a
-                   href="/request-order"
-                   className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity whitespace-nowrap"
-                 >
-                   {t('Request Project', 'Yêu Cầu Dự Án')}
-                 </a>
-                <button
-                  onClick={handleLogout}
-                  className="hover:text-[#C6733B] transition-colors"
-                  title={t('Logout', 'Đăng xuất')}
-                >
-                  <LogOut size={18} />
-                </button>
-              </div>
-            ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="hover:text-[#C6733B] transition-colors pl-2"
+                    title={t('Logout', 'Đăng xuất')}
+                  >
+                    <LogOut size={18} />
+                  </button>
+                </div>
+              ) : (
               <a
                 href="/login"
                 className="flex items-center gap-2 font-mono text-[14px] uppercase tracking-[0.15em] hover:text-[#C6733B] transition-colors"
@@ -170,36 +178,48 @@
                   {link.name}
                 </a>
               ))}
-                  <div className="pt-4 border-t border-border flex flex-col gap-4">
-                    {user ? (
-                      <>
-                        {isAdmin && (
+                    <div className="pt-4 border-t border-border flex flex-col gap-4">
+                      {user ? (
+                        <>
+                          <div className="flex items-center gap-3 px-2 py-1 bg-muted/30 rounded">
+                            <User size={16} className="text-primary" />
+                            <div className="flex flex-col">
+                              <span className="text-[9px] uppercase tracking-widest text-muted-foreground font-mono">
+                                {isAdmin ? 'ADMIN' : 'CLIENT'}
+                              </span>
+                              <span className="text-[11px] font-mono truncate max-w-[200px]">
+                                {user.email}
+                              </span>
+                            </div>
+                          </div>
+                          {isAdmin && (
+                            <a
+                              href="/admin"
+                              className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-3 text-center hover:bg-primary hover:text-primary-foreground transition-all"
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              CRM
+                            </a>
+                          )}
                           <a
-                            href="/admin"
-                            className="font-mono text-[12px] uppercase tracking-[0.2em] border border-primary px-4 py-3 text-center"
+                            href="/request-order"
+                            className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
                             onClick={() => setMobileMenuOpen(false)}
                           >
-                            CRM
+                            {t('Request Project', 'Yêu Cầu Dự Án')}
                           </a>
-                        )}
-                        <a
-                          href="/request-order"
-                          className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-3 text-center"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {t('Request Project', 'Yêu Cầu Dự Án')}
-                        </a>
-                    <button
-                      onClick={() => {
-                        handleLogout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="font-mono text-[12px] uppercase tracking-[0.2em] text-left hover:text-[#C6733B]"
-                    >
-                      {t('Logout', 'Đăng Xuất')}
-                    </button>
-                  </>
-                ) : (
+                      <button
+                        onClick={() => {
+                          handleLogout();
+                          setMobileMenuOpen(false);
+                        }}
+                        className="font-mono text-[12px] uppercase tracking-[0.2em] text-left hover:text-[#C6733B] flex items-center gap-2 pt-2 border-t border-border/50"
+                      >
+                        <LogOut size={16} />
+                        {t('Logout', 'Đăng Xuất')}
+                      </button>
+                    </>
+                  ) : (
                   <a
                     href="/login"
                     className="font-mono text-[12px] uppercase tracking-[0.2em] hover:text-[#C6733B]"
