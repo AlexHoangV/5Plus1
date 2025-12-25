@@ -10,6 +10,8 @@ import { Upload, FileText, Image as ImageIcon, X, Send } from 'lucide-react';
 
 export default function RequestOrderPage() {
   const [user, setUser] = useState<any>(null);
+  const [customerName, setCustomerName] = useState('');
+  const [budget, setBudget] = useState('');
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
   const [briefFile, setBriefFile] = useState<File | null>(null);
@@ -79,16 +81,18 @@ export default function RequestOrderPage() {
         imageUrls.push(data.publicUrl);
       }
 
-      // Insert Request
-      const { error: insertError } = await supabase
-        .from('project_requests')
-        .insert({
-          user_id: user.id,
-          description,
-          notes,
-          brief_url: briefUrl,
-          image_urls: imageUrls,
-        });
+        // Insert Request
+        const { error: insertError } = await supabase
+          .from('project_requests')
+          .insert({
+            user_id: user.id,
+            customer_name: customerName,
+            budget: budget,
+            description,
+            notes,
+            brief_url: briefUrl,
+            image_urls: imageUrls,
+          });
 
       if (insertError) throw insertError;
 
@@ -117,12 +121,36 @@ export default function RequestOrderPage() {
             </h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="bg-white/50 backdrop-blur-sm border border-border p-8 md:p-12 space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Left Column */}
-              <div className="space-y-10">
-                <div className="space-y-4">
-                  <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Project Brief & Description</label>
+            <form onSubmit={handleSubmit} className="bg-white/50 backdrop-blur-sm border border-border p-8 md:p-12 space-y-12">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                {/* Left Column */}
+                <div className="space-y-10">
+                  <div className="space-y-4">
+                    <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Customer Name</label>
+                    <input
+                      required
+                      type="text"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      placeholder="Enter your full name..."
+                      className="w-full bg-transparent border border-border p-4 text-sm focus:outline-none focus:border-primary transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Estimated Budget</label>
+                    <input
+                      required
+                      type="text"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      placeholder="e.g. $10,000 - $20,000"
+                      className="w-full bg-transparent border border-border p-4 text-sm focus:outline-none focus:border-primary transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="text-[10px] uppercase tracking-[0.2em] font-bold">Project Brief & Description</label>
                   <textarea
                     required
                     rows={8}
