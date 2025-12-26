@@ -115,6 +115,18 @@
     --radius: 0px;
   }
 
+  .font-en {
+    --font-display: var(--font-gt-pressura), monospace;
+    --font-sans: var(--font-gt-pressura), monospace;
+    --font-mono: var(--font-gt-pressura), monospace;
+  }
+  
+  .font-vi {
+    --font-display: var(--font-jetbrains-mono), monospace;
+    --font-sans: var(--font-jetbrains-mono), monospace;
+    --font-mono: var(--font-jetbrains-mono), monospace;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
