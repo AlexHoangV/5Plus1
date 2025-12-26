@@ -4,7 +4,14 @@ import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
+import { JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "700", "800"],
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fiveplusone.com"),
