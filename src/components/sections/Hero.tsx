@@ -56,15 +56,15 @@ const Hero = () => {
                   </div>
               </div>
 
-              {/* Slogan positioned below the image, aligned to the left of the image container */}
-              <div className="w-full max-w-[480px] lg:max-w-[560px]">
-                <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-left tracking-normal text-white hover:text-[#C6733B] transition-colors duration-300 cursor-default">
-                  {t(
-                    '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
-                    '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
-                  )}
-                </p>
-              </div>
+                {/* Slogan positioned below the image, aligned to the left of the image container */}
+                <div className="w-full max-w-[480px] lg:max-w-[560px] bg-black/90 p-4 md:p-6 -mt-6 relative z-20">
+                  <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-left tracking-normal text-white hover:text-[#C6733B] transition-colors duration-300 cursor-default">
+                    {t(
+                      '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
+                      '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
+                    )}
+                  </p>
+                </div>
             </div>
       </div>
     </section>
