@@ -22,15 +22,56 @@ export async function processChatMessage({
 }) {
   const knowledgeBase = await getKnowledgeBase(language);
   
-  const processedMessages = messages
+  // 1. Fetch historical messages from Supabase if we don't have enough context
+  let historicalMessages: any[] = [];
+  try {
+    const { data } = await supabase
+      .from('chat_history')
+      .select('role, content')
+      .or(`device_id.eq.${deviceId},ip_address.eq.${ipAddress}`)
+      .order('created_at', { ascending: false })
+      .limit(10);
+    
+    if (data) {
+      historicalMessages = data.reverse().map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }]
+      }));
+    }
+  } catch (err) {
+    console.error("Failed to fetch history:", err);
+  }
+
+  // 2. Process current messages
+  const currentProcessed = messages
     .filter((msg: any) => msg.content && msg.content.trim() !== '')
     .map((msg: any) => ({
       role: msg.role === 'user' ? 'user' : 'model',
       parts: [{ text: msg.content }]
     }));
 
+  // 3. Merge history with current messages, avoiding duplicates if possible
+  // If the last message in history is the same as one of the current messages, we should handle that.
+  // For simplicity, if currentProcessed has more than 1 message, we assume it has its own context.
+  // If currentProcessed has only 1 message, we prepend the history.
+  
+  let finalMessages: any[] = [];
+  if (currentProcessed.length <= 1 && historicalMessages.length > 0) {
+    // Check if the last message in historicalMessages is already in currentProcessed
+    const lastHistoryMsg = historicalMessages[historicalMessages.length - 1].parts[0].text;
+    const firstCurrentMsg = currentProcessed[0]?.parts[0].text;
+    
+    if (lastHistoryMsg === firstCurrentMsg) {
+      finalMessages = historicalMessages;
+    } else {
+      finalMessages = [...historicalMessages, ...currentProcessed];
+    }
+  } else {
+    finalMessages = currentProcessed;
+  }
+
   const coalescedMessages: any[] = [];
-  for (const msg of processedMessages) {
+  for (const msg of finalMessages) {
     if (coalescedMessages.length > 0 && coalescedMessages[coalescedMessages.length - 1].role === msg.role) {
       coalescedMessages[coalescedMessages.length - 1].parts[0].text += "\n\n" + msg.parts[0].text;
     } else {
@@ -51,7 +92,7 @@ export async function processChatMessage({
   const finalHistory = coalescedMessages;
 
   const model = genAI.getGenerativeModel({ 
-    model: "gemini-2.0-flash-lite",
+    model: "gemini-2.0-flash",
     systemInstruction: {
       parts: [{ text: `ROLE: You are the AI Architect for Five Plus One (Kosuke Osawa).
 KNOWLEDGE BASE:
