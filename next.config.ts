@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+import path from "path";
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -24,7 +26,7 @@ const nextConfig: NextConfig = {
 // Turbopack loader is only needed for development interactivity
 if (process.env.NODE_ENV === 'development') {
     try {
-      const loaderPath = './src/visual-edits/component-tagger-loader.js';
+      const loaderPath = path.join(process.cwd(), 'src/visual-edits/component-tagger-loader.js');
       (nextConfig as any).turbopack = {
         rules: {
           "*.{jsx,tsx}": {
