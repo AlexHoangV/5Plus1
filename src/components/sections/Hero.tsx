@@ -42,28 +42,30 @@ const Hero = () => {
             </div>
         </div>
 
-        {/* Right Column: Promotional Black Square - Visible on Mobile but stacked */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-square relative overflow-hidden flex flex-col justify-between text-[#ffffff] p-8 md:p-12 lg:p-16">
-              {/* Image Background for Section 01 */}
-                <div className="absolute inset-0 z-0 group">
-                  <img
-                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
-                    alt="Kosuke Osawa"
-                    className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 bg-black/60 group-hover:bg-transparent transition-all duration-700"></div>
-                </div>
+          {/* Right Column: Promotional Black Square - Visible on Mobile but stacked */}
+            <div className="flex flex-col items-start lg:items-end">
+              <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-square relative overflow-hidden mb-6">
+                {/* Image Background for Section 01 */}
+                  <div className="absolute inset-0 z-0 group">
+                    <img
+                      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+                      alt="Kosuke Osawa"
+                      className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 bg-black/60 group-hover:bg-transparent transition-all duration-700"></div>
+                  </div>
+              </div>
 
-                {/* Quote about architectural harmony */}
-              <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-justify tracking-normal lowercase relative z-10">
-                {t(
-                  '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
-                  '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
-                )}
-              </p>
+              {/* Slogan positioned below the image, aligned to the left of the image container */}
+              <div className="w-full max-w-[480px] lg:max-w-[560px]">
+                <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-left tracking-normal text-white hover:text-[#C6733B] transition-colors duration-300 cursor-default">
+                  {t(
+                    '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
+                    '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
+                  )}
+                </p>
+              </div>
             </div>
-          </div>
       </div>
     </section>
   );
