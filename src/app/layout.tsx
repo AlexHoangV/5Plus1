@@ -8,11 +8,11 @@ import Script from "next/script";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fiveplusone.com"),
-  title: "FIVE + ONE | Architecture Studio",
-  description: "Boutique architecture studio by Mr. Kosuke Osawa - Traditional Japanese Minimalism & Modern Brutalist Aesthetics",
+  title: "KOSUKE | FIVE + ONE – Brutalist & Zen Architecture Studio",
+  description: "FIVE + ONE by architect Kosuke explores Brutalist, Zen and natural architecture through honest materials and contemporary context.",
   openGraph: {
-    title: "FIVE + ONE | Architecture Studio",
-    description: "Boutique architecture studio by Mr. Kosuke Osawa",
+    title: "KOSUKE | FIVE + ONE – Brutalist & Zen Architecture Studio",
+    description: "FIVE + ONE by architect Kosuke explores Brutalist, Zen and natural architecture through honest materials and contemporary context.",
     url: "https://fiveplusone.com",
     siteName: "FIVE + ONE",
     images: [
@@ -32,8 +32,33 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Architect",
+    "name": "KOSUKE – FIVE + ONE",
+    "url": "https://fiveplusone.com",
+    "logo": "https://fiveplusone.com/logo.png",
+    "description": "Architectural studio exploring Brutalist, Zen and natural architecture through honest materials and contemporary context.",
+    "sameAs": [
+      "https://www.archdaily.com",
+      "https://www.instagram.com/fiveplusone"
+    ],
+    "knowsAbout": [
+      "Brutalist Architecture",
+      "Zen Architecture",
+      "Natural Architecture",
+      "Contemporary Residential Design"
+    ]
+  };
+
   return (
     <html lang="en" suppressHydrationWarning>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+        </head>
         <body
           className="antialiased font-sans"
         >
