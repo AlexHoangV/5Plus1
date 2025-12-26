@@ -3,8 +3,9 @@ import "./globals.css";
 import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
-import { LanguageProvider } from "@/hooks/useLanguage";
+import { LanguageProvider, useLanguage } from "@/hooks/useLanguage";
 import { JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -12,6 +13,36 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500", "700", "800"],
   variable: "--font-jetbrains-mono",
 });
+
+const gtPressura = localFont({
+  src: [
+    {
+      path: "../../public/fonts/GT-Pressura-Mono-Regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/GT-Pressura-Mono-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-gt-pressura",
+});
+
+function FontWrapper({ children }: { children: React.ReactNode }) {
+  const { language } = useLanguage();
+  
+  return (
+    <body
+      className={`${jetbrainsMono.variable} ${gtPressura.variable} antialiased font-sans ${
+        language === 'en' ? 'font-en' : 'font-vi'
+      }`}
+    >
+      {children}
+    </body>
+  );
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fiveplusone.com"),
