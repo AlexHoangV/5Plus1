@@ -3,10 +3,13 @@ import "./globals.css";
 import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
-import { LanguageProvider, useLanguage } from "@/hooks/useLanguage";
+import { LanguageProvider } from "@/hooks/useLanguage";
 import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { FontWrapper } from "@/components/FontWrapper";
+import { Toaster } from "sonner";
+import { Chatbot } from "@/components/Chatbot";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin", "vietnamese"],
@@ -29,20 +32,6 @@ const gtPressura = localFont({
   ],
   variable: "--font-gt-pressura",
 });
-
-function FontWrapper({ children }: { children: React.ReactNode }) {
-  const { language } = useLanguage();
-  
-  return (
-    <body
-      className={`${jetbrainsMono.variable} ${gtPressura.variable} antialiased font-sans ${
-        language === 'en' ? 'font-en' : 'font-vi'
-      }`}
-    >
-      {children}
-    </body>
-  );
-}
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fiveplusone.com"),
