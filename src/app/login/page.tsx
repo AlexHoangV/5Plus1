@@ -7,6 +7,11 @@ import { toast } from 'sonner';
 import Navbar from '@/components/sections/navbar';
 import Footer from '@/components/sections/Footer';
 import { useLanguage } from '@/hooks/useLanguage';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 export default function LoginPage() {
   const { t } = useLanguage();
@@ -15,37 +20,71 @@ export default function LoginPage() {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminUsername, setAdminUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
   const router = useRouter();
 
-    const handleLogin = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsLoading(true);
-  
-      try {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: isAdminMode ? adminUsername : email,
-          password,
-        });
-        if (error) throw error;
-        toast.success(isAdminMode ? 'Welcome back, Admin' : 'Successfully logged in');
-        router.push('/');
-      } catch (error: any) {
-        toast.error(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-  const handleSignUp = async () => {
-    if (isAdminMode) return;
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
+
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
+      const { error } = await supabase.auth.signInWithPassword({
+        email: adminUsername,
         password,
       });
       if (error) throw error;
-      toast.success('Check your email for confirmation');
+      toast.success('Welcome back, Admin');
+      router.push('/');
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSendOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!email) {
+      toast.error(t('Please enter your email', 'Vui lòng nhập email'));
+      return;
+    }
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          shouldCreateUser: true,
+        }
+      });
+      if (error) throw error;
+      setIsOtpSent(true);
+      toast.success(t('OTP sent to your email', 'Mã xác thực đã được gửi đến email của bạn'));
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (otp.length !== 6) {
+      toast.error(t('Please enter 6-digit code', 'Vui lòng nhập mã 6 chữ số'));
+      return;
+    }
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'email',
+      });
+      if (error) throw error;
+      toast.success(t('Successfully verified', 'Xác thực thành công'));
+      router.push('/');
     } catch (error: any) {
       toast.error(error.message);
     } finally {
@@ -57,60 +96,60 @@ export default function LoginPage() {
     <div className="min-h-screen bg-background font-mono flex flex-col">
       <Navbar />
       <main className="flex-grow flex items-center justify-center py-24 px-4">
-        <div className="w-full max-w-md border border-border p-8 md:p-12 space-y-8">
+        <div className="w-full max-w-md border border-border p-8 md:p-12 space-y-8 bg-background/50 backdrop-blur-sm">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-display font-bold uppercase tracking-tighter">
+            <h1 className="text-3xl font-display font-bold uppercase tracking-tighter text-foreground">
               {isAdminMode ? t('ADMIN ACCESS', 'QUYỀN ADMIN') : t('CLIENT PORTAL', 'CỔNG KHÁCH HÀNG')}
             </h1>
             <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              {isAdminMode ? t('Mode 01 | Exclusive for Kosuke', 'Chế độ 01 | Dành riêng cho Kosuke') : t('Mode 02 | Client Login & Registration', 'Chế độ 02 | Đăng nhập & Đăng ký Khách hàng')}
+              {isAdminMode ? t('Mode 01 | Exclusive for Kosuke', 'Chế độ 01 | Dành riêng cho Kosuke') : t('Mode 02 | OTP Verification', 'Chế độ 02 | Xác thực mã OTP')}
             </p>
           </div>
 
           <div className="flex border-b border-border">
             <button
-              onClick={() => setIsAdminMode(false)}
-              className={`flex-1 py-3 text-[10px] uppercase tracking-widest transition-colors ${!isAdminMode ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+              onClick={() => { setIsAdminMode(false); setIsOtpSent(false); }}
+              className={`flex-1 py-3 text-[10px] uppercase tracking-widest transition-colors ${!isAdminMode ? 'bg-primary text-primary-foreground font-bold' : 'hover:bg-muted text-muted-foreground'}`}
             >
               {t('Client', 'Khách Hàng')}
             </button>
             <button
               onClick={() => setIsAdminMode(true)}
-              className={`flex-1 py-3 text-[10px] uppercase tracking-widest transition-colors ${isAdminMode ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+              className={`flex-1 py-3 text-[10px] uppercase tracking-widest transition-colors ${isAdminMode ? 'bg-primary text-primary-foreground font-bold' : 'hover:bg-muted text-muted-foreground'}`}
             >
               Admin
             </button>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-[10px] uppercase tracking-widest font-bold">
-                  {isAdminMode ? t('Username', 'Tên đăng nhập') : 'Email'}
-                </label>
-                <input
-                  type={isAdminMode ? 'text' : 'email'}
-                  required
-                  value={isAdminMode ? adminUsername : email}
-                  onChange={(e) => isAdminMode ? setAdminUsername(e.target.value) : setEmail(e.target.value)}
-                  placeholder={isAdminMode ? 'KOSUKE' : 'YOUR@EMAIL.COM'}
-                  className="w-full bg-transparent border-b border-border py-2 text-sm focus:outline-none focus:border-primary transition-colors"
-                />
+          {isAdminMode ? (
+            <form onSubmit={handleAdminLogin} className="space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-foreground">
+                    {t('Username', 'Tên đăng nhập')}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={adminUsername}
+                    onChange={(e) => setAdminUsername(e.target.value)}
+                    placeholder="KOSUKE"
+                    className="w-full bg-transparent border-b border-border py-2 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-foreground">{t('Password', 'Mật khẩu')}</label>
+                  <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="********"
+                    className="w-full bg-transparent border-b border-border py-2 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                  />
+                </div>
               </div>
-              <div className="space-y-1">
-                <label className="text-[10px] uppercase tracking-widest font-bold">{t('Password', 'Mật khẩu')}</label>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="********"
-                  className="w-full bg-transparent border-b border-border py-2 text-sm focus:outline-none focus:border-primary transition-colors"
-                />
-              </div>
-            </div>
 
-            <div className="space-y-4 pt-4">
               <button
                 type="submit"
                 disabled={isLoading}
@@ -118,19 +157,83 @@ export default function LoginPage() {
               >
                 {isLoading ? t('PROCESSING...', 'ĐANG XỬ LÝ...') : t('SIGN IN', 'ĐĂNG NHẬP')}
               </button>
-              
-              {!isAdminMode && (
-                <button
-                  type="button"
-                  onClick={handleSignUp}
-                  disabled={isLoading}
-                  className="w-full py-4 border border-border font-bold uppercase tracking-widest hover:bg-muted transition-colors disabled:opacity-50"
-                >
-                  {t('SIGN UP', 'ĐĂNG KÝ')}
-                </button>
+            </form>
+          ) : (
+            <div className="space-y-6">
+              {!isOtpSent ? (
+                <form onSubmit={handleSendOtp} className="space-y-6">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase tracking-widest font-bold text-foreground">Email</label>
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="YOUR@EMAIL.COM"
+                      className="w-full bg-transparent border-b border-border py-2 text-sm focus:outline-none focus:border-primary transition-colors text-foreground"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+                  >
+                    {isLoading ? t('SENDING...', 'ĐANG GỬI...') : t('SEND OTP CODE', 'GỬI MÃ OTP')}
+                  </button>
+                </form>
+              ) : (
+                <div className="space-y-8 flex flex-col items-center w-full">
+                  <div className="text-center space-y-2">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {t('Code sent to', 'Mã đã được gửi đến')} <span className="text-foreground font-bold">{email}</span>
+                    </p>
+                    <button 
+                      onClick={() => { setIsOtpSent(false); setOtp(''); }}
+                      className="text-[8px] uppercase tracking-tighter text-primary hover:underline"
+                    >
+                      {t('Change Email', 'Thay đổi Email')}
+                    </button>
+                  </div>
+                  
+                  <div className="w-full flex justify-center py-4">
+                    <InputOTP
+                      maxLength={6}
+                      value={otp}
+                      onChange={(value) => setOtp(value)}
+                      onComplete={() => handleVerifyOtp()}
+                    >
+                      <InputOTPGroup className="gap-2">
+                        <InputOTPSlot index={0} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                        <InputOTPSlot index={1} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                        <InputOTPSlot index={2} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                        <InputOTPSlot index={3} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                        <InputOTPSlot index={4} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                        <InputOTPSlot index={5} className="w-10 h-12 text-lg border-b border-t-0 border-x-0 rounded-none bg-transparent" />
+                      </InputOTPGroup>
+                    </InputOTP>
+                  </div>
+
+                  <div className="w-full space-y-4">
+                    <button
+                      onClick={() => handleVerifyOtp()}
+                      disabled={isLoading || otp.length !== 6}
+                      className="w-full py-4 bg-primary text-primary-foreground font-bold uppercase tracking-widest hover:opacity-90 transition-opacity disabled:opacity-50"
+                    >
+                      {isLoading ? t('VERIFYING...', 'ĐANG XÁC THỰC...') : t('VERIFY & LOGIN', 'XÁC THỰC & ĐĂNG NHẬP')}
+                    </button>
+
+                    <button
+                      onClick={() => handleSendOtp()}
+                      disabled={isLoading}
+                      className="w-full text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2"
+                    >
+                      {t('Resend Code', 'Gửi lại mã')}
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
-          </form>
+          )}
         </div>
       </main>
       <Footer />
