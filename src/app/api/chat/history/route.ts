@@ -9,7 +9,9 @@ const supabase = createClient(
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const deviceId = searchParams.get('deviceId');
-  const ipAddress = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+  const fullIpAddress = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+  // Take only the first IP if there are multiple (e.g. from proxy) to avoid filter errors
+  const ipAddress = fullIpAddress.split(',')[0].trim();
 
   if (!deviceId) {
     return NextResponse.json({ error: "Missing deviceId" }, { status: 400 });
