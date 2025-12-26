@@ -7,9 +7,9 @@ import Image from 'next/image';
 const FeaturedProject = () => {
   const { t } = useLanguage();
 
-  return (
-    <section className="py-32 washi-paper">
-      <div className="container mx-auto px-6 md:px-12">
+    return (
+      <section className="py-32 bg-white">
+        <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Project Image */}
           <div className="relative aspect-[4/5] overflow-hidden shadow-2xl">

@@ -9,17 +9,6 @@ const Hero = () => {
 
   return (
     <section className="min-h-screen relative flex items-center bg-black overflow-hidden">
-      {/* Background Architectural Sketch */}
-      <div className="absolute inset-0 z-0 opacity-40">
-        <Image
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/96-1766774983077.png"
-          alt="Architectural Sketch"
-          fill
-          className="object-cover grayscale"
-          priority
-        />
-      </div>
-
       <div className="container mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Content */}
         <div className="lg:col-span-7 flex flex-col pt-20 lg:pt-0">

@@ -191,32 +191,11 @@
     }
   }
 
-  .hero-title {
-    font-size: clamp(5rem, 12vw, 12rem);
-  }
+    .hero-title {
+      font-size: clamp(5rem, 12vw, 12rem);
+    }
 
-  .washi-paper {
-    background-color: #f8f7f2;
-    background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
-  }
-
-  .sketch-overlay {
-    position: relative;
-  }
-
-  .sketch-overlay::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/97-1766774983121.png");
-    background-size: cover;
-    background-position: center;
-    mix-blend-mode: overlay;
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .glow-box {
+    .glow-box {
     box-shadow: 0 0 40px rgba(198, 115, 59, 0.3);
   }
 

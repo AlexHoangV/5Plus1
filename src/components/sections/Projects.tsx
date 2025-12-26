@@ -63,15 +63,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
           fill
           className="object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
         />
-        {/* Architectural Sketch Overlay Effect */}
-        <div className="absolute inset-0 opacity-40 mix-blend-screen pointer-events-none group-hover:opacity-60 transition-opacity duration-500">
-           <Image 
-             src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/97-1766774983121.png"
-             alt="Sketch Overlay"
-             fill
-             className="object-cover invert"
-           />
-        </div>
         
         {/* Hover Info Overlay */}
         <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">

@@ -107,9 +107,9 @@ const Philosophy = () => {
     }
   ];
 
-  return (
-    <section id="about" className="py-24 washi-paper overflow-hidden border-y border-black/5">
-      <div className="container mx-auto px-6 md:px-12 mb-16 text-center">
+    return (
+      <section id="about" className="py-24 bg-white overflow-hidden border-y border-black/5">
+        <div className="container mx-auto px-6 md:px-12 mb-16 text-center">
         <h2 className="font-display text-5xl md:text-7xl font-bold tracking-tight mb-4">
           Godai + Human
         </h2>
