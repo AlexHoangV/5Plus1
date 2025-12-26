@@ -191,48 +191,49 @@ const ProjectsSection = () => {
             <ProjectCard project={projects[2]} />
           </div>
 
-          {/* Poem Part 1 - English Only */}
-          <div className="md:col-span-5 flex flex-col justify-center space-y-12">
-            <div className="space-y-6">
-              <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
-                ... "First in the heart is the dream —<br />
-                Then the mind starts seeking a way.<br /><br />
-                His eyes look out on the world,<br />
-                On the great wooded world,<br />
-                On the rich soil of the world,<br />
-                On the rivers of the world.<br /><br />
-                The eyes see there materials for building,<br />
-                See the difficulties, too, and the obstacles."
-              </p>
+            {/* Poem Part 1 - English Only */}
+            <div className="md:col-span-5 flex flex-col justify-center space-y-12">
+              <div className="space-y-6">
+                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                  ... &ldquo;First in the heart is the dream —<br />
+                  Then the mind starts seeking a way.<br /><br />
+                  His eyes look out on the world,<br />
+                  On the great wooded world,<br />
+                  On the rich soil of the world,<br />
+                  On the rivers of the world.<br /><br />
+                  The eyes see there materials for building,<br />
+                  See the difficulties, too, and the obstacles.&rdquo;
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Project 04 - Offset */}
-          <div className="md:col-span-7">
-            <ProjectCard project={projects[3]} />
-          </div>
-
-          {/* Project 05 - Vertical Focus */}
-          <div className="md:col-span-4">
-            <ProjectCard project={projects[4]} />
-          </div>
-
-          {/* Poem Part 2 - English Only */}
-          <div className="md:col-span-8 flex flex-col justify-center pl-0 md:pl-24 space-y-12">
-            <div className="space-y-6">
-              <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
-                "The mind seeks a way to overcome these obstacles.<br /><br />
-                The hand seeks tools to cut the wood,<br />
-                To till the soil, and harness the power of the waters.<br /><br />
-                Then the hand seeks other hands to help,<br />
-                A community of hands to help —<br />
-                Thus, the dream becomes not one man's dream alone,<br />
-                But a community dream.<br /><br />
-                Not my dream alone, but our dream" ....<br /><br />
-                <span className="not-italic font-bold">— Langston Hughes</span>
-              </p>
+            {/* Project 04 - Offset */}
+            <div className="md:col-span-7">
+              <ProjectCard project={projects[3]} />
             </div>
-          </div>
+
+            {/* Project 05 - Vertical Focus */}
+            <div className="md:col-span-4">
+              <ProjectCard project={projects[4]} />
+            </div>
+
+            {/* Poem Part 2 - English Only */}
+            <div className="md:col-span-8 flex flex-col justify-center pl-0 md:pl-24 space-y-12">
+              <div className="space-y-6">
+                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                  &ldquo;The mind seeks a way to overcome these obstacles.<br /><br />
+                  The hand seeks tools to cut the wood,<br />
+                  To till the soil, and harness the power of the waters.<br /><br />
+                  Then the hand seeks other hands to help,<br />
+                  A community of hands to help —<br />
+                  Thus, the dream becomes not one man&apos;s dream alone,<br />
+                  But a community dream.<br /><br />
+                  Not my dream alone, but our dream&rdquo; ....<br /><br />
+                  <span className="not-italic font-bold">— Langston Hughes</span>
+                </p>
+              </div>
+            </div>
+
 
           {/* Project 06 - Large Central */}
           <div className="md:col-span-12 my-12">
