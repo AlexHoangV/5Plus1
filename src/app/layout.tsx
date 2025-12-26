@@ -84,7 +84,10 @@ export default function RootLayout({
           />
         </head>
         <LanguageProvider>
-          <FontWrapper>
+          <FontWrapper 
+            jetbrainsMonoVar={jetbrainsMono.variable} 
+            gtPressuraVar={gtPressura.variable}
+          >
             <Script
               id="orchids-browser-logs"
               src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
