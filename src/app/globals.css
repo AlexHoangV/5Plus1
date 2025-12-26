@@ -47,10 +47,10 @@
   --color-sidebar-border: #e5e5e5;
   --color-sidebar-ring: #c6733b;
 
-    --font-display: var(--font-jetbrains-mono), monospace;
-    --font-sans: var(--font-jetbrains-mono), monospace;
-    --font-main: var(--font-jetbrains-mono), monospace;
-    --font-mono: var(--font-jetbrains-mono), monospace;
+    --font-display: var(--font-gt-pressura), var(--font-jetbrains-mono), monospace;
+    --font-sans: var(--font-gt-pressura), var(--font-jetbrains-mono), monospace;
+    --font-main: var(--font-gt-pressura), var(--font-jetbrains-mono), monospace;
+    --font-mono: var(--font-gt-pressura), var(--font-jetbrains-mono), monospace;
     --font-serif-jp: var(--font-jetbrains-mono), monospace;
 
     --letter-spacing-technical: 0.04em;
