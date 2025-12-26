@@ -60,11 +60,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { messages, language = 'vi' } = body;
+  const { messages, language = 'vi', deviceId, sessionId } = body;
+  const ip_address = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
 
   try {
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "No messages provided" }, { status: 400 });
+    }
+
+    const lastUserMessage = messages[messages.length - 1];
+    
+    // Store user message
+    if (lastUserMessage && lastUserMessage.role === 'user') {
+      await supabase.from('chat_history').insert([{
+        session_id: sessionId || 'default',
+        device_id: deviceId || 'unknown',
+        ip_address,
+        role: 'user',
+        content: lastUserMessage.content
+      }]);
     }
 
     const knowledgeBase = await getKnowledgeBase(language);
