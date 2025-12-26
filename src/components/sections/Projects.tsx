@@ -2,125 +2,221 @@
 
 import React from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
-import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+/**
+ * ProjectsSection Component
+ * 
+ * Clones the "Selected Works" grid section.
+ * Features:
+ * - High-contrast "Selected Works" header with terracotta underline.
+ * - Grid of 5 project cards.
+ * - Grayscale-to-color transition on hover with 1.05x scale.
+ * - Primary accent overlay on image hover.
+ * - Bold display typography for titles and technical monospace for metadata.
+ * - Top-border separation for card content.
+ */
 
 interface Project {
   id: string;
-  titleEn: string;
-  titleVi: string;
-  categoryEn: string;
-  categoryVi: string;
+  title: string;
+  category: string;
   image: string;
-  sketchUrl?: string;
+  size?: "small" | "medium" | "large";
 }
 
 const projects: Project[] = [
   {
     id: "01",
-    titleEn: "Project Mangetsu",
-    titleVi: "Dự Án Mangetsu",
-    categoryEn: "Da Nang / Renovation",
-    categoryVi: "Đà Nẵng / Cải Tạo",
+    title: "Project Mangetsu",
+    category: "Da Nang / Renovation",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-1766603064607.png",
+    size: "large"
   },
   {
     id: "02",
-    titleEn: "Truc Bach Saga",
-    titleVi: "Truyền Thuyết Trúc Bạch",
-    categoryEn: "Hanoi / Urban Mapping",
-    categoryVi: "Hà Nội / Quy Hoạch Đô Thị",
+    title: "Truc Bach Saga",
+    category: "Hanoi / Urban Mapping",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.2-1766603600381.png",
+    size: "medium"
   },
   {
     id: "03",
-    titleEn: "Project Barbaros",
-    titleVi: "Dự Án Barbaros",
-    categoryEn: "Hanoi / Social Space",
-    categoryVi: "Hà Nội / Không Gian Xã Hội",
+    title: "Project Barbaros",
+    category: "Hanoi / Social Space",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.3-1766603600383.png",
+    size: "medium"
   },
   {
     id: "04",
-    titleEn: "The Quiet Residence",
-    titleVi: "Nơi Ở Tĩnh Lặng",
-    categoryEn: "Residential / Interior",
-    categoryVi: "Nhà Ở / Nội Thất",
-    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/99-1766774982898.png",
-  }
+    title: "Asobi Bar",
+    category: "Da Nang / Commercial",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603600605.png",
+    size: "medium"
+  },
+  {
+    id: "05",
+    title: "Mangetsu Anatomy",
+    category: "Architectural Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603064608.png",
+    size: "medium"
+  },
+  {
+    id: "06",
+    title: "Tay Ho Section",
+    category: "Spatial Study / In-Progress",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-2-1766603600397.png",
+    size: "large"
+  },
+  {
+    id: "07",
+    title: "Project Asobi Bar",
+    category: "Da Nang / Commercial",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603962182.png",
+    size: "medium"
+  },
+  {
+    id: "08",
+    title: "Project Tho",
+    category: "Hanoi / Interior Space",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.7-1766603962180.png",
+    size: "medium"
+  },
+  {
+    id: "09",
+    title: "Project Mangetsu Da Nang",
+    category: "Axonometric Diagram",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603962281.png",
+    size: "medium"
+  },
+  {
+    id: "10",
+    title: "Project Tần Mẫn Bakery",
+    category: "Commercial / Bakery",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/1.6-1766604061650.png",
+    size: "medium"
+  },
+  {
+    id: "11",
+    title: "Project Mangetsu Da Nang",
+    category: "Material Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/5-1766604061733.png",
+    size: "medium"
+  },
+  {
+    id: "12",
+    title: "Case Study: Casa Gilardi",
+    category: "Luis Barragán / Analysis",
+    image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/9-1766604061733.png",
+    size: "large"
+  },
 ];
 
 const ProjectCard = ({ project }: { project: Project }) => {
-  const { t } = useLanguage();
-  
   return (
-    <div className="group cursor-pointer relative">
-      {/* Image Container with Sketch Overlay */}
-      <div className="relative aspect-[4/5] overflow-hidden mb-6 border border-white/10">
-        <Image
-          src={project.image}
-          alt={project.titleEn}
-          fill
-          className="object-cover grayscale transition-all duration-700 group-hover:scale-110 group-hover:grayscale-0"
-        />
+    <div className="group cursor-pointer">
+      {/* Image Container */}
+      <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
+        {/* Overlay on hover */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
         
-        {/* Hover Info Overlay */}
-        <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-          <span className="font-mono text-xs text-white tracking-[0.3em] uppercase border border-white/50 px-6 py-2 backdrop-blur-sm">
-            {t('View Project', 'Xem Dự Án')}
+          {/* Project Image */}
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover grayscale-0 md:grayscale transition-all duration-700 md:group-hover:grayscale-0 group-hover:scale-105"
+          />
+
+          {/* Project Number (Revealed on hover) */}
+          <span className="absolute top-4 right-4 text-4xl font-display font-black text-white opacity-100 md:opacity-0 -translate-y-0 md:-translate-y-4 md:group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
+            {project.id}
           </span>
         </div>
-      </div>
 
-      {/* Project Info */}
-      <div className="flex flex-col gap-1">
-        <h3 className="font-display text-2xl font-bold text-white tracking-tight uppercase group-hover:text-primary transition-colors">
-          {t(project.titleEn, project.titleVi)}
+        {/* Content Area */}
+        <div className="flex flex-col pt-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150">
+        <h3 className="text-xl md:text-2xl font-display font-black uppercase tracking-tight mb-1 group-hover:text-[#c6733b] transition-colors leading-none">
+          {project.title}
         </h3>
-        <p className="font-mono text-[10px] text-white/50 uppercase tracking-[0.2em]">
-          {t(project.categoryEn, project.categoryVi)}
+        <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#737373]">
+          {project.category}
         </p>
       </div>
     </div>
   );
 };
 
-const ProjectsSection = () => {
-  const { t } = useLanguage();
-  
-  return (
-    <section id="projects" className="py-32 bg-[#0a0a0a] overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
-        {/* Section Header */}
-        <div className="mb-20">
-          <h2 className="font-display text-5xl md:text-7xl font-bold text-white tracking-tight mb-8 relative inline-block">
-            PROJECTS
-            <div className="absolute bottom-0 left-0 w-full h-[6px] bg-primary"></div>
-          </h2>
-          <p className="font-mono text-xs md:text-sm text-white/40 uppercase tracking-[0.3em] max-w-2xl leading-relaxed">
-            {t(
-              'Selected architectural interventions / Residential, Commercial & Urban Studies',
-              'Các Dự Án Kiến Trúc Tiêu Biểu / Nhà Ở, Thương Mại & Nghiên Cứu Đô Thị'
-            )}
-          </p>
-        </div>
-
-        {/* Project Grid / Carousel Placeholder */}
-        <div className="relative">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
+  const ProjectsSection = () => {
+    const { t } = useLanguage();
+    
+    return (
+      <section id="projects" className="py-24 md:py-32 bg-white">
+        <div className="container mx-auto">
+          {/* Section Header */}
+          <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
+            <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
+              {t('Projects', 'Dự Án')}
+            </h2>
+            <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
+              {t(
+                'Selected architectural interventions / Residential, Commercial & Urban Studies',
+                'Các Dự Án Kiến Trúc Tiêu Biểu / Nhà Ở, Thương Mại & Nghiên Cứu Đô Thị'
+              )}
+            </p>
           </div>
 
-          {/* Navigation Arrows (Visual) */}
-          <div className="hidden lg:flex absolute top-1/2 -left-16 -right-16 -translate-y-1/2 justify-between pointer-events-none">
-            <button className="p-4 text-primary animate-pulse pointer-events-auto">
-              <ChevronLeft size={48} className="drop-shadow-[0_0_10px_rgba(198,115,59,0.8)]" />
-            </button>
-            <button className="p-4 text-primary animate-pulse pointer-events-auto">
-              <ChevronRight size={48} className="drop-shadow-[0_0_10px_rgba(198,115,59,0.8)]" />
-            </button>
+
+        {/* Project Grid - Artistic Brutalist Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
+          {/* Project 01 - Large */}
+          <div className="md:col-span-12">
+            <ProjectCard project={projects[0]} />
+          </div>
+
+          {/* Projects 02 & 03 - Side by Side */}
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[1]} />
+          </div>
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[2]} />
+          </div>
+
+          {/* Project 04 - Offset */}
+          <div className="md:col-span-7 md:col-start-6">
+            <ProjectCard project={projects[3]} />
+          </div>
+
+          {/* Project 05 - Vertical Focus */}
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[4]} />
+          </div>
+
+          {/* Project 06 - Large Central */}
+          <div className="md:col-span-12 my-12">
+            <ProjectCard project={projects[5]} />
+          </div>
+
+          {/* Projects 07 & 08 */}
+          <div className="md:col-span-5">
+            <ProjectCard project={projects[6]} />
+          </div>
+          <div className="md:col-span-7">
+            <ProjectCard project={projects[7]} />
+          </div>
+
+          {/* Projects 09, 10, 11 - Triple Grid */}
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[8]} />
+          </div>
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[9]} />
+          </div>
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[10]} />
+          </div>
+
+          {/* Project 12 - Final Large Statement */}
+          <div className="md:col-span-10 md:col-start-2">
+            <ProjectCard project={projects[11]} />
           </div>
         </div>
       </div>
