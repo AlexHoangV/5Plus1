@@ -69,8 +69,7 @@ export async function POST(req: Request) {
 
     const knowledgeBase = await getKnowledgeBase(language);
     
-    // 1. Process and Clean History for Gemini
-    // Ensure history is alternating user/model and starts with user
+    // Process messages for Gemini
     const processedMessages = messages
       .filter((msg: any) => msg.content && msg.content.trim() !== '')
       .map((msg: any) => ({
@@ -99,13 +98,13 @@ export async function POST(req: Request) {
       });
     }
 
-    // Extract the last message (which must be from 'user')
+    // Extract the last message
     const lastMsg = coalescedMessages.pop();
     const finalLastUserMessage = lastMsg.parts[0].text;
     const finalHistory = coalescedMessages;
 
-    // 2. Initialize Model (Gemini 1.5 Flash - Most Stable for Tool Calling)
-    const MODEL_NAME = "gemini-1.5-flash"; 
+    // Use gemini-1.5-flash-latest to avoid 404 errors on v1beta
+    const MODEL_NAME = "gemini-1.5-flash-latest"; 
     const model = genAI.getGenerativeModel({ 
       model: MODEL_NAME,
       systemInstruction: {
@@ -145,68 +144,53 @@ STRICT PROTOCOL FOR LEADS:
       ],
     });
 
-    // 3. Attempt Chat with robust error handling
-    try {
-      const chat = model.startChat({
-        history: finalHistory,
-      });
+    // Start chat with history
+    const chat = model.startChat({
+      history: finalHistory,
+    });
 
-      const result = await chat.sendMessage(finalLastUserMessage);
-      const response = await result.response;
+    const result = await chat.sendMessage(finalLastUserMessage);
+    const response = await result.response;
+    
+    // Check for function calls
+    const call = response.functionCalls()?.[0];
+    if (call && call.name === "create_order") {
+      const { name, email, phone, message } = call.args as any;
       
-      // Handle Function Calls
-      const call = response.functionCalls()?.[0];
-      if (call && call.name === "create_order") {
-        const { name, email, phone, message } = call.args as any;
-        
-        // 1. Internal CRM: Save to Supabase
-        await supabase.from('contact_messages').insert([{ name, email, phone, message }]);
-
-        // 2. External CRM: Try sending to Bottle CRM or Webhook if configured
-        // We log it here for now. User can add CRM_WEBHOOK_URL to .env.local
-        const webhookUrl = process.env.CRM_WEBHOOK_URL;
-        if (webhookUrl) {
-          try {
-            await fetch(webhookUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name, email, phone, message, source: 'Chatbot AI' }),
-            });
-          } catch (e) {
-            console.error("External CRM sync failed:", e);
-          }
-        }
-
-        return NextResponse.json({ 
-          content: language === 'en' 
-            ? `Excellent. I've recorded your details, ${name}. Our studio will review your request and contact you at ${email} or ${phone} soon.` 
-            : `Tuyệt vời. Tôi đã ghi lại thông tin của bạn, ${name}. Studio của chúng tôi sẽ xem xét yêu cầu và liên hệ với bạn qua ${email} hoặc ${phone} sớm nhất.`
-        });
-      }
-
-      return NextResponse.json({ content: response.text() });
-    } catch (chatError: any) {
-      console.error("Chat Session Error:", chatError.message);
-      
-      // Fallback 1: Try gemini-2.5-flash-lite or direct generateContent
+      // Save to Supabase
       try {
-        const result = await model.generateContent({
-          contents: [
-            { role: 'user', parts: [{ text: `System Info: ${knowledgeBase}\n\nUser Question: ${finalLastUserMessage}` }] }
-          ]
-        });
-        const response = await result.response;
-        return NextResponse.json({ content: response.text() });
-      } catch (fallbackError: any) {
-        console.error("All Model Fallbacks Failed:", fallbackError.message);
-        throw fallbackError;
+        await supabase.from('contact_messages').insert([{ name, email, phone, message }]);
+      } catch (dbError) {
+        console.error("Supabase insert error:", dbError);
       }
+
+      // External CRM Webhook
+      const webhookUrl = process.env.CRM_WEBHOOK_URL;
+      if (webhookUrl) {
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone, message, source: 'Chatbot AI' }),
+          });
+        } catch (e) {
+          console.error("External CRM sync failed:", e);
+        }
+      }
+
+      return NextResponse.json({ 
+        content: language === 'en' 
+          ? `Excellent. I've recorded your details, ${name}. Our studio will review your request and contact you at ${email} or ${phone} soon.` 
+          : `Tuyệt vời. Tôi đã ghi lại thông tin của bạn, ${name}. Studio của chúng tôi sẽ xem xét yêu cầu và liên hệ với bạn qua ${email} hoặc ${phone} sớm nhất.`
+      });
     }
 
+    return NextResponse.json({ content: response.text() });
+
   } catch (error: any) {
-    console.error("Critical Gemini API Error:", error);
+    console.error("Gemini API Route Error:", error);
     
-    // Final hard fallback
+    // Hard fallback for users
     return NextResponse.json({ 
       error: "Service temporarily unavailable",
       content: language === 'en' 
