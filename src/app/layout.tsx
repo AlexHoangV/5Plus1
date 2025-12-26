@@ -56,12 +56,11 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
         />
-            <LanguageProvider>
-              {children}
-              <Chatbot />
-              <VisualEditsMessenger />
-              <Toaster position="top-right" richColors />
-            </LanguageProvider>
+              <LanguageProvider>
+                {children}
+                <Chatbot />
+                <Toaster position="top-right" richColors />
+              </LanguageProvider>
         </body>
 
     </html>
