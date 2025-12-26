@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Reddit_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
-import { VisualEditsMessenger } from "orchids-visual-edits";
 import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
