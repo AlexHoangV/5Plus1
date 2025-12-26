@@ -1,6 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+
+@font-face {
+  font-family: 'GT Pressura Mono';
+  src: url('/fonts/GT-Pressura-Mono-Regular.woff') format('woff'),
+       url('/fonts/GT-Pressura-Mono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GT Pressura Mono';
+  src: url('/fonts/GT-Pressura-Mono-Bold.woff') format('woff'),
+       url('/fonts/GT-Pressura-Mono-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -48,9 +65,9 @@
   --color-sidebar-border: #e5e5e5;
   --color-sidebar-ring: #c6733b;
 
-    --font-display: var(--font-main), sans-serif;
-    --font-sans: var(--font-main), sans-serif;
-    --font-mono: var(--font-mono), monospace;
+    --font-display: 'GT Pressura Mono', monospace;
+    --font-sans: 'GT Pressura Mono', monospace;
+    --font-mono: 'GT Pressura Mono', monospace;
     --font-serif-jp: "Noto Serif JP", serif;
 
     --letter-spacing-technical: 0.04em;
