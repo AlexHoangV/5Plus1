@@ -69,7 +69,7 @@ export async function POST(req: Request) {
 
     const knowledgeBase = await getKnowledgeBase(language);
     
-    // Process messages for Gemini
+    // Process and clean history for Gemini
     const processedMessages = messages
       .filter((msg: any) => msg.content && msg.content.trim() !== '')
       .map((msg: any) => ({
@@ -103,8 +103,8 @@ export async function POST(req: Request) {
     const finalLastUserMessage = lastMsg.parts[0].text;
     const finalHistory = coalescedMessages;
 
-    // Use gemini-2.0-flash which is confirmed to exist and be stable
-    const MODEL_NAME = "gemini-2.0-flash"; 
+    // Use gemini-2.0-flash-lite for better availability if flash 2.0 is at quota
+    const MODEL_NAME = "gemini-2.0-flash-lite"; 
     const model = genAI.getGenerativeModel({ 
       model: MODEL_NAME,
       systemInstruction: {
@@ -144,58 +144,76 @@ STRICT PROTOCOL FOR LEADS:
       ],
     });
 
-    // Start chat with history
-    const chat = model.startChat({
-      history: finalHistory,
-    });
-
-    const result = await chat.sendMessage(finalLastUserMessage);
-    const response = await result.response;
-    
-    // Check for function calls
-    const call = response.functionCalls()?.[0];
-    if (call && call.name === "create_order") {
-      const { name, email, phone, message } = call.args as any;
-      
-      // Save to Supabase
-      try {
-        await supabase.from('contact_messages').insert([{ name, email, phone, message }]);
-      } catch (dbError) {
-        console.error("Supabase insert error:", dbError);
-      }
-
-      // External CRM Webhook
-      const webhookUrl = process.env.CRM_WEBHOOK_URL;
-      if (webhookUrl) {
-        try {
-          await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone, message, source: 'Chatbot AI' }),
-          });
-        } catch (e) {
-          console.error("External CRM sync failed:", e);
-        }
-      }
-
-      return NextResponse.json({ 
-        content: language === 'en' 
-          ? `Excellent. I've recorded your details, ${name}. Our studio will review your request and contact you at ${email} or ${phone} soon.` 
-          : `Tuyệt vời. Tôi đã ghi lại thông tin của bạn, ${name}. Studio của chúng tôi sẽ xem xét yêu cầu và liên hệ với bạn qua ${email} hoặc ${phone} sớm nhất.`
+    try {
+      const chat = model.startChat({
+        history: finalHistory,
       });
+
+      const result = await chat.sendMessage(finalLastUserMessage);
+      const response = await result.response;
+      
+      const call = response.functionCalls()?.[0];
+      if (call && call.name === "create_order") {
+        const { name, email, phone, message } = call.args as any;
+        
+        try {
+          await supabase.from('contact_messages').insert([{ name, email, phone, message }]);
+        } catch (dbError) {
+          console.error("Supabase insert error:", dbError);
+        }
+
+        const webhookUrl = process.env.CRM_WEBHOOK_URL;
+        if (webhookUrl) {
+          try {
+            await fetch(webhookUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, phone, message, source: 'Chatbot AI' }),
+            });
+          } catch (e) {
+            console.error("External CRM sync failed:", e);
+          }
+        }
+
+        return NextResponse.json({ 
+          content: language === 'en' 
+            ? `Excellent. I've recorded your details, ${name}. Our studio will review your request and contact you at ${email} or ${phone} soon.` 
+            : `Tuyệt vời. Tôi đã ghi lại thông tin của bạn, ${name}. Studio của chúng tôi sẽ xem xét yêu cầu và liên hệ với bạn qua ${email} hoặc ${phone} sớm nhất.`
+        });
+      }
+
+      return NextResponse.json({ content: response.text() });
+    } catch (chatError: any) {
+      console.warn("Primary model/chat error, trying direct generation fallback:", chatError.message);
+      
+      // Direct generation fallback without chat history (stateless) if history causes errors
+      const fallbackResult = await model.generateContent({
+        contents: [
+          { 
+            role: 'user', 
+            parts: [{ text: `System Instruction: You are the AI Architect for Five Plus One.\nUser Message: ${finalLastUserMessage}` }] 
+          }
+        ]
+      });
+      const fallbackResponse = await fallbackResult.response;
+      return NextResponse.json({ content: fallbackResponse.text() });
     }
 
-    return NextResponse.json({ content: response.text() });
-
   } catch (error: any) {
-    console.error("Gemini API Route Error:", error);
+    console.error("Final Gemini API Route Error:", error);
     
-    // Hard fallback for users
+    // Check if it's a quota error
+    const isQuotaError = error.message?.includes("429") || error.message?.includes("quota");
+
     return NextResponse.json({ 
-      error: "Service temporarily unavailable",
+      error: isQuotaError ? "Quota exceeded" : "Service temporarily unavailable",
       content: language === 'en' 
-        ? "I apologize, I'm experiencing some connectivity issues. Please try again in a moment." 
-        : "Thật xin lỗi, tôi đang gặp chút gián đoạn kết nối. Vui lòng thử lại sau giây lát."
-    }, { status: 500 });
+        ? (isQuotaError 
+            ? "I'm currently at my message limit. Please try again in a moment or contact us directly via the form below."
+            : "I apologize, I'm experiencing some connectivity issues. Please try again in a moment.")
+        : (isQuotaError
+            ? "Tôi hiện đã đạt giới hạn tin nhắn. Vui lòng thử lại sau giây lát hoặc liên hệ trực tiếp qua biểu mẫu bên dưới."
+            : "Thật xin lỗi, tôi đang gặp chút gián đoạn kết nối. Vui lòng thử lại sau giây lát.")
+    }, { status: error.status || 500 });
   }
 }
