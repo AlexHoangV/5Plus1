@@ -1,23 +1,10 @@
 import type { Metadata } from "next";
-import { Reddit_Sans, Reddit_Mono } from "next/font/google";
 import "./globals.css";
 import { Chatbot } from "@/components/Chatbot";
 
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import Script from "next/script";
-
-const mainFont = Reddit_Sans({
-  variable: "--font-main",
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-
-const monoFont = Reddit_Mono({
-  variable: "--font-mono",
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://fiveplusone.com"),
@@ -48,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
         <body
-          className={`${mainFont.variable} ${monoFont.variable} antialiased font-sans`}
+          className="antialiased font-sans"
         >
         <Script
           id="orchids-browser-logs"
