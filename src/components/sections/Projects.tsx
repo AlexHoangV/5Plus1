@@ -164,32 +164,84 @@ const projects: Project[] = [
           </div>
 
 
-        {/* Project Grid - Artistic Brutalist Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
-          {/* Project 01 - Large */}
-          <div className="md:col-span-12">
-            <ProjectCard project={projects[0]} />
-          </div>
+          {/* Project Grid - Artistic Brutalist Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
+            {/* Project 01 - Large */}
+            <div className="md:col-span-12">
+              <ProjectCard project={projects[0]} />
+            </div>
 
-          {/* Projects 02 & 03 - Side by Side */}
-          <div className="md:col-span-6">
-            <ProjectCard project={projects[1]} />
-          </div>
-          <div className="md:col-span-6">
-            <ProjectCard project={projects[2]} />
-          </div>
+            {/* Projects 02 & 03 - Side by Side */}
+            <div className="md:col-span-6">
+              <ProjectCard project={projects[1]} />
+            </div>
+            <div className="md:col-span-6">
+              <ProjectCard project={projects[2]} />
+            </div>
 
-          {/* Project 04 - Offset */}
-          <div className="md:col-span-7 md:col-start-6">
-            <ProjectCard project={projects[3]} />
-          </div>
+            {/* Poem Part 1 - Interleaved in White Space */}
+            <div className="md:col-span-5 flex flex-col justify-center space-y-12">
+              <div className="space-y-6">
+                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                  ... "First in the heart is the dream-<br />
+                  Then the mind starts seeking a way.<br /><br />
+                  His eyes look out on the world,<br />
+                  On the great wooded world,<br />
+                  On the rich soil of the world,<br />
+                  On the rivers of the world.<br /><br />
+                  The eyes see there materials for building,<br />
+                  See the difficulties, too, and the obstacles."
+                </p>
+                <p className="font-mono text-sm md:text-base leading-relaxed text-[#737373]">
+                  ... "Ban đầu là ước mơ trong tim<br />
+                  Rồi khối óc đi tìm lấy con đường<br /><br />
+                  Đôi mắt hắn nhìn quanh thế giới,<br />
+                  Trên thế giới rộng lớn của rừng cây<br />
+                  Trên thế giới của đất đai màu mỡ<br />
+                  Trên thế giới của những dòng sông<br /><br />
+                  Đôi mắt thấy ở đó là vật liệu cho xây dựng,<br />
+                  Và những khó khăn và cả những chướng ngại"
+                </p>
+              </div>
+            </div>
 
-          {/* Project 05 - Vertical Focus */}
-          <div className="md:col-span-4">
-            <ProjectCard project={projects[4]} />
-          </div>
+            {/* Project 04 - Offset */}
+            <div className="md:col-span-7">
+              <ProjectCard project={projects[3]} />
+            </div>
 
-          {/* Project 06 - Large Central */}
+            {/* Project 05 - Vertical Focus */}
+            <div className="md:col-span-4">
+              <ProjectCard project={projects[4]} />
+            </div>
+
+            {/* Poem Part 2 - Interleaved in White Space */}
+            <div className="md:col-span-8 flex flex-col justify-center pl-0 md:pl-24 space-y-12">
+              <div className="space-y-6">
+                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                  "The mind seeks a way to overcome these obstacles.<br /><br />
+                  The hand seeks tools to cut the wood,<br />
+                  To till the soil, and harness the power of the waters.<br /><br />
+                  Then the hand seeks other hands to help,<br />
+                  A community of hands to help-<br />
+                  Thus, the dream becomes not one man's dream alone,<br />
+                  But a community dream.<br /><br />
+                  Not my dream alone, but our dream"....<br /><br />
+                  <span className="not-italic font-bold">— Langston Hughes</span>
+                </p>
+                <p className="font-mono text-sm md:text-base leading-relaxed text-[#737373]">
+                  "Khối óc lại đi tìm cách để vượt qua những chướng ngại.<br /><br />
+                  Bàn tay đi tìm công cụ để chặt gỗ,<br />
+                  Để xới đất và tận dụng sức mạnh của dòng nước.<br /><br />
+                  Rồi bàn tay tìm kiếm sự giúp đỡ từ những bàn tay khác,<br />
+                  Một cộng đồng của những bàn tay trợ lực<br />
+                  Rồi, ước mơ không còn của riêng ai mà là ước mơ của cả một cộng đồng<br /><br />
+                  Không phải ước mơ của mình tôi, mà của tất cả chúng ta"...
+                </p>
+              </div>
+            </div>
+
+            {/* Project 06 - Large Central */}
           <div className="md:col-span-12 my-12">
             <ProjectCard project={projects[5]} />
           </div>
