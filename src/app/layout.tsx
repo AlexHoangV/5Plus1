@@ -97,23 +97,19 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
         </head>
-          <body
-            className={`${jetbrainsMono.variable} antialiased font-sans`}
-          >
-
-        <Script
-          id="orchids-browser-logs"
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
-          strategy="afterInteractive"
-          data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
-        />
-              <LanguageProvider>
-                {children}
-                <Chatbot />
-                <Toaster position="top-right" richColors />
-              </LanguageProvider>
-        </body>
-
+        <LanguageProvider>
+          <FontWrapper>
+            <Script
+              id="orchids-browser-logs"
+              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
+              strategy="afterInteractive"
+              data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
+            />
+            {children}
+            <Chatbot />
+            <Toaster position="top-right" richColors />
+          </FontWrapper>
+        </LanguageProvider>
     </html>
   );
 }
