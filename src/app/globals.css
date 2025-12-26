@@ -65,11 +65,11 @@
   --color-sidebar-border: #e5e5e5;
   --color-sidebar-ring: #c6733b;
 
-    --font-display: 'GT Pressura Mono', monospace;
-    --font-sans: 'GT Pressura Mono', monospace;
-    --font-main: 'GT Pressura Mono', monospace;
-    --font-mono: 'GT Pressura Mono', monospace;
-    --font-serif-jp: 'GT Pressura Mono', monospace;
+    --font-display: var(--font-jetbrains-mono), monospace;
+    --font-sans: var(--font-jetbrains-mono), monospace;
+    --font-main: var(--font-jetbrains-mono), monospace;
+    --font-mono: var(--font-jetbrains-mono), monospace;
+    --font-serif-jp: var(--font-jetbrains-mono), monospace;
 
     --letter-spacing-technical: 0.04em;
     --letter-spacing-display: -0.05em;
