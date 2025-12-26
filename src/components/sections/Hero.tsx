@@ -46,21 +46,16 @@ const Hero = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="w-full max-w-[480px] lg:max-w-[560px] aspect-square relative overflow-hidden flex flex-col justify-between text-[#ffffff] p-8 md:p-12 lg:p-16">
               {/* Image Background for Section 01 */}
-              <div className="absolute inset-0 z-0">
-                <img
-                  src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
-                  alt="Kosuke Osawa"
-                  className="w-full h-full object-cover grayscale brightness-50"
-                />
-                <div className="absolute inset-0 bg-black/60"></div>
-              </div>
+                <div className="absolute inset-0 z-0 group">
+                  <img
+                    src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766602117975.jpg?width=8000&height=8000&resize=contain"
+                    alt="Kosuke Osawa"
+                    className="w-full h-full object-cover grayscale brightness-50 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 bg-black/60 group-hover:bg-transparent transition-all duration-700"></div>
+                </div>
 
-              {/* Numerical 01 */}
-              <span className="font-display text-7xl md:text-8xl lg:text-9xl font-bold opacity-20 block leading-none relative z-10">
-                01
-              </span>
-              
-              {/* Quote about architectural harmony */}
+                {/* Quote about architectural harmony */}
               <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-justify tracking-normal lowercase relative z-10">
                 {t(
                   '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
