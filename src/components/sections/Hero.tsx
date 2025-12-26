@@ -27,10 +27,10 @@ const Hero = () => {
 
           
             <div className="border-l-[6px] border-[#C6733B] pl-6 md:pl-8 space-y-6 md:space-y-8">
-              <p className="font-mono text-base md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
-                {t('Architectural Design', 'Thiết Kế Kiến Trúc')} <br />
-                &amp; {t('Planning', 'Quy Hoạch')}
-              </p>
+                <p className="font-mono text-base md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
+                  {t('Architectural Design', 'Thiết Kế Kiến Trúc')} <br />
+                  &amp; {t('Interior Design', 'Nội Thất')}
+                </p>
               <div className="pt-2 md:pt-4">
                 <a 
                   href="/login" 
