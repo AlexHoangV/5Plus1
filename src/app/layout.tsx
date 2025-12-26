@@ -66,9 +66,10 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           />
         </head>
-        <body
-          className="antialiased font-sans"
-        >
+          <body
+            className={`${jetbrainsMono.variable} antialiased font-sans`}
+          >
+
         <Script
           id="orchids-browser-logs"
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
