@@ -19,10 +19,19 @@ export function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [deviceId, setDeviceId] = useState<string>('');
+  const [sessionId] = useState<string>(() => Math.random().toString(36).substring(7));
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize messages when language changes or on mount
+  // Initialize deviceId and messages
   useEffect(() => {
+    let storedId = localStorage.getItem('chatbot_device_id');
+    if (!storedId) {
+      storedId = 'dev_' + Math.random().toString(36).substring(2, 15);
+      localStorage.setItem('chatbot_device_id', storedId);
+    }
+    setDeviceId(storedId);
+
     if (messages.length === 0) {
     setMessages([
       { 
