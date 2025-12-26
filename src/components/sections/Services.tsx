@@ -57,42 +57,41 @@ const Services = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
-          {services.map((service, index) => (
-            <motion.div 
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative bg-black/40 border border-white/10 p-8 md:p-10 hover:border-[#C6733B] transition-all duration-500 rounded-lg flex flex-col h-full overflow-hidden"
-            >
-              {/* Card Glow Effect */}
-              <div className="absolute inset-0 bg-[#C6733B]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <div className="mb-8 relative z-10 transition-transform duration-500 group-hover:scale-110">
-                {service.icon}
-              </div>
-              
-              <h3 className="text-2xl font-display font-bold mb-6 tracking-tight relative z-10 group-hover:text-[#C6733B] transition-colors duration-300">
-                {t(service.titleEn, service.titleVi)}
-              </h3>
-              
-              <p className="text-sm md:text-base text-gray-400 mb-10 leading-relaxed font-sans relative z-10 group-hover:text-gray-300 transition-colors duration-300">
-                {t(service.descriptionEn, service.descriptionVi)}
-              </p>
-
-              {/* Illustration Sketch inside Card */}
-              <div className="mt-auto relative h-48 w-full overflow-hidden rounded border border-white/5 grayscale group-hover:grayscale-0 transition-all duration-700">
-                <img 
-                  src={service.image} 
-                  alt={service.titleEn}
-                  className="w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-opacity duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
-                {/* Sketch overlay line effect */}
-                <div className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-700 bg-[linear-gradient(45deg,rgba(198,115,59,0.2)_25%,transparent_25%,transparent_50%,rgba(198,115,59,0.2)_50%,rgba(198,115,59,0.2)_75%,transparent_75%,transparent)] bg-[length:4px_4px]"></div>
-              </div>
-            </motion.div>
-          ))}
+            {services.map((service, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative bg-black/40 border border-white/10 p-8 md:p-10 transition-none rounded-lg flex flex-col h-full overflow-hidden"
+              >
+                {/* Card Glow Effect removed */}
+                
+                <div className="mb-8 relative z-10 transition-none">
+                  {service.icon}
+                </div>
+                
+                <h3 className="text-2xl font-display font-bold mb-6 tracking-tight relative z-10 transition-none">
+                  {t(service.titleEn, service.titleVi)}
+                </h3>
+                
+                <p className="text-sm md:text-base text-gray-400 mb-10 leading-relaxed font-sans relative z-10 transition-none">
+                  {t(service.descriptionEn, service.descriptionVi)}
+                </p>
+  
+                {/* Illustration Sketch inside Card */}
+                <div className="mt-auto relative h-48 w-full overflow-hidden rounded border border-white/5 transition-none">
+                  <img 
+                    src={service.image} 
+                    alt={service.titleEn}
+                    className="w-full h-full object-cover opacity-100 transition-none"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
+                  {/* Sketch overlay line effect */}
+                  <div className="absolute inset-0 opacity-20 transition-none bg-[linear-gradient(45deg,rgba(198,115,59,0.2)_25%,transparent_25%,transparent_50%,rgba(198,115,59,0.2)_50%,rgba(198,115,59,0.2)_75%,transparent_75%,transparent)] bg-[length:4px_4px]"></div>
+                </div>
+              </motion.div>
+            ))}
         </div>
 
         {/* CTA Button */}
