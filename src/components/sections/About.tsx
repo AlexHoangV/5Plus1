@@ -65,16 +65,16 @@ const AboutUs = () => {
                 </h2>
               </div>
               
-                <div className="mt-16 flex flex-col md:flex-row gap-12 items-start">
-                  <div className="w-full md:w-1/3 shrink-0">
-                    <div className="aspect-[3/4] overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-                      <img 
-                        src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766600883475.jpg?width=8000&height=8000&resize=contain" 
-                        alt={t("Mr. Kosuke Osawa", "KTS. Kosuke Osawa")} 
-                        className="w-full h-full object-cover"
-                      />
+                  <div className="mt-16 flex flex-col md:flex-row gap-12 items-start">
+                    <div className="w-full md:w-1/3 shrink-0">
+                      <div className="aspect-[3/4] overflow-hidden">
+                        <img 
+                          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-1766600883475.jpg?width=8000&height=8000&resize=contain" 
+                          alt={t("Mr. Kosuke Osawa", "KTS. Kosuke Osawa")} 
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     </div>
-                  </div>
                   <div className="flex-1">
                     <h3 className="text-2xl font-display font-bold mb-2 text-black uppercase">{t("Mr. Kosuke Osawa", "KTS. Kosuke Osawa")}</h3>
                     <p className="font-mono text-[#C6733B] text-sm uppercase tracking-wider mb-8">
