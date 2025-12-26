@@ -196,7 +196,18 @@ STRICT PROTOCOL FOR LEADS:
         });
       }
 
-      return NextResponse.json({ content: response.text() });
+      const modelResponse = response.text();
+
+      // Store model response
+      await supabase.from('chat_history').insert([{
+        session_id: sessionId || 'default',
+        device_id: deviceId || 'unknown',
+        ip_address,
+        role: 'model',
+        content: modelResponse
+      }]);
+
+      return NextResponse.json({ content: modelResponse });
     } catch (chatError: any) {
       console.warn("Primary model/chat error, trying direct generation fallback:", chatError.message);
       
