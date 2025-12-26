@@ -43,54 +43,65 @@ export default function LoginPage() {
     }
   };
 
-  const handleSendOtp = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!email) {
-      toast.error(t('Please enter your email', 'Vui lòng nhập email'));
-      return;
-    }
-    setIsLoading(true);
-
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: true,
+    const handleSendOtp = async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+      if (!email) {
+        toast.error(t('Please enter your email', 'Vui lòng nhập email'));
+        return;
+      }
+      setIsLoading(true);
+  
+      try {
+        const response = await fetch('/api/auth/otp/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Failed to send OTP');
+        
+        setIsOtpSent(true);
+        toast.success(t('OTP sent to your email', 'Mã xác thực đã được gửi đến email của bạn'));
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    const handleVerifyOtp = async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+      if (otp.length !== 6) {
+        toast.error(t('Please enter 6-digit code', 'Vui lòng nhập mã 6 chữ số'));
+        return;
+      }
+      setIsLoading(true);
+  
+      try {
+        const response = await fetch('/api/auth/otp/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp }),
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Verification failed');
+        
+        toast.success(t('Successfully verified', 'Xác thực thành công'));
+        
+        // Use the action link returned from the server to log the user in
+        if (data.action_link) {
+          window.location.href = data.action_link;
+        } else {
+          router.push('/');
         }
-      });
-      if (error) throw error;
-      setIsOtpSent(true);
-      toast.success(t('OTP sent to your email', 'Mã xác thực đã được gửi đến email của bạn'));
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (otp.length !== 6) {
-      toast.error(t('Please enter 6-digit code', 'Vui lòng nhập mã 6 chữ số'));
-      return;
-    }
-    setIsLoading(true);
-
-    try {
-      const { error } = await supabase.auth.verifyOtp({
-        email,
-        token: otp,
-        type: 'email',
-      });
-      if (error) throw error;
-      toast.success(t('Successfully verified', 'Xác thực thành công'));
-      router.push('/');
-    } catch (error: any) {
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      } catch (error: any) {
+        toast.error(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-background font-mono flex flex-col">
