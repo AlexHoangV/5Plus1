@@ -111,39 +111,38 @@ const projects: Project[] = [
   },
 ];
 
-const ProjectCard = ({ project }: { project: Project }) => {
-  return (
-    <div className="group cursor-pointer">
-      {/* Image Container */}
-      <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
-        {/* Overlay on hover */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500 z-10" />
-        
-          {/* Project Image */}
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover grayscale-0 md:grayscale transition-all duration-700 md:group-hover:grayscale-0 group-hover:scale-105"
-          />
-
-          {/* Project Number (Revealed on hover) */}
-          <span className="absolute top-4 right-4 text-4xl font-display font-black text-white opacity-100 md:opacity-0 -translate-y-0 md:-translate-y-4 md:group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
-            {project.id}
-          </span>
+  const ProjectCard = ({ project }: { project: Project }) => {
+    return (
+      <div className="group cursor-default">
+        {/* Image Container */}
+        <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
+          {/* Overlay removed */}
+          
+            {/* Project Image */}
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover grayscale-0 transition-none"
+            />
+  
+            {/* Project Number (Always visible) */}
+            <span className="absolute top-4 right-4 text-4xl font-display font-black text-white opacity-100 z-20">
+              {project.id}
+            </span>
+          </div>
+  
+          {/* Content Area (Always visible) */}
+          <div className="flex flex-col pt-4 opacity-100">
+          <h3 className="text-xl md:text-2xl font-display font-black uppercase tracking-tight mb-1 transition-none leading-none text-black">
+            {project.title}
+          </h3>
+          <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#737373]">
+            {project.category}
+          </p>
         </div>
-
-        {/* Content Area */}
-        <div className="flex flex-col pt-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-150">
-        <h3 className="text-xl md:text-2xl font-display font-black uppercase tracking-tight mb-1 group-hover:text-[#c6733b] transition-colors leading-none">
-          {project.title}
-        </h3>
-        <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#737373]">
-          {project.category}
-        </p>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   const ProjectsSection = () => {
     const { t } = useLanguage();
