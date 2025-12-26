@@ -8,25 +8,28 @@ export async function POST(req: Request) {
   // Zalo Webhook events: user_send_text, user_send_image, etc.
   const { event_name, sender, message, recipient } = body;
 
-  if (event_name === "user_send_text") {
-    const userId = sender.id;
-    const userText = message.text;
+    if (event_name === "user_send_text") {
+      const userId = sender.id;
+      const userText = message.text;
 
-    try {
-      // Process with Gemini
-      const result = await processChatMessage({
-        messages: [{ role: 'user', content: userText }],
-        deviceId: `zalo_${userId}`,
-        sessionId: `zalo_session_${userId}`,
-        ipAddress: 'zalo_internal'
-      });
+      try {
+        // Process with Gemini - now with history retrieval enabled by deviceId
+        const result = await processChatMessage({
+          messages: [{ role: 'user', content: userText }],
+          deviceId: `zalo_${userId}`,
+          sessionId: `zalo_session_${userId}`,
+          ipAddress: 'zalo_internal'
+        });
 
-      // Send reply back to Zalo
-      await sendZaloMessage(userId, result.content);
-    } catch (error) {
-      console.error("Zalo processing error:", error);
+        // Send reply back to Zalo
+        await sendZaloMessage(userId, result.content);
+        console.log(`Zalo reply sent to ${userId}`);
+      } catch (error: any) {
+        console.error("Zalo processing error:", error);
+        await sendZaloMessage(userId, "Xin lỗi, tôi đang gặp gián đoạn kết nối. Vui lòng thử lại sau.");
+      }
     }
-  }
+
 
   return NextResponse.json({ status: "success" });
 }
