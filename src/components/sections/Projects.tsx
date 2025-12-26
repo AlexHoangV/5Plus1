@@ -17,6 +17,7 @@ import { useLanguage } from '@/hooks/useLanguage';
 interface Project {
   id: string;
   title: string;
+  slug: string;
   category: string;
   image: string;
   size?: "small" | "medium" | "large";
@@ -26,6 +27,7 @@ const projects: Project[] = [
   {
     id: "01",
     title: "Project Mangetsu",
+    slug: "project-mangetsu",
     category: "Da Nang / Renovation",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2-1766603064607.png",
     size: "large"
@@ -33,6 +35,7 @@ const projects: Project[] = [
   {
     id: "02",
     title: "Truc Bach Saga",
+    slug: "truc-bach-saga",
     category: "Hanoi / Urban Mapping",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.2-1766603600381.png",
     size: "medium"
@@ -40,6 +43,7 @@ const projects: Project[] = [
   {
     id: "03",
     title: "Project Barbaros",
+    slug: "project-barbaros",
     category: "Hanoi / Social Space",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.3-1766603600383.png",
     size: "medium"
@@ -47,6 +51,7 @@ const projects: Project[] = [
   {
     id: "04",
     title: "Asobi Bar",
+    slug: "asobi-bar",
     category: "Da Nang / Commercial",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603600605.png",
     size: "medium"
@@ -54,6 +59,7 @@ const projects: Project[] = [
   {
     id: "05",
     title: "Mangetsu Anatomy",
+    slug: "mangetsu-anatomy",
     category: "Architectural Analysis",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603064608.png",
     size: "medium"
@@ -61,6 +67,7 @@ const projects: Project[] = [
   {
     id: "06",
     title: "Tay Ho Section",
+    slug: "tay-ho-section",
     category: "Spatial Study / In-Progress",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/3-2-1766603600397.png",
     size: "large"
@@ -68,6 +75,7 @@ const projects: Project[] = [
   {
     id: "07",
     title: "Project Asobi Bar",
+    slug: "project-asobi-bar",
     category: "Da Nang / Commercial",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.4-1766603962182.png",
     size: "medium"
@@ -75,6 +83,7 @@ const projects: Project[] = [
   {
     id: "08",
     title: "Project Tho",
+    slug: "project-tho",
     category: "Hanoi / Interior Space",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/2.7-1766603962180.png",
     size: "medium"
@@ -82,6 +91,7 @@ const projects: Project[] = [
   {
     id: "09",
     title: "Project Mangetsu Da Nang",
+    slug: "project-mangetsu-da-nang-diag",
     category: "Axonometric Diagram",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/4-1766603962281.png",
     size: "medium"
@@ -89,6 +99,7 @@ const projects: Project[] = [
   {
     id: "10",
     title: "Project Tần Mẫn Bakery",
+    slug: "project-tan-man-bakery",
     category: "Commercial / Bakery",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/1.6-1766604061650.png",
     size: "medium"
@@ -96,6 +107,7 @@ const projects: Project[] = [
   {
     id: "11",
     title: "Project Mangetsu Da Nang",
+    slug: "project-mangetsu-da-nang-mat",
     category: "Material Analysis",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/5-1766604061733.png",
     size: "medium"
@@ -103,6 +115,7 @@ const projects: Project[] = [
   {
     id: "12",
     title: "Case Study: Casa Gilardi",
+    slug: "casa-gilardi-study",
     category: "Luis Barragán / Analysis",
     image: "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/9-1766604061733.png",
     size: "large"
@@ -111,20 +124,18 @@ const projects: Project[] = [
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
-    <div className="group cursor-pointer">
+    <a href={`/projects/${project.slug}`} className="group cursor-pointer block">
       {/* Image Container */}
       <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
         {/* Project Image */}
         <img
           src={project.image}
-          alt={project.title}
+          alt={`Exposed concrete brutalist residence ${project.title} by architect Kosuke – Five Plus One`}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
-        {/* Hover Overlay */}
-        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 md:p-12">
-           {/* You can add text here if desired, but user asked for "Tên + Description như ban đầu" which usually refers to the content below or an overlay */}
-        </div>
+        {/* Hover Overlay - Subtle shadow for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
         {/* Project Number (Always visible) */}
         <span className="absolute top-4 right-4 text-4xl font-display font-black text-white mix-blend-difference z-20">
@@ -141,7 +152,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
           {project.category}
         </p>
       </div>
-    </div>
+    </a>
   );
 };
 
