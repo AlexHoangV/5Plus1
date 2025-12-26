@@ -53,9 +53,8 @@ const Footer = () => {
               <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] leading-relaxed opacity-60">
                 © 2025 Five Plus One Architecture.
                 <br className="md:hidden" />
-                  <span className="md:ml-1">{t('All rights reserved.', 'Bản quyền được bảo lưu.')}</span>
-                  <a href="/admin" className="ml-2 opacity-20 hover:opacity-100 transition-opacity">.</a>
-                </p>
+                <span className="md:ml-1">{t('All rights reserved.', 'Bản quyền được bảo lưu.')}</span>
+              </p>
             </div>
 
         </div>
