@@ -27,9 +27,9 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('language', lang);
   };
 
-  const t = (en: string, vi: string) => {
+  const t = React.useCallback((en: string, vi: string) => {
     return language === 'en' ? en : vi;
-  };
+  }, [language]);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
