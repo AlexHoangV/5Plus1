@@ -66,7 +66,9 @@ export function Chatbot() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           messages: [...messages, userMessage],
-          language 
+          language,
+          deviceId,
+          sessionId
         }),
       });
 
