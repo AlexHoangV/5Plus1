@@ -103,8 +103,8 @@ export async function POST(req: Request) {
     const finalLastUserMessage = lastMsg.parts[0].text;
     const finalHistory = coalescedMessages;
 
-    // Use gemini-1.5-flash-latest to avoid 404 errors on v1beta
-    const MODEL_NAME = "gemini-1.5-flash-latest"; 
+    // Use gemini-2.0-flash which is confirmed to exist and be stable
+    const MODEL_NAME = "gemini-2.0-flash"; 
     const model = genAI.getGenerativeModel({ 
       model: MODEL_NAME,
       systemInstruction: {
