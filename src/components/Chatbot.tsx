@@ -32,17 +32,30 @@ export function Chatbot() {
     }
     setDeviceId(storedId);
 
-    if (messages.length === 0) {
-    setMessages([
-      { 
-        role: 'assistant', 
-        content: language === 'en' 
-          ? "Welcome to the space of Five Plus One. Here, we believe architecture is not just building walls, but creating a place where Nature, People, and Light converge in harmony. I am the AI assistant of Architect Kosuke. Today, what are you looking for in your life's flow?"
-          : "Chào mừng bạn đến với không gian của Five Plus One. Tại đây, chúng tôi tin rằng kiến trúc không chỉ là dựng lên những bức tường, mà là tạo ra nơi Thiên nhiên, Con người và Ánh sáng hội tụ trong sự hài hòa. Tôi là trợ lý AI của KTS Kosuke. Hôm nay, bạn ghé thăm 5plus1 để tìm kiếm điều gì cho dòng chảy cuộc sống của mình?"
+    // Fetch existing history
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch(`/api/chat/history?deviceId=${storedId}`);
+        const data = await res.json();
+        if (data.messages && data.messages.length > 0) {
+          setMessages(data.messages);
+        } else {
+          setMessages([
+            { 
+              role: 'assistant', 
+              content: language === 'en' 
+                ? "Welcome to the space of Five Plus One. Here, we believe architecture is not just building walls, but creating a place where Nature, People, and Light converge in harmony. I am the AI assistant of Architect Kosuke. Today, what are you looking for in your life's flow?"
+                : "Chào mừng bạn đến với không gian của Five Plus One. Tại đây, chúng tôi tin rằng kiến trúc không chỉ là dựng lên những bức tường, mà là tạo ra nơi Thiên nhiên, Con người và Ánh sáng hội tụ trong sự hài hòa. Tôi là trợ lý AI của KTS Kosuke. Hôm nay, bạn ghé thăm 5plus1 để tìm kiếm điều gì cho dòng chảy cuộc sống của mình?"
+            }
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch history:", err);
       }
-    ]);
-    }
-  }, [language, t, messages.length]);
+    };
+
+    fetchHistory();
+  }, [language]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
