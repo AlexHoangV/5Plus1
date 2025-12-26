@@ -2,66 +2,127 @@
 
 import React from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
-import { motion } from 'framer-motion';
+import Image from 'next/image';
+
+const GodaiElement = ({ 
+  kanji, 
+  titleEn, 
+  titleVi, 
+  descEn, 
+  descVi, 
+  imageUrl 
+}: { 
+  kanji: string; 
+  titleEn: string; 
+  titleVi: string; 
+  descEn: string; 
+  descVi: string; 
+  imageUrl: string;
+}) => {
+  const { t } = useLanguage();
+  
+  return (
+    <div className="relative group overflow-hidden border-r border-black/5 last:border-r-0 h-[600px] md:h-[700px] transition-all duration-700 flex flex-col justify-end p-8">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0 transition-transform duration-1000 group-hover:scale-110">
+        <Image 
+          src={imageUrl} 
+          alt={titleEn} 
+          fill 
+          className="object-cover grayscale"
+        />
+        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 flex flex-col gap-4 translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
+        <span className="font-serif-jp text-5xl text-white opacity-80">{kanji}</span>
+        <div className="flex flex-col">
+          <h3 className="font-mono text-xl text-white tracking-[0.2em] uppercase">
+            {titleEn}
+          </h3>
+          <span className="font-mono text-[10px] text-white/50 tracking-[0.3em] uppercase">
+            ({t(titleEn, titleVi)})
+          </span>
+        </div>
+        <p className="font-sans text-xs text-white/70 leading-relaxed max-w-[200px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+          {t(descEn, descVi)}
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const Philosophy = () => {
-  const [mounted, setMounted] = React.useState(false);
   const { t } = useLanguage();
 
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const philosophies = [
+  const elements = [
     {
-      titleEn: "Balance",
-      titleVi: "Cân Bằng",
-      contentEn: "Of course, I also need private time, time to be creative. But when you are truly passionate about your work, that time becomes very important — you just want to work more. Therefore, when there is passion, there is almost no balance. You just work, because you feel you need to.",
-      contentVi: "Tất nhiên, tôi cũng cần thời gian riêng tư, cần thời gian để sáng tạo. Nhưng khi bạn thật sự đam mê công việc của mình, quãng thời gian đó lại trở nên rất quan trọng — bạn chỉ muốn làm việc nhiều hơn. Vì thế, khi đã có đam mê, thì gần như không có sự cân bằng nào cả. Bạn chỉ làm việc, bởi vì bạn cảm thấy mình cần phải làm.",
-      highlightEn: "Therefore, when there is passion, there is almost no balance. You just work, because you feel you need to.",
-      highlightVi: "Vì thế, khi đã có đam mê, thì gần như không có sự cân bằng nào cả. Bạn chỉ làm việc, bởi vì bạn cảm thấy mình cần phải làm.",
+      kanji: "地",
+      titleEn: "CHI",
+      titleVi: "Đất",
+      descEn: "Stability and grounding. The foundation of existence.",
+      descVi: "Sự ổn định và nền tảng. Gốc rễ của sự tồn tại.",
+      imageUrl: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=2574&auto=format&fit=crop"
     },
     {
-      titleEn: "Efficiency",
-      titleVi: "Hiệu Quả",
-      contentEn: "Efficiency does not mean doing it fast, but using time wisely. To work efficiently, you need experience — and that means you have to accept failure. I have failed a lot, wasted a lot of time. But thanks to those experiences, I have changed. Either way, learning from failure is the key to working efficiently.",
-      contentVi: "Hiệu quả không có nghĩa là làm nhanh, mà là sử dụng thời gian một cách thông minh. Để làm việc hiệu quả, bạn cần có kinh nghiệm — và điều đó có nghĩa là bạn phải chấp nhận thất bại. Tôi từng thất bại rất nhiều, lãng phí không ít thời gian. Nhưng nhờ những trải nghiệm đó, tôi đã thay đổi. Dù bằng cách nào, việc học hỏi từ thất bại chính là chìa khóa để làm việc hiệu quả.",
-      highlightEn: "Either way, learning from failure is the key to working efficiently.",
-      highlightVi: "Dù bằng cách nào, việc học hỏi từ thất bại chính là chìa khóa để làm việc hiệu quả.",
+      kanji: "水",
+      titleEn: "SUI",
+      titleVi: "Nước",
+      descEn: "Adaptability and flow. The power of change.",
+      descVi: "Sự thích nghi và dòng chảy. Sức mạnh của sự thay đổi.",
+      imageUrl: "https://images.unsplash.com/photo-1439405326854-014607f694d7?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+      kanji: "火",
+      titleEn: "KA",
+      titleVi: "Lửa",
+      descEn: "Passion and transformation. The energy of life.",
+      descVi: "Đam mê và sự chuyển hóa. Năng lượng của sự sống.",
+      imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+      kanji: "風",
+      titleEn: "FU",
+      titleVi: "Gió",
+      descEn: "Freedom and movement. The breath of space.",
+      descVi: "Tự do và chuyển động. Hơi thở của không gian.",
+      imageUrl: "https://images.unsplash.com/photo-1508780709619-7956203a4458?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+      kanji: "空",
+      titleEn: "KU",
+      titleVi: "Không",
+      descEn: "Creative potential. The void where everything begins.",
+      descVi: "Tiềm năng sáng tạo. Hư vô nơi mọi thứ bắt đầu.",
+      imageUrl: "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=2670&auto=format&fit=crop"
+    },
+    {
+      kanji: "+1",
+      titleEn: "HUMAN",
+      titleVi: "Con Người",
+      descEn: "The soul of the space. The observer and the center.",
+      descVi: "Linh hồn của không gian. Người quan sát và trung tâm.",
+      imageUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2670&auto=format&fit=crop"
     }
   ];
 
-  if (!mounted) return null;
-
   return (
-    <section id="philosophy" className="py-24 md:py-32 bg-white">
-      <div className="container mx-auto px-4 md:px-8">
-        <div className="max-w-5xl mx-auto space-y-24">
-          {philosophies.map((item, index) => (
-            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
-                <div className="space-y-2">
-                  <h3 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-black tracking-tight leading-none">
-                    “{t(item.titleEn, item.titleVi)}”
-                  </h3>
-                  <p className="text-xl md:text-2xl font-mono text-black/40 uppercase tracking-widest">
-                    {item.titleEn}
-                  </p>
-                </div>
-                
-                <div className="space-y-8 relative">
-                  <div className="text-base md:text-lg leading-relaxed text-[#737373] font-sans">
-                    {t(item.contentEn, item.contentVi)}
-                  </div>
-                  
-                  <div className="relative pl-6 border-l-2 border-black">
-                    <p className="text-lg md:text-xl font-medium text-black">
-                      {t(item.highlightEn, item.highlightVi)}
-                    </p>
-                  </div>
-                </div>
-            </div>
-          ))}
-        </div>
+    <section id="about" className="py-24 washi-paper overflow-hidden border-y border-black/5">
+      <div className="container mx-auto px-6 md:px-12 mb-16 text-center">
+        <h2 className="font-display text-5xl md:text-7xl font-bold tracking-tight mb-4">
+          Godai + Human
+        </h2>
+        <div className="w-24 h-[1px] bg-primary mx-auto mb-8"></div>
+        <p className="font-mono text-xs uppercase tracking-[0.4em] text-black/50">
+          {t('Our Design Philosophy', 'Triết Lý Thiết Kế Của Chúng Tôi')}
+        </p>
+      </div>
+
+      <div className="flex flex-col md:flex-row w-full max-w-[1800px] mx-auto">
+        {elements.map((el, i) => (
+          <GodaiElement key={i} {...el} />
+        ))}
       </div>
     </section>
   );
