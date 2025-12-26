@@ -9,11 +9,9 @@ import { useLanguage } from '@/hooks/useLanguage';
  * Clones the "Selected Works" grid section.
  * Features:
  * - High-contrast "Selected Works" header with terracotta underline.
- * - Grid of 5 project cards.
- * - Grayscale-to-color transition on hover with 1.05x scale.
- * - Primary accent overlay on image hover.
+ * - Grid of 12 project cards in a brutalist layout.
+ * - Hover effect: Content appears on hover.
  * - Bold display typography for titles and technical monospace for metadata.
- * - Top-border separation for card content.
  */
 
 interface Project {
@@ -111,137 +109,121 @@ const projects: Project[] = [
   },
 ];
 
-  const ProjectCard = ({ project }: { project: Project }) => {
-    return (
-      <div className="group cursor-default">
-        {/* Image Container */}
-        <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
-          {/* Overlay removed */}
-          
-            {/* Project Image */}
-            <img
-              src={project.image}
-              alt={project.title}
-              className="w-full h-full object-cover grayscale-0 transition-none"
-            />
+const ProjectCard = ({ project }: { project: Project }) => {
+  return (
+    <div className="group cursor-pointer">
+      {/* Image Container */}
+      <div className={`relative ${project.size === 'large' ? 'aspect-[16/9]' : 'aspect-[4/5]'} overflow-hidden mb-4 bg-[#f5f5f5]`}>
+        {/* Project Image */}
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8 md:p-12">
+           {/* You can add text here if desired, but user asked for "Tên + Description như ban đầu" which usually refers to the content below or an overlay */}
+        </div>
+
+        {/* Project Number (Always visible) */}
+        <span className="absolute top-4 right-4 text-4xl font-display font-black text-white mix-blend-difference z-20">
+          {project.id}
+        </span>
+      </div>
+
+      {/* Content Area - Appears on Hover */}
+      <div className="flex flex-col pt-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+        <h3 className="text-xl md:text-2xl font-mono font-bold uppercase tracking-tight mb-1 text-black">
+          {project.title}
+        </h3>
+        <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#737373]">
+          {project.category}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const ProjectsSection = () => {
+  const { t } = useLanguage();
   
-            {/* Project Number (Always visible) */}
-            <span className="absolute top-4 right-4 text-4xl font-display font-black text-white opacity-100 z-20">
-              {project.id}
-            </span>
-          </div>
-  
-          {/* Content Area (Always visible) */}
-          <div className="flex flex-col pt-4 opacity-100">
-          <h3 className="text-xl md:text-2xl font-display font-black uppercase tracking-tight mb-1 transition-none leading-none text-black">
-            {project.title}
-          </h3>
-          <p className="font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-[#737373]">
-            {project.category}
+  return (
+    <section id="projects" className="py-24 md:py-32 bg-white">
+      <div className="container mx-auto px-4 md:px-8">
+        {/* Section Header */}
+        <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
+          <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
+            {t('Projects', 'Dự Án')}
+          </h2>
+          <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
+            {t(
+              'Selected architectural interventions / Residential, Commercial & Urban Studies',
+              'Các Dự Án Kiến Trúc Tiêu Biểu / Nhà Ở, Thương Mại & Nghiên Cứu Đô Thị'
+            )}
           </p>
         </div>
-      </div>
-    );
-  };
 
-  const ProjectsSection = () => {
-    const { t } = useLanguage();
-    
-    return (
-      <section id="projects" className="py-24 md:py-32 bg-white">
-        <div className="container mx-auto">
-          {/* Section Header */}
-          <div className="flex flex-col gap-4 mb-24 md:mb-32 text-left items-start">
-            <h2 className="relative section-header font-display font-black uppercase tracking-tighter leading-none">
-              {t('Projects', 'Dự Án')}
-            </h2>
-            <p className="font-mono text-xs md:text-sm text-[#737373] uppercase tracking-[0.2em] mt-8 max-w-2xl">
-              {t(
-                'Selected architectural interventions / Residential, Commercial & Urban Studies',
-                'Các Dự Án Kiến Trúc Tiêu Biểu / Nhà Ở, Thương Mại & Nghiên Cứu Đô Thị'
-              )}
-            </p>
+
+        {/* Project Grid - Artistic Brutalist Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
+          {/* Project 01 - Large */}
+          <div className="md:col-span-12">
+            <ProjectCard project={projects[0]} />
           </div>
 
+          {/* Projects 02 & 03 - Side by Side */}
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[1]} />
+          </div>
+          <div className="md:col-span-6">
+            <ProjectCard project={projects[2]} />
+          </div>
 
-          {/* Project Grid - Artistic Brutalist Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-16 md:gap-x-8 md:gap-y-24">
-            {/* Project 01 - Large */}
-            <div className="md:col-span-12">
-              <ProjectCard project={projects[0]} />
+          {/* Poem Part 1 - English Only */}
+          <div className="md:col-span-5 flex flex-col justify-center space-y-12">
+            <div className="space-y-6">
+              <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                ... "First in the heart is the dream —<br />
+                Then the mind starts seeking a way.<br /><br />
+                His eyes look out on the world,<br />
+                On the great wooded world,<br />
+                On the rich soil of the world,<br />
+                On the rivers of the world.<br /><br />
+                The eyes see there materials for building,<br />
+                See the difficulties, too, and the obstacles."
+              </p>
             </div>
+          </div>
 
-            {/* Projects 02 & 03 - Side by Side */}
-            <div className="md:col-span-6">
-              <ProjectCard project={projects[1]} />
-            </div>
-            <div className="md:col-span-6">
-              <ProjectCard project={projects[2]} />
-            </div>
+          {/* Project 04 - Offset */}
+          <div className="md:col-span-7">
+            <ProjectCard project={projects[3]} />
+          </div>
 
-            {/* Poem Part 1 - Interleaved in White Space */}
-            <div className="md:col-span-5 flex flex-col justify-center space-y-12">
-              <div className="space-y-6">
-                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
-                  ... "First in the heart is the dream-<br />
-                  Then the mind starts seeking a way.<br /><br />
-                  His eyes look out on the world,<br />
-                  On the great wooded world,<br />
-                  On the rich soil of the world,<br />
-                  On the rivers of the world.<br /><br />
-                  The eyes see there materials for building,<br />
-                  See the difficulties, too, and the obstacles."
-                </p>
-                <p className="font-mono text-sm md:text-base leading-relaxed text-[#737373]">
-                  ... "Ban đầu là ước mơ trong tim<br />
-                  Rồi khối óc đi tìm lấy con đường<br /><br />
-                  Đôi mắt hắn nhìn quanh thế giới,<br />
-                  Trên thế giới rộng lớn của rừng cây<br />
-                  Trên thế giới của đất đai màu mỡ<br />
-                  Trên thế giới của những dòng sông<br /><br />
-                  Đôi mắt thấy ở đó là vật liệu cho xây dựng,<br />
-                  Và những khó khăn và cả những chướng ngại"
-                </p>
-              </div>
-            </div>
+          {/* Project 05 - Vertical Focus */}
+          <div className="md:col-span-4">
+            <ProjectCard project={projects[4]} />
+          </div>
 
-            {/* Project 04 - Offset */}
-            <div className="md:col-span-7">
-              <ProjectCard project={projects[3]} />
+          {/* Poem Part 2 - English Only */}
+          <div className="md:col-span-8 flex flex-col justify-center pl-0 md:pl-24 space-y-12">
+            <div className="space-y-6">
+              <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
+                "The mind seeks a way to overcome these obstacles.<br /><br />
+                The hand seeks tools to cut the wood,<br />
+                To till the soil, and harness the power of the waters.<br /><br />
+                Then the hand seeks other hands to help,<br />
+                A community of hands to help —<br />
+                Thus, the dream becomes not one man's dream alone,<br />
+                But a community dream.<br /><br />
+                Not my dream alone, but our dream" ....<br /><br />
+                <span className="not-italic font-bold">— Langston Hughes</span>
+              </p>
             </div>
+          </div>
 
-            {/* Project 05 - Vertical Focus */}
-            <div className="md:col-span-4">
-              <ProjectCard project={projects[4]} />
-            </div>
-
-            {/* Poem Part 2 - Interleaved in White Space */}
-            <div className="md:col-span-8 flex flex-col justify-center pl-0 md:pl-24 space-y-12">
-              <div className="space-y-6">
-                <p className="font-mono text-sm md:text-base leading-relaxed text-black italic">
-                  "The mind seeks a way to overcome these obstacles.<br /><br />
-                  The hand seeks tools to cut the wood,<br />
-                  To till the soil, and harness the power of the waters.<br /><br />
-                  Then the hand seeks other hands to help,<br />
-                  A community of hands to help-<br />
-                  Thus, the dream becomes not one man's dream alone,<br />
-                  But a community dream.<br /><br />
-                  Not my dream alone, but our dream"....<br /><br />
-                  <span className="not-italic font-bold">— Langston Hughes</span>
-                </p>
-                <p className="font-mono text-sm md:text-base leading-relaxed text-[#737373]">
-                  "Khối óc lại đi tìm cách để vượt qua những chướng ngại.<br /><br />
-                  Bàn tay đi tìm công cụ để chặt gỗ,<br />
-                  Để xới đất và tận dụng sức mạnh của dòng nước.<br /><br />
-                  Rồi bàn tay tìm kiếm sự giúp đỡ từ những bàn tay khác,<br />
-                  Một cộng đồng của những bàn tay trợ lực<br />
-                  Rồi, ước mơ không còn của riêng ai mà là ước mơ của cả một cộng đồng<br /><br />
-                  Không phải ước mơ của mình tôi, mà của tất cả chúng ta"...
-                </p>
-              </div>
-            </div>
-
-            {/* Project 06 - Large Central */}
+          {/* Project 06 - Large Central */}
           <div className="md:col-span-12 my-12">
             <ProjectCard project={projects[5]} />
           </div>
