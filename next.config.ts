@@ -23,16 +23,16 @@ const nextConfig: NextConfig = {
 
 // Turbopack loader is only needed for development interactivity
 if (process.env.NODE_ENV === 'development') {
-  try {
-    const loaderPath = require.resolve('orchids-visual-edits/loader.js');
-    (nextConfig as any).turbopack = {
-      rules: {
-        "*.{jsx,tsx}": {
-          loaders: [loaderPath]
+    try {
+      const loaderPath = './src/visual-edits/component-tagger-loader.js';
+      (nextConfig as any).turbopack = {
+        rules: {
+          "*.{jsx,tsx}": {
+            loaders: [loaderPath]
+          }
         }
-      }
-    };
-  } catch (e) {
+      };
+    } catch (e) {
     // Ignore if loader is not found
   }
 }
