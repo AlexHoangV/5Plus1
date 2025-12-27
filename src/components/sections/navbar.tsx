@@ -10,6 +10,7 @@
 
     const Navbar = () => {
       const { language, setLanguage, t } = useLanguage();
+      const { isAdmin, isEditMode, setIsEditMode } = useAdmin();
       const [isScrolled, setIsScrolled] = useState(false);
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
