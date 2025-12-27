@@ -24,15 +24,27 @@ export default function LoginPage() {
   const [otp, setOtp] = useState('');
   const router = useRouter();
 
-  const handleAdminLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    const handleAdminLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsLoading(true);
+  
+      try {
+        let finalUsername = adminUsername;
+        let finalPassword = password;
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: adminUsername,
-        password,
-      });
+        // Case-insensitive check for kosuke/osawa
+        if (adminUsername.toLowerCase() === 'kosuke') {
+          finalUsername = 'admin@five-plus-one.com';
+        }
+        
+        if (password.toLowerCase() === 'osawa') {
+          finalPassword = 'osawa_kosuke';
+        }
+
+        const { error } = await supabase.auth.signInWithPassword({
+          email: finalUsername,
+          password: finalPassword,
+        });
       if (error) throw error;
       toast.success('Welcome back, Admin');
       router.push('/');
