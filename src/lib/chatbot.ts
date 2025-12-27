@@ -191,13 +191,24 @@ STRICT PROTOCOL FOR LEADS:
     console.error("Gemini Error:", error);
     
     // Handle Leaked Key / Auth Errors gracefully
-    if (error.status === 403 || error.message?.includes('403') || error.message?.includes('API key')) {
-      return { 
-        content: language === 'en' 
-          ? "Our AI assistant is currently resting to improve its vision. Please contact us directly via email or phone for immediate assistance." 
-          : "Trợ lý AI của chúng tôi hiện đang tạm nghỉ để nâng cấp tầm nhìn. Vui lòng liên hệ trực tiếp qua email hoặc số điện thoại để được hỗ trợ ngay lập tức."
-      };
-    }
+if (error.status === 403 || error.message?.includes('403') || error.message?.includes('API key')) {
+        const groqFallbackMsg = await callGroqFallback(
+          finalMessages.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.parts[0].text })),
+          language
+        );
+        if (groqFallbackMsg) {
+          await supabase.from('chat_history').insert([
+            { session_id: sessionId, device_id: deviceId, ip_address: ipAddress, role: 'user', content: finalLastUserMessage },
+            { session_id: sessionId, device_id: deviceId, ip_address: ipAddress, role: 'model', content: groqFallbackMsg }
+          ]);
+          return { content: groqFallbackMsg };
+        }
+        return { 
+          content: language === 'en' 
+            ? "Our AI assistant is currently resting to improve its vision. Please contact us directly via email or phone for immediate assistance." 
+            : "Trợ lý AI của chúng tôi hiện đang tạm nghỉ để nâng cấp tầm nhìn. Vui lòng liên hệ trực tiếp qua email hoặc số điện thoại để được hỗ trợ ngay lập tức."
+        };
+      }
 
     try {
       const fallbackResult = await model.generateContent({
