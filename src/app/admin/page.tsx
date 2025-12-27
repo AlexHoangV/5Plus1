@@ -192,17 +192,29 @@ export default function AdminDashboard() {
             <ClipboardList size={16} />
             Project Requests
           </button>
-          <button
-            onClick={() => setActiveTab('messages')}
-            className={`w-full flex items-center gap-3 px-4 py-3 text-xs uppercase tracking-widest transition-all ${
-              activeTab === 'messages' 
-                ? 'bg-black text-white' 
-                : 'hover:bg-muted text-muted-foreground'
-            }`}
-          >
-            <MessageSquare size={16} />
-            Contact Messages
-          </button>
+            <button
+              onClick={() => setActiveTab('messages')}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-xs uppercase tracking-widest transition-all ${
+                activeTab === 'messages' 
+                  ? 'bg-black text-white' 
+                  : 'hover:bg-muted text-muted-foreground'
+              }`}
+            >
+              <MessageSquare size={16} />
+              Contact Messages
+            </button>
+            <button
+              onClick={() => setActiveTab('kb')}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-xs uppercase tracking-widest transition-all ${
+                activeTab === 'kb' 
+                  ? 'bg-black text-white' 
+                  : 'hover:bg-muted text-muted-foreground'
+              }`}
+            >
+              <Database size={16} />
+              Knowledge Base
+            </button>
+
         </nav>
 
         <div className="p-4 mt-auto border-t border-border">
