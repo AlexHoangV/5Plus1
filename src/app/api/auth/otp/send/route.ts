@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
   try {
     const { email } = await request.json();
@@ -15,9 +13,11 @@ export async function POST(request: Request) {
     if (!process.env.RESEND_API_KEY) {
       console.error('RESEND_API_KEY is not configured');
       return NextResponse.json({ 
-        error: 'Email service is not configured. Please contact administrator or set RESEND_API_KEY.' 
+        error: 'Email service is not configured. Please enter RESEND_API_KEY in environment variables.' 
       }, { status: 500 });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Rate limiting: Check if an OTP was sent in the last 60 seconds
     const { data: lastOtp } = await supabaseAdmin
