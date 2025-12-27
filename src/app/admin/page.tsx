@@ -239,24 +239,151 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="flex-grow p-8 md:p-12 overflow-y-auto max-h-screen">
-        <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h2 className="text-4xl font-bold uppercase tracking-tight mb-2">
-              {activeTab === 'requests' ? 'Project Requests' : 'Contact Messages'}
-            </h2>
-            <p className="text-xs opacity-50 uppercase tracking-[0.2em]">
-              Overview of all incoming {activeTab === 'requests' ? 'client vision submissions' : 'inquiries'}
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <div className="bg-white border border-border px-6 py-3 text-center">
-              <p className="text-[8px] opacity-40 uppercase mb-1">Total {activeTab === 'requests' ? 'Requests' : 'Messages'}</p>
-              <p className="text-xl font-bold">{activeTab === 'requests' ? requests.length : messages.length}</p>
+          <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <h2 className="text-4xl font-bold uppercase tracking-tight mb-2">
+                {activeTab === 'requests' ? 'Project Requests' : activeTab === 'messages' ? 'Contact Messages' : 'Knowledge Base'}
+              </h2>
+              <p className="text-xs opacity-50 uppercase tracking-[0.2em]">
+                {activeTab === 'kb' 
+                  ? 'Manage training data for the AI Assistant'
+                  : `Overview of all incoming ${activeTab === 'requests' ? 'client vision submissions' : 'inquiries'}`}
+              </p>
             </div>
-          </div>
-        </header>
+            <div className="flex gap-4">
+              {activeTab === 'kb' && (
+                <button
+                  onClick={() => setShowAddKB(!showAddKB)}
+                  className="bg-black text-white px-6 py-3 text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-primary transition-colors"
+                >
+                  <Plus size={16} />
+                  Add Document
+                </button>
+              )}
+              <div className="bg-white border border-border px-6 py-3 text-center min-w-[120px]">
+                <p className="text-[8px] opacity-40 uppercase mb-1">Total {activeTab === 'requests' ? 'Requests' : activeTab === 'messages' ? 'Messages' : 'Documents'}</p>
+                <p className="text-xl font-bold">
+                  {activeTab === 'requests' ? requests.length : activeTab === 'messages' ? messages.length : kbDocs.length}
+                </p>
+              </div>
+            </div>
+          </header>
 
-        {activeTab === 'requests' ? (
+          {activeTab === 'kb' && showAddKB && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-12 bg-white border border-black p-8"
+            >
+              <h3 className="text-xl font-bold uppercase tracking-tight mb-6 flex items-center gap-2">
+                <Database size={20} /> New Knowledge Document
+              </h3>
+              <form onSubmit={handleAddKB} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Document Title</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Studio Philosophy 2025"
+                      className="w-full bg-transparent border-b border-border py-2 focus:border-black outline-none transition-colors"
+                      value={newKB.title}
+                      onChange={e => setNewKB({...newKB, title: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Source (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. philosophy.pdf"
+                      className="w-full bg-transparent border-b border-border py-2 focus:border-black outline-none transition-colors"
+                      value={newKB.source}
+                      onChange={e => setNewKB({...newKB, source: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest opacity-40">Content</label>
+                  <textarea
+                    required
+                    rows={8}
+                    placeholder="Paste your knowledge base content here..."
+                    className="w-full bg-muted/30 border border-border p-4 focus:border-black outline-none transition-colors text-sm leading-relaxed"
+                    value={newKB.content}
+                    onChange={e => setNewKB({...newKB, content: e.target.value})}
+                  />
+                  <p className="text-[10px] opacity-40 uppercase italic">Document will be automatically chunked for optimal AI retrieval.</p>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowAddKB(false)}
+                    className="px-6 py-3 text-xs uppercase tracking-widest hover:bg-muted transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isActionLoading}
+                    className="bg-black text-white px-8 py-3 text-xs uppercase tracking-widest hover:bg-primary transition-colors disabled:opacity-50"
+                  >
+                    {isActionLoading ? 'Indexing...' : 'Index Document'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+
+          {activeTab === 'kb' ? (
+            <div className="space-y-4">
+              {kbDocs.length === 0 ? (
+                <div className="border border-dashed border-border p-20 text-center uppercase text-xs opacity-40">
+                  No knowledge base documents indexed
+                </div>
+              ) : (
+                <div className="bg-white border border-border overflow-hidden">
+                  <table className="w-full text-left text-xs uppercase tracking-widest">
+                    <thead className="bg-muted border-b border-border">
+                      <tr>
+                        <th className="px-6 py-4 font-bold">Document</th>
+                        <th className="px-6 py-4 font-bold">Source</th>
+                        <th className="px-6 py-4 font-bold text-center">Chunks</th>
+                        <th className="px-6 py-4 font-bold">Created</th>
+                        <th className="px-6 py-4 font-bold text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {kbDocs.map((doc) => (
+                        <tr key={doc.id} className="hover:bg-[#F9F9F9] transition-colors group">
+                          <td className="px-6 py-4">
+                            <div className="font-bold">{doc.title}</div>
+                            <div className="text-[8px] opacity-40 mt-1 uppercase truncate max-w-[200px]">{doc.id}</div>
+                          </td>
+                          <td className="px-6 py-4 opacity-60 italic">{doc.source || 'No source'}</td>
+                          <td className="px-6 py-4 text-center">
+                            <span className="bg-black text-white px-2 py-1 text-[10px] font-bold">
+                              {doc.chunk_count}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-[10px] opacity-60">{formatDate(doc.created_at)}</td>
+                          <td className="px-6 py-4 text-right">
+                            <button
+                              onClick={() => handleDeleteKB(doc.id)}
+                              disabled={isActionLoading}
+                              className="text-red-500 hover:text-red-700 p-2 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'requests' ? (
+
           <div className="space-y-6">
             {requests.length === 0 ? (
               <div className="border border-dashed border-border p-20 text-center uppercase text-xs opacity-40">
