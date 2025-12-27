@@ -2,10 +2,11 @@
 
   import React, { useState, useEffect } from 'react';
   import Image from 'next/image';
-    import { Menu, X, User, LogOut, Languages } from 'lucide-react';
+    import { Menu, X, User, LogOut, Languages, Edit3, Eye } from 'lucide-react';
     import { supabase } from '@/lib/supabase';
     import { useRouter } from 'next/navigation';
     import { useLanguage } from '@/hooks/useLanguage';
+    import { useAdmin } from '@/components/AdminProvider';
 
     const Navbar = () => {
       const { language, setLanguage, t } = useLanguage();
