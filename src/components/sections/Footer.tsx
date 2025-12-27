@@ -33,8 +33,15 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Empty Space - Fibonacci Span: 3/13 */}
-          <div className="hidden md:block md:col-span-3" />
+          {/* Golden Ratio CTA - Fibonacci Span: 3/13 */}
+          <div className="hidden md:flex md:col-span-3 justify-center items-center">
+            <a 
+              href="/request-order"
+              className="w-[162px] h-[100px] bg-white text-black flex items-center justify-center font-display text-sm font-bold uppercase tracking-tighter hover:bg-primary hover:text-white transition-all text-center px-4 border border-white"
+            >
+              {t('BUILD WITH US!', 'CÙNG XÂY NGAY!')}
+            </a>
+          </div>
 
           {/* Social & Links Section - Fibonacci Span: 5/13 */}
           <div className="md:col-span-5 flex flex-col gap-12 md:items-end">
