@@ -4,7 +4,7 @@ import React from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
 
 const Manifesto = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
