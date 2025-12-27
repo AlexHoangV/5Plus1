@@ -207,14 +207,14 @@ const ContactSection = () => {
                 </div>
               </div>
               
-              <div className="w-full md:w-auto">
-                <a 
-                  href="/request-order"
-                  className="block w-full md:w-[400px] h-[150px] bg-primary text-primary-foreground flex items-center justify-center font-display text-2xl font-bold uppercase tracking-tighter hover:opacity-90 transition-opacity text-center px-8"
-                >
-                  {t('Start Your Project Journey', 'Bắt Đầu Hành Trình Dự Án')}
-                </a>
-              </div>
+                <div className="w-full md:w-auto">
+                  <a 
+                    href="/request-order"
+                    className="block w-full md:w-[324px] h-[200px] bg-primary text-primary-foreground flex items-center justify-center font-display text-2xl font-bold uppercase tracking-tighter hover:opacity-90 transition-opacity text-center px-8"
+                  >
+                    {t('BUILD WITH US!', 'CÙNG XÂY NGAY!')}
+                  </a>
+                </div>
             </div>
           </div>
         </div>
