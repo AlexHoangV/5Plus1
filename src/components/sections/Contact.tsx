@@ -176,12 +176,12 @@ const ContactSection = () => {
                   <div className="mt-1 p-2 bg-muted transition-colors group-hover:text-primary">
                     <MapPin size={18} strokeWidth={1.5} />
                   </div>
-                  <div>
-                    <p className={labelClasses}>{t('Office', 'Văn Phòng')}</p>
-                    <p className="font-mono text-sm tracking-tight">
-                      District 1, Ho Chi Minh City, Vietnam
-                    </p>
-                  </div>
+                    <div>
+                      <p className={labelClasses}>{t('Office', 'Văn Phòng')}</p>
+                      <p className="font-mono text-sm tracking-tight">
+                        {t('District 1, Ho Chi Minh City, Vietnam', 'Quận 1, TP. Hồ Chí Minh, Việt Nam')}
+                      </p>
+                    </div>
                 </div>
               </div>
             </div>
