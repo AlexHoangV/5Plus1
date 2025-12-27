@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Chatbot } from "@/components/Chatbot";
+import Chatbot from "@/components/Chatbot";
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
 import { JetBrains_Mono } from "next/font/google";
