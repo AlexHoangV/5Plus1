@@ -7,7 +7,76 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ""
 );
 
-async function callGroqFallback(messages: { role: string; content: string }[], language: string): Promise<string> {
+function stripAccents(s: string): string {
+  return s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function expandQueryForRAG(query: string): string {
+  const raw = (query || "").trim();
+  if (!raw) return "";
+  const qLower = raw.toLowerCase();
+  const qAscii = stripAccents(qLower);
+
+  const mapping: Record<string, string[]> = {
+    "dich vu": ["services", "service"],
+    "lien he": ["contact", "email", "phone", "address"],
+    "du an": ["projects", "project"],
+    "gioi thieu": ["about"],
+    "kien truc": ["architectural", "architecture"],
+    "noi that": ["interior"],
+    "quy hoach": ["urbanism", "planning"],
+  };
+
+  const extra: string[] = [];
+  for (const [k, vals] of Object.entries(mapping)) {
+    if (qAscii.includes(k)) extra.push(...vals);
+  }
+
+  const parts = [raw];
+  if (qAscii !== qLower) parts.push(qAscii);
+  if (extra.length > 0) parts.push([...new Set(extra)].sort().join(" "));
+  return parts.join(" ");
+}
+
+async function retrieveRAGContext(query: string, k = 6): Promise<{ chunks: any[]; context: string }> {
+  try {
+    const expandedQuery = expandQueryForRAG(query);
+    const tsQuery = expandedQuery.split(/\s+/).filter(Boolean).join(" | ");
+
+    const { data, error } = await supabase.rpc("search_kb_chunks", {
+      search_query: tsQuery,
+      match_count: k,
+    });
+
+    if (error || !data?.length) {
+      const { data: fallbackData } = await supabase
+        .from("kb_chunks")
+        .select("id, doc_id, title, source, content")
+        .ilike("content", `%${query}%`)
+        .limit(k);
+      
+      if (fallbackData?.length) {
+        const context = fallbackData
+          .map((c: any) => `[Source: ${c.title || "Untitled"}${c.source ? " | " + c.source : ""}]\n${c.content}`)
+          .join("\n\n")
+          .slice(0, 2500);
+        return { chunks: fallbackData, context };
+      }
+      return { chunks: [], context: "" };
+    }
+
+    const context = data
+      .map((c: any) => `[Source: ${c.title || "Untitled"}${c.source ? " | " + c.source : ""}]\n${c.content}`)
+      .join("\n\n")
+      .slice(0, 2500);
+    return { chunks: data, context };
+  } catch (err) {
+    console.error("RAG retrieval error:", err);
+    return { chunks: [], context: "" };
+  }
+}
+
+async function callGroqFallback(messages: { role: string; content: string }[], language: string, ragContext?: string): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) return "";
   
