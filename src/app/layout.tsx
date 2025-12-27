@@ -89,20 +89,22 @@ export default function RootLayout({
           />
         </head>
         <LanguageProvider>
-          <FontWrapper 
-            jetbrainsMonoVar={jetbrainsMono.variable} 
-            gtPressuraVar={gtPressura.variable}
-          >
-            <Script
-              id="orchids-browser-logs"
-              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
-              strategy="afterInteractive"
-              data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
-            />
-            {children}
-            <Chatbot />
-            <Toaster position="top-right" richColors />
-          </FontWrapper>
+          <AdminProvider>
+            <FontWrapper 
+              jetbrainsMonoVar={jetbrainsMono.variable} 
+              gtPressuraVar={gtPressura.variable}
+            >
+              <Script
+                id="orchids-browser-logs"
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/orchids-browser-logs.js"
+                strategy="afterInteractive"
+                data-orchids-project-id="fd5536bb-3b33-40d9-82fe-c9eb5e249067"
+              />
+              {children}
+              <Chatbot />
+              <Toaster position="top-right" richColors />
+            </FontWrapper>
+          </AdminProvider>
         </LanguageProvider>
     </html>
   );
