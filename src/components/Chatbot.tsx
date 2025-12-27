@@ -164,13 +164,26 @@ export default function Chatbot() {
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
               {messages.map((m, i) => (
                 <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-[85%] p-3 text-sm leading-relaxed ${
-                    m.role === 'user' 
-                    ? 'bg-primary text-white' 
-                    : 'bg-secondary text-black border border-border'
-                  }`}>
-                    {m.content}
-                  </div>
+                    <div className={`max-w-[85%] p-3 text-sm leading-relaxed ${
+                      m.role === 'user' 
+                      ? 'bg-primary text-white' 
+                      : 'bg-secondary text-black border border-border'
+                    }`}>
+                      <div className="whitespace-pre-wrap">{m.content}</div>
+                      {m.role === 'assistant' && m.sources && m.sources.length > 0 && (
+                        <div className="mt-3 pt-2 border-t border-black/5">
+                          <p className="text-[8px] uppercase tracking-widest font-bold opacity-40 mb-2">References</p>
+                          <div className="flex flex-wrap gap-1">
+                            {Array.from(new Set(m.sources.map(s => s.title))).map((title, idx) => (
+                              <span key={idx} className="bg-white/50 border border-black/10 px-1.5 py-0.5 text-[8px] uppercase tracking-tighter">
+                                {title}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                 </div>
               ))}
               {isLoading && (
