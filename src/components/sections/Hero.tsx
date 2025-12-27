@@ -28,13 +28,15 @@ const Hero = () => {
 
           
             <div className="border-l-[6px] border-[#C6733B] pl-6 md:pl-8 space-y-6 md:space-y-8">
-                <p className="font-mono text-base md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight">
-                  {t('Architectural Design', 'Thiết Kế Kiến Trúc')} <br />
-                  &amp; {t('Interior Design', 'Nội Thất')}
-                </p>
+                <EditableText 
+                  contentKey="hero_subtitle"
+                  initialValue={language === 'en' ? 'Architectural Design & Interior Design' : 'Thiết Kế Kiến Trúc & Nội Thất'}
+                  as="p"
+                  className="font-mono text-base md:text-xl xl:text-2xl tracking-[0.2em] uppercase leading-tight whitespace-pre-line"
+                />
               <div className="pt-2 md:pt-4">
                 <a 
-                  href="/login" 
+                  href="#contact" 
                   className="inline-block bg-primary text-primary-foreground px-6 py-3 md:px-8 md:py-4 font-mono text-xs md:text-sm uppercase tracking-[0.2em] hover:bg-primary/90 transition-colors"
                 >
                   {t('Start Your Project', 'Bắt Đầu Dự Án')}
@@ -58,12 +60,15 @@ const Hero = () => {
 
                   {/* Slogan positioned below the image, aligned to the left of the image container */}
                   <div className="w-full max-w-[480px] lg:max-w-[560px] relative z-20">
-                    <p className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-left tracking-normal text-black cursor-default">
-                      {t(
-                        '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."',
-                        '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
-                      )}
-                    </p>
+                    <EditableText
+                      contentKey="hero_slogan"
+                      initialValue={language === 'en' 
+                        ? '"Architecture is not just about building walls, but about creating spaces where nature, humanity, and light converge in harmony."' 
+                        : '"Kiến trúc không chỉ là xây dựng những bức tường, mà là tạo ra những không gian nơi thiên nhiên, con người và ánh sáng hội tụ trong sự hài hòa."'
+                      }
+                      as="p"
+                      className="font-mono text-xs sm:text-sm md:text-base leading-relaxed text-left tracking-normal text-black"
+                    />
                   </div>
               </div>
       </div>
