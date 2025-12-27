@@ -99,12 +99,23 @@
                     <Languages size={16} />
                     <span>{language === 'en' ? 'VN' : 'EN'}</span>
                 </button>
+
+                {isAdmin && (
+                  <button
+                    onClick={() => setIsEditMode(!isEditMode)}
+                    className={`flex items-center gap-2 font-mono text-[12px] uppercase tracking-widest transition-colors ${isEditMode ? 'text-primary' : 'hover:text-[#C6733B]'}`}
+                    title={isEditMode ? t('Exit Edit Mode', 'Thoát Chế Độ Sửa') : t('Enter Edit Mode', 'Vào Chế Độ Sửa')}
+                  >
+                    {isEditMode ? <Eye size={16} /> : <Edit3 size={16} />}
+                    <span>{isEditMode ? 'VIEW' : 'EDIT'}</span>
+                  </button>
+                )}
             </div>
 
             {user ? (
               <div className="flex items-center gap-8 pl-4 border-l border-border">
                 <a
-                  href="/request-order"
+                  href="#contact"
                   className="font-mono text-[12px] uppercase tracking-[0.2em] bg-primary text-primary-foreground px-4 py-2 hover:opacity-90 transition-opacity whitespace-nowrap"
                 >
                   {t('Request Project', 'Yêu Cầu Dự Án')}
