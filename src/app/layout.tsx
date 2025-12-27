@@ -8,8 +8,14 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import { FontWrapper } from "@/components/FontWrapper";
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+const jetbrainsMono = localFont({
+  src: [
+    {
+      path: "../../public/fonts/jetbrains-mono.woff2",
+      weight: "400",
+      style: "normal",
+    },
+  ],
   variable: "--font-jetbrains-mono",
 });
 
