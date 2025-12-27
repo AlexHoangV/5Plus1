@@ -20,6 +20,7 @@ import {
   Plus
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 type ProjectRequest = {
   id: string;
