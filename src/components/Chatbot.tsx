@@ -13,7 +13,7 @@ interface Message {
 
 const KOSUKE_AVATAR = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-3-1766614999280.jpg";
 
-export function Chatbot() {
+export default function Chatbot() {
   const { language, t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
