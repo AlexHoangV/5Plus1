@@ -157,11 +157,28 @@ STRICT PROTOCOL FOR LEADS:
     return { content };
   } catch (error: any) {
     console.error("Gemini Error:", error);
-    // Fallback logic...
-    const fallbackResult = await model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: finalLastUserMessage }] }]
-    });
-    return { content: fallbackResult.response.text() };
+    
+    // Handle Leaked Key / Auth Errors gracefully
+    if (error.status === 403 || error.message?.includes('403') || error.message?.includes('API key')) {
+      return { 
+        content: language === 'en' 
+          ? "Our AI assistant is currently resting to improve its vision. Please contact us directly via email or phone for immediate assistance." 
+          : "Trợ lý AI của chúng tôi hiện đang tạm nghỉ để nâng cấp tầm nhìn. Vui lòng liên hệ trực tiếp qua email hoặc số điện thoại để được hỗ trợ ngay lập tức."
+      };
+    }
+
+    try {
+      const fallbackResult = await model.generateContent({
+        contents: [{ role: 'user', parts: [{ text: finalLastUserMessage }] }]
+      });
+      return { content: fallbackResult.response.text() };
+    } catch (fallbackError) {
+      return { 
+        content: language === 'en' 
+          ? "I'm having trouble connecting right now. Let's talk again soon." 
+          : "Tôi đang gặp khó khăn khi kết nối. Hãy trò chuyện lại sau nhé."
+      };
+    }
   }
 }
 
