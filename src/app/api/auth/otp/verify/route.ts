@@ -26,10 +26,16 @@ export async function POST(request: Request) {
 
     // 2. OTP is valid, ensure user exists and is confirmed in Supabase
     // This prevents "email not confirmed" errors when using the magic link
-    const { data: user, error: userError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    const { data: userResponse } = await supabaseAdmin.auth.admin.getUserByEmail(email);
     
-    if (user && user.user) {
-      await supabaseAdmin.auth.admin.updateUserById(user.user.id, {
+    if (userResponse?.user) {
+      await supabaseAdmin.auth.admin.updateUserById(userResponse.user.id, {
+        email_confirm: true,
+      });
+    } else {
+      // Create user if not exists
+      await supabaseAdmin.auth.admin.createUser({
+        email,
         email_confirm: true,
       });
     }
