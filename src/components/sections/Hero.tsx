@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useLanguage } from '@/hooks/useLanguage';
+import { EditableText } from '@/components/EditableText';
 
 /**
  * Hero component for the Five + One Architecture website.
