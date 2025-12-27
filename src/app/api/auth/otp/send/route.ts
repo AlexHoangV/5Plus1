@@ -12,6 +12,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
+    // Rate limiting: Check if an OTP was sent in the last 60 seconds
+    const { data: lastOtp } = await supabaseAdmin
+      .from('user_otps')
+      .select('created_at')
+      .eq('email', email)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (lastOtp) {
+      const lastSent = new Date(lastOtp.created_at).getTime();
+      const now = Date.now();
+      if (now - lastSent < 60 * 1000) {
+        return NextResponse.json({ 
+          error: 'Please wait 60 seconds before requesting another code.' 
+        }, { status: 429 });
+      }
+    }
+
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
