@@ -9,6 +9,12 @@ import Image from 'next/image';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  sources?: {
+    doc_id: string;
+    title: string;
+    source: string;
+    score: number;
+  }[];
 }
 
 const KOSUKE_AVATAR = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Kosuke-3-1766614999280.jpg";
