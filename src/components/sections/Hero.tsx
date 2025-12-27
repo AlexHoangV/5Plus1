@@ -9,8 +9,9 @@ import { EditableText } from '@/components/EditableText';
  * Features a large bold "FIVE + ONE" headline, architectural subtitle with a colored border,
  * and a black promotional square on the right.
  */
-const Hero = () => {
-  const { t } = useLanguage();
+  const Hero = () => {
+    const { language, t } = useLanguage();
+
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 sm:px-8 py-20 md:py-0">
