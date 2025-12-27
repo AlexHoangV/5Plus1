@@ -24,7 +24,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 400 });
     }
 
-    // 2. OTP is valid, generate a Supabase Magic Link to sign the user in
+    // 2. OTP is valid, ensure user exists and is confirmed in Supabase
+    // This prevents "email not confirmed" errors when using the magic link
+    const { data: user, error: userError } = await supabaseAdmin.auth.admin.getUserByEmail(email);
+    
+    if (user && user.user) {
+      await supabaseAdmin.auth.admin.updateUserById(user.user.id, {
+        email_confirm: true,
+      });
+    }
+
+    // 3. Generate a Supabase Magic Link to sign the user in
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'magiclink',
       email: email,
@@ -35,10 +45,10 @@ export async function POST(request: Request) {
 
     if (authError) throw authError;
 
-    // 3. Delete the used OTP
+    // 4. Delete the used OTP
     await supabaseAdmin.from('user_otps').delete().eq('id', otpData.id);
 
-    // 4. Return the magic link to the frontend
+    // 5. Return the magic link to the frontend
     return NextResponse.json({ 
       success: true, 
       action_link: authData.properties.action_link 
