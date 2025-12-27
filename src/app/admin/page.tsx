@@ -14,7 +14,10 @@ import {
   ChevronRight,
   User,
   Calendar,
-  DollarSign
+  DollarSign,
+  Database,
+  Trash2,
+  Plus
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -38,62 +41,110 @@ type ContactMessage = {
   created_at: string;
 };
 
+type KBDocument = {
+  id: string;
+  title: string;
+  source: string;
+  chunk_count: number;
+  created_at: string;
+};
+
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState<'requests' | 'messages'>('requests');
+  const [activeTab, setActiveTab] = useState<'requests' | 'messages' | 'kb'>('requests');
   const [requests, setRequests] = useState<ProjectRequest[]>([]);
   const [messages, setMessages] = useState<ContactMessage[]>([]);
+  const [kbDocs, setKBDocs] = useState<KBDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+  const [showAddKB, setShowAddKB] = useState(false);
+  const [newKB, setNewKB] = useState({ title: '', content: '', source: '' });
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
 
-    useEffect(() => {
-      const checkUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-          router.push('/login');
-          return;
-        }
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push('/login');
+        return;
+      }
 
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', user.id)
-          .single();
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
 
-        if (error || profile?.role !== 'admin') {
-          toast.error('Unauthorized access');
-          router.push('/');
-          return;
-        }
+      if (error || profile?.role !== 'admin') {
+        toast.error('Unauthorized access');
+        router.push('/');
+        return;
+      }
 
-        setUser(user);
-        fetchData();
-      };
-      checkUser();
-    }, [router]);
+      setUser(user);
+      fetchData();
+    };
+    checkUser();
+  }, [router]);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const { data: reqData, error: reqError } = await supabase
+      const { data: reqData } = await supabase
         .from('project_requests')
         .select('*')
         .order('created_at', { ascending: false });
-      
-      if (reqError) throw reqError;
       setRequests(reqData || []);
 
-      const { data: msgData, error: msgError } = await supabase
+      const { data: msgData } = await supabase
         .from('contact_messages')
         .select('*')
         .order('created_at', { ascending: false });
-      
-      if (msgError) throw msgError;
       setMessages(msgData || []);
+
+      const kbRes = await fetch('/api/kb/documents');
+      const kbData = await kbRes.json();
+      setKBDocs(kbData || []);
     } catch (error: any) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleAddKB = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsActionLoading(true);
+    try {
+      const res = await fetch('/api/kb/documents', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newKB),
+      });
+      if (!res.ok) throw new Error('Failed to add document');
+      toast.success('Document added and indexed');
+      setNewKB({ title: '', content: '', source: '' });
+      setShowAddKB(false);
+      fetchData();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleDeleteKB = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this document? All associated chunks will be removed.')) return;
+    setIsActionLoading(true);
+    try {
+      const res = await fetch(`/api/kb/documents/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete document');
+      toast.success('Document deleted');
+      fetchData();
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
