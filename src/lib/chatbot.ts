@@ -19,12 +19,15 @@ function expandQueryForRAG(query: string): string {
 
   const mapping: Record<string, string[]> = {
     "dich vu": ["services", "service"],
+    "dich vu gi": ["services"],
     "lien he": ["contact", "email", "phone", "address"],
     "du an": ["projects", "project"],
     "gioi thieu": ["about"],
     "kien truc": ["architectural", "architecture"],
     "noi that": ["interior"],
     "quy hoach": ["urbanism", "planning"],
+    "gia": ["price", "cost", "budget"],
+    "bao gia": ["quotation", "quote", "estimate"],
   };
 
   const extra: string[] = [];
