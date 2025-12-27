@@ -12,6 +12,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
     }
 
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is not configured');
+      return NextResponse.json({ 
+        error: 'Email service is not configured. Please contact administrator or set RESEND_API_KEY.' 
+      }, { status: 500 });
+    }
+
     // Rate limiting: Check if an OTP was sent in the last 60 seconds
     const { data: lastOtp } = await supabaseAdmin
       .from('user_otps')
