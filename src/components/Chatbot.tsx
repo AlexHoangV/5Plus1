@@ -93,7 +93,11 @@ export default function Chatbot() {
 
       const data = await response.json();
       if (data.content) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.content }]);
+        setMessages(prev => [...prev, { 
+          role: 'assistant', 
+          content: data.content,
+          sources: data.sources 
+        }]);
       } else {
         throw new Error(data.error || 'No content received');
       }
