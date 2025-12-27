@@ -3,7 +3,6 @@ import "./globals.css";
 import Chatbot from "@/components/Chatbot";
 import { Toaster } from "sonner";
 import { LanguageProvider } from "@/hooks/useLanguage";
-import { JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
 import { FontWrapper } from "@/components/FontWrapper";
