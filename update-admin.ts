@@ -22,24 +22,24 @@ async function updateAdmin() {
 
   const adminUser = users.users.find(u => u.email === 'admin@five-plus-one.com')
 
-  if (!adminUser) {
-    console.log('Admin user not found, creating...')
-    const { error: createError } = await supabase.auth.admin.createUser({
-      email: 'admin@five-plus-one.com',
-      password: 'osawa123',
-      email_confirm: true,
-      user_metadata: { role: 'admin' }
-    })
-    if (createError) console.error('Error creating admin:', createError)
-    else console.log('Admin user created.')
-  } else {
-    const { error: updateError } = await supabase.auth.admin.updateUserById(
-      adminUser.id,
-      { password: 'osawa123', email_confirm: true }
-    )
-    if (updateError) console.error('Error updating admin:', updateError)
-    else console.log('Admin user password updated.')
-  }
+    if (!adminUser) {
+      console.log('Admin user not found, creating...')
+      const { error: createError } = await supabase.auth.admin.createUser({
+        email: 'admin@five-plus-one.com',
+        password: 'osawa',
+        email_confirm: true,
+        user_metadata: { role: 'admin' }
+      })
+      if (createError) console.error('Error creating admin:', createError)
+      else console.log('Admin user created.')
+    } else {
+      const { error: updateError } = await supabase.auth.admin.updateUserById(
+        adminUser.id,
+        { password: 'osawa', email_confirm: true }
+      )
+      if (updateError) console.error('Error updating admin:', updateError)
+      else console.log('Admin user password updated.')
+    }
 }
 
 updateAdmin()
