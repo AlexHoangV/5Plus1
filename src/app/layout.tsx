@@ -9,8 +9,7 @@ import Script from "next/script";
 import { FontWrapper } from "@/components/FontWrapper";
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "700", "800"],
+  subsets: ["latin"],
   variable: "--font-jetbrains-mono",
 });
 
