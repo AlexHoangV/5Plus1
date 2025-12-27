@@ -49,16 +49,18 @@ const getDefaultData = (slug: string): ProjectData => ({
   related: ["project-mangetsu", "truc-bach-saga"]
 });
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const data = projectDatabase[params.slug] || getDefaultData(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const data = projectDatabase[slug] || getDefaultData(slug);
   return {
     title: `${data.title} | Brutalist Architecture by KOSUKE`,
     description: data.overview.substring(0, 160),
   };
 }
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const data = projectDatabase[params.slug] || getDefaultData(params.slug);
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const data = projectDatabase[slug] || getDefaultData(slug);
 
   const jsonLd = {
     "@context": "https://schema.org",
