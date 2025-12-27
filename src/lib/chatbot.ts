@@ -7,6 +7,38 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ""
 );
 
+async function callGroqFallback(messages: { role: string; content: string }[], language: string): Promise<string> {
+  const apiKey = process.env.GROQ_API_KEY;
+  if (!apiKey) return "";
+  
+  const model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  
+  try {
+    const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: `You are an AI assistant for Five Plus One architecture studio. Respond in ${language === 'vi' ? 'Vietnamese' : 'English'}. Be helpful and concise.` },
+          ...messages
+        ],
+        temperature: 0.2,
+        max_tokens: 512,
+      }),
+    });
+    
+    if (!resp.ok) return "";
+    const data = await resp.json();
+    return data.choices?.[0]?.message?.content || "";
+  } catch {
+    return "";
+  }
+}
+
 export async function processChatMessage({
   messages,
   language = 'vi',
