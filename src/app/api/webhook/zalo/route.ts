@@ -12,9 +12,9 @@ export async function POST(req: Request) {
       const userId = sender.id;
       const userText = message.text;
 
-      try {
-        // Process with Gemini - now with history retrieval enabled by deviceId
-        const result = await processChatMessage({
+        try {
+          // Process with Groq - now with history retrieval enabled by deviceId
+          const result = await processChatMessage({
           messages: [{ role: 'user', content: userText }],
           deviceId: `zalo_${userId}`,
           sessionId: `zalo_session_${userId}`,
